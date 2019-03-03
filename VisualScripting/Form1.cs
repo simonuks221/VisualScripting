@@ -37,9 +37,7 @@ namespace VisualScripting
             }
         }
 
-        
-
-        void SpawnNode(Point _position)
+        void SpawnNode(Type _nodeType, Point _position)
         {
             BaseNode newNode = new BaseNode();
             MainScriptingPanel.Controls.Add(newNode);
