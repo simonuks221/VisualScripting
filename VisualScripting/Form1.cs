@@ -34,19 +34,25 @@ namespace VisualScripting
                 }
                 createNodeSearchBar = new CreateNodeSearchBar(e.Location);
                 MainScriptingPanel.Controls.Add(createNodeSearchBar);
+                createNodeSearchBar.partPressed += SpawnNode;
             }
         }
 
-        void SpawnNode(Type _nodeType, Point _position)
+        void SpawnNode(Type _nodeType, Point _position) //Spawn node
         {
             BaseNode newNode = new BaseNode();
             MainScriptingPanel.Controls.Add(newNode);
             newNode.Location = _position;
 
             newNode.MouseDown += StartMovingNode;
+
+            if(createNodeSearchBar != null)
+            {
+                createNodeSearchBar.Dispose();
+            }
         }
 
-        private void StartMovingNode(object sender, MouseEventArgs e)
+        private void StartMovingNode(object sender, MouseEventArgs e) //Start moving node
         {
 
             BaseNode nodeToMove = (BaseNode)sender;

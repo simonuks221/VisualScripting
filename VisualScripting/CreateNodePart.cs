@@ -10,6 +10,8 @@ namespace VisualScripting
 {
     class CreateNodePart : Panel
     {
+        public delegate void MyEventHandler(Type thisType);
+        public event MyEventHandler panelPressed;
         Type thisType;
 
         Label typeLabel;
@@ -26,6 +28,15 @@ namespace VisualScripting
             typeLabel.Size = new Size(100, 10);
             typeLabel.Location = new Point();
             typeLabel.Text = thisType.ToString();
+
+            typeLabel.Click += ThisClicked;
+            this.Click += ThisClicked;
+        }
+
+        private void ThisClicked(object sender, EventArgs e)
+        {
+            MyEventHandler handler = panelPressed;
+            panelPressed(thisType);
         }
     }
 }
