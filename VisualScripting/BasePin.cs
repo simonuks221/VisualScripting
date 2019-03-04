@@ -8,10 +8,20 @@ using System.Drawing;
 
 namespace VisualScripting
 {
+    public enum PinRole { Input, Output}
+
     class BasePin : Panel
     {
-        public BasePin()
+        public PinRole pinRole;
+        public BasePin otherConnectedPin;
+        public Type pinType;
+
+        public BasePin(Type _pinType, PinRole _pinRole)
         {
+            otherConnectedPin = null;
+            pinType = _pinType;
+            pinRole = _pinRole;
+
             this.Size = new Size(10, 10);
             this.BackColor = Color.Gray;
         }

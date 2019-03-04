@@ -38,7 +38,9 @@
             this.MainScriptingPanel.Name = "MainScriptingPanel";
             this.MainScriptingPanel.Size = new System.Drawing.Size(765, 384);
             this.MainScriptingPanel.TabIndex = 0;
+            this.MainScriptingPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.MainScriptingPanel_Paint);
             this.MainScriptingPanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MainScriptingPanel_MouseClick);
+            this.MainScriptingPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainScriptingPanel_MouseMove);
             // 
             // Form1
             // 
