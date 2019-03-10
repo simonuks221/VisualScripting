@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseNodes.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="BasePin.cs">
       <SubType>Component</SubType>
     </Compile>

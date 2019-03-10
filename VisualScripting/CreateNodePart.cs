@@ -16,6 +16,8 @@ namespace VisualScripting
 
         Label typeLabel;
 
+        
+
         public CreateNodePart(Type _thisType)
         {
             thisType = _thisType;
@@ -27,7 +29,8 @@ namespace VisualScripting
             this.Controls.Add(typeLabel);
             typeLabel.Size = new Size(100, 10);
             typeLabel.Location = new Point();
-            typeLabel.Text = thisType.ToString();
+            var prop = thisType.GetField("nodeName").GetValue(null);
+            typeLabel.Text = prop.ToString();
 
             typeLabel.Click += ThisClicked;
             this.Click += ThisClicked;

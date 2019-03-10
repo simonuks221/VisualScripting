@@ -17,7 +17,7 @@ namespace VisualScripting
 
         Point panelLocation;
 
-        List<Type> nodesToShow = new List<Type>() { typeof(BaseNode) };
+        List<Type> nodesToShow = new List<Type>() { typeof(StartNode), typeof(IfNode)};
 
         public CreateNodeSearchBar(Point _panelLocation)
         {

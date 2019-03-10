@@ -13,15 +13,17 @@ namespace VisualScripting
         public delegate void MyEventHandler(BasePin pinPressed);
         public event MyEventHandler pinPressed;
 
-
-        List<Type> inputs = new List<Type>() { typeof(int), typeof(string)};
-        List<Type> outputs = new List<Type>() { typeof(int)};
+        public static List<Type> inputs;
+        public static List<Type> outputs;
 
         public List<BasePin> inputPins;
         public List<BasePin> outputPins;
 
+        public static string nodeName = "Node name here";
+
         public BaseNode()
         {
+            Console.Out.WriteLine(nodeName);
             inputPins = new List<BasePin>();
             outputPins = new List<BasePin>();
 
@@ -46,6 +48,11 @@ namespace VisualScripting
 
                 newPin.Click += PinClicked;
             }
+        }
+
+        public virtual string CompileToString()
+        {
+            return "//Not implemented";
         }
 
         private void PinClicked(object sender, EventArgs e)

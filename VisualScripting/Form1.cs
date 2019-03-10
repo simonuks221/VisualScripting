@@ -45,7 +45,7 @@ namespace VisualScripting
 
         void SpawnNode(Type _nodeType, Point _position) //Spawn node
         {
-            BaseNode newNode = new BaseNode();
+            BaseNode newNode = (BaseNode)Activator.CreateInstance(_nodeType);
             MainScriptingPanel.Controls.Add(newNode);
             newNode.Location = _position;
 
@@ -130,6 +130,16 @@ namespace VisualScripting
             {
                 MainScriptingPanel.Refresh();
             }
+        }
+
+        private void CompileButton_Click(object sender, EventArgs e)
+        {
+            CompileAllToString();
+        }
+
+        void CompileAllToString()
+        {
+            Console.Out.WriteLine(currentNodes[0].CompileToString());
         }
     }
 }
