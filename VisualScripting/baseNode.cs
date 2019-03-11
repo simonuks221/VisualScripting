@@ -92,6 +92,25 @@ namespace VisualScripting
             return "Error, no output pin found";
         }
 
+        protected string GetCodeFromInput(int index)
+        {
+            if (inputPins.Count > index)
+            {
+                if (inputPins[index] != null)
+                {
+                    if (inputPins[index].otherConnectedPin != null)
+                    {
+                        return inputPins[index].otherConnectedPin.parentNode.CompileToString();
+                    }
+                    else //Output isnt connected, thats acceptable
+                    {
+                        return "";
+                    }
+                }
+            }
+            return "Error, no input pin found";
+        }
+
         public virtual string CompileToString()
         {
             return "Not implemented node compilation";

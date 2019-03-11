@@ -17,7 +17,7 @@ namespace VisualScripting
 
         Point panelLocation;
 
-        List<Type> nodesToShow = new List<Type>() {typeof(IfNode)};
+        List<Type> nodesToShow = new List<Type>() {typeof(IfNode), typeof(PrintNode), typeof(MakeString)};
 
         public CreateNodeSearchBar(Point _panelLocation)
         {
@@ -25,7 +25,7 @@ namespace VisualScripting
 
             this.BackColor = Color.DimGray;
             this.Location = _panelLocation;
-            this.Size = new Size(200, 40);
+            this.Size = new Size(200, 80);
 
             mainTextBox = new TextBox();
             this.Controls.Add(mainTextBox);
