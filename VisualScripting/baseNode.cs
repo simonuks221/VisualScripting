@@ -21,6 +21,8 @@ namespace VisualScripting
 
         public static string nodeName = "Node name here";
 
+        Label nodeLabel;
+
         public BaseNode()
         {
             
@@ -28,11 +30,16 @@ namespace VisualScripting
 
         protected void SetupAllPins(List<Type> _inputs, List<Type> _outputs)
         {
+            this.BackColor = Color.LightGray;
+
+            nodeLabel = new Label();
+            this.Controls.Add(nodeLabel);
+            nodeLabel.Location = new Point(0, 0);
+            nodeLabel.Size = new Size(this.Size.Width, 13);
+            nodeLabel.Text = nodeName;
+
             inputPins = new List<BasePin>();
             outputPins = new List<BasePin>();
-
-            this.BackColor = Color.LightGray;
-            this.Size = new Size(50, 50);
 
             for (int i = 0; i < _inputs.Count; i++)
             {
