@@ -6,26 +6,37 @@ using System.Threading.Tasks;
 
 namespace VisualScripting
 {
-    class StartNode : BaseNode
+    class ConstructNode : BaseNode
     {
         new public static string nodeName = "Start";
-        new public static List<Type> inputs = new List<Type>() {};
-        new public static List<Type> outputs = new List<Type>() { typeof(int) };
+        new public List<Type> inputs = new List<Type>() {};
+        new public List<Type> outputs = new List<Type>() {typeof(ExecutionPin)};
+
+        public ConstructNode()
+        {
+            SetupAllPins(inputs, outputs);
+        }
 
         public override string CompileToString()
         {
-            return "Start";
+            return GetCodeFromOutput(0); ;
         }
     }
 
     class IfNode : BaseNode
     {
         new public static string nodeName = "If";
-        new public static List<Type> inputs = new List<Type>() { typeof(float) };
-        new public static List<Type> outputs = new List<Type>() { typeof(int) };
+        new public List<Type> inputs = new List<Type>() {typeof(ExecutionPin), typeof(bool)};
+        new public List<Type> outputs = new List<Type>() {typeof(ExecutionPin), typeof(ExecutionPin) };
+
+        public IfNode()
+        {
+            SetupAllPins(inputs, outputs);
+        }
 
         public override string CompileToString()
         {
+            Console.Out.WriteLine(outputs.Count);
             return "IfNode";
         }
     }

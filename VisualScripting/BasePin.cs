@@ -16,14 +16,55 @@ namespace VisualScripting
         public BasePin otherConnectedPin;
         public Type pinType;
 
-        public BasePin(Type _pinType, PinRole _pinRole)
+        public BaseNode parentNode;
+
+        public BasePin(Type _pinType, PinRole _pinRole, BaseNode _parentNode)
         {
             otherConnectedPin = null;
             pinType = _pinType;
             pinRole = _pinRole;
+            parentNode = _parentNode;
 
             this.Size = new Size(10, 10);
-            this.BackColor = Color.Gray;
+
+            Console.Out.WriteLine(pinType);
+
+            if(pinType == typeof(ExecutionPin))
+            {
+                this.BackColor = Color.Black;
+            }
+            else if (pinType == typeof(int))
+            {
+                this.BackColor = Color.LawnGreen;
+            }
+            else if(pinType == typeof(string))
+            {
+                this.BackColor = Color.Purple;
+            }
+            else if (pinType == typeof(char))
+            {
+                this.BackColor = Color.Pink;
+            }
+            else if (pinType == typeof(float))
+            {
+                this.BackColor = Color.DarkGreen;
+            }
+            else if (pinType == typeof(bool))
+            {
+                this.BackColor = Color.Red;
+            }
+            else
+            {
+                this.BackColor = Color.Gray;
+            }
         }
+    }
+
+    class ExecutionPin// : BasePin
+    {
+        //public ExecutionPin(PinRole _pinRole, BaseNode _parentNode) : base(typeof(ExecutionPin), _pinRole, _parentNode)
+        //{
+        //    this.BackColor = Color.Black;
+        //}
     }
 }

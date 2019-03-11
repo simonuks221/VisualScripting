@@ -15,9 +15,7 @@ namespace VisualScripting
         Type thisType;
 
         Label typeLabel;
-
-        
-
+       
         public CreateNodePart(Type _thisType)
         {
             thisType = _thisType;

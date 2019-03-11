@@ -17,6 +17,7 @@ namespace VisualScripting
         List<BaseNode> currentNodes;
 
         BasePin firstSelectedPin;
+        BaseNode firstSelectedNode;
 
         public Form1()
         {
@@ -27,6 +28,8 @@ namespace VisualScripting
         {
             currentNodes = new List<BaseNode>();
             firstSelectedPin = null;
+            firstSelectedNode = null;
+            SpawnNode(typeof(ConstructNode), new Point(50, 50));
         }
 
         private void MainScriptingPanel_MouseClick(object sender, MouseEventArgs e) //Show node search bar
@@ -52,7 +55,9 @@ namespace VisualScripting
             currentNodes.Add(newNode);
 
             newNode.MouseDown += StartMovingNode;
+            newNode.MouseUp += StopMovingNode;
             newNode.pinPressed += PinPressed;
+            newNode.MouseMove += MainScriptingPanel_MouseMove;
 
             if(createNodeSearchBar != null)
             {
@@ -60,17 +65,16 @@ namespace VisualScripting
             }
         }
 
+        private void StopMovingNode(object sender, MouseEventArgs e) //Stop moving node
+        {
+            firstSelectedNode = null;
+            MainScriptingPanel.Refresh();
+        }
+
         private void StartMovingNode(object sender, MouseEventArgs e) //Start moving node
         {
-
-            BaseNode nodeToMove = (BaseNode)sender;
-            //nodeToMove.Location = new Point(0, 0);
-                // Console.Out.WriteLine(sender);
-                //nodeToMove.Location = new Point(0, 0);
-                //nodeToMove.Moves();
-               
-                //MainScriptingPanel.Update();
-            
+            firstSelectedNode = (BaseNode)sender;
+            MainScriptingPanel.Refresh();
         }
 
         private void Form1_Resize(object sender, EventArgs e) //For resizing main form window
@@ -82,11 +86,10 @@ namespace VisualScripting
         private void MainScriptingPanel_Paint(object sender, PaintEventArgs e) //Paint connections between pins
         {
             Graphics g;
-            Control c = (Control)sender;
-            g = c.CreateGraphics();
+            g = MainScriptingPanel.CreateGraphics();
             Pen myPen = new Pen(Color.Black);
             myPen.Width = 2;
-            foreach (BaseNode n in currentNodes)
+            foreach (BaseNode n in currentNodes) //Painting lines
             {
                 foreach (BasePin p in n.inputPins) //Paint from input
                 {
@@ -105,6 +108,11 @@ namespace VisualScripting
                 g.DrawLine(myPen, pLoc.X, pLoc.Y, mLoc.X, mLoc.Y);
             }
 
+            if(firstSelectedNode != null) //Moving node
+            {
+                firstSelectedNode.Location = MainScriptingPanel.PointToClient(Control.MousePosition);
+            }
+
             g.Dispose();
             myPen.Dispose();
         }
@@ -117,19 +125,19 @@ namespace VisualScripting
             }
             else
             {
-                _pinPressed.otherConnectedPin = firstSelectedPin;
-                firstSelectedPin.otherConnectedPin = _pinPressed;
-                firstSelectedPin = null;
-                MainScriptingPanel.Refresh();
+                if (_pinPressed.pinType == firstSelectedPin.pinType && _pinPressed.pinRole != firstSelectedPin.pinRole)
+                {
+                    _pinPressed.otherConnectedPin = firstSelectedPin;
+                    firstSelectedPin.otherConnectedPin = _pinPressed;
+                    firstSelectedPin = null;
+                    MainScriptingPanel.Refresh();
+                }
             }
         }
 
         private void MainScriptingPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            if(firstSelectedPin != null)
-            {
-                MainScriptingPanel.Refresh();
-            }
+            MainScriptingPanel.Refresh();
         }
 
         private void CompileButton_Click(object sender, EventArgs e)
@@ -139,7 +147,28 @@ namespace VisualScripting
 
         void CompileAllToString()
         {
-            Console.Out.WriteLine(currentNodes[0].CompileToString());
+            string allCode = @"
+                using System; 
+                using System.Collections.Generic; 
+                using System.Linq;
+                using System.Text;
+                using System.Threading.Tasks;
+
+                namespace NewProgram
+                {
+                    class Program
+                    {
+                        static void Main(string[] args)
+                        {
+                        
+                        ";
+            allCode += currentNodes[0].CompileToString();
+            allCode += @"
+                        }
+                    }
+                }";
+
+            Console.Out.WriteLine(allCode);
         }
     }
 }
