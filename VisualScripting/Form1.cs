@@ -220,8 +220,10 @@ namespace VisualScripting
                 }";
 
             VisualScriptCompiler visualCompiler = new VisualScriptCompiler(allCode);
-
             visualCompiler = null;
+
+            ConsoleForm c = new ConsoleForm();
+            c.Show();
         }
     }
 }
