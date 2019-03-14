@@ -8,10 +8,10 @@ using System.Drawing;
 
 namespace VisualScripting
 {
-    class BaseNode : Panel
+    public class BaseNode : Panel
     {
-        public delegate void MyEventHandler(BasePin pinPressed);
-        public event MyEventHandler pinPressed;
+        //public delegate void MyEventHandler(BasePin pinPressed);
+        //public event MyEventHandler pinPressed;
 
         //public List<Type> inputs = new List<Type>() { typeof(ExecutionPin)};
         //public List<Type> outputs = new List<Type>() { typeof(ExecutionPin) };
@@ -36,7 +36,7 @@ namespace VisualScripting
             this.Controls.Add(nodeLabel);
             nodeLabel.Location = new Point(0, 0);
             nodeLabel.Size = new Size(this.Size.Width, 13);
-            nodeLabel.Text = nodeName;
+            nodeLabel.Text = this.GetType().GetField("nodeName").GetValue(null).ToString();
 
             inputPins = new List<BasePin>();
             outputPins = new List<BasePin>();
@@ -54,10 +54,10 @@ namespace VisualScripting
                     newPin = new BasePin(_inputs[i], PinRole.Input, this);
                 }
                 this.Controls.Add(newPin);
-                newPin.Location = new Point(0, i * 12);
+                newPin.Location = new Point(0, i * 12 + 13);
                 inputPins.Add(newPin);
 
-                newPin.Click += PinClicked;
+                //newPin.Click += PinClicked;
             }
 
             for (int i = 0; i < _outputs.Count; i++)
@@ -73,10 +73,10 @@ namespace VisualScripting
                     newPin = new BasePin(_outputs[i], PinRole.Output, this);
                 }
                 this.Controls.Add(newPin);
-                newPin.Location = new Point(40, i * 12);
+                newPin.Location = new Point(this.Size.Width - 10, i * 12 + 13);
                 outputPins.Add(newPin);
 
-                newPin.Click += PinClicked;
+                //newPin.Click += PinClicked;
             }
         }
 
@@ -99,7 +99,7 @@ namespace VisualScripting
             return "Error, no output pin found";
         }
 
-        protected string GetCodeFromInput(int index)
+        protected string GetValueFromInput(int index)
         {
             if (inputPins.Count > index)
             {
@@ -123,10 +123,10 @@ namespace VisualScripting
             return "Not implemented node compilation";
         }
 
-        private void PinClicked(object sender, EventArgs e)
-        {
-            MyEventHandler handler = pinPressed;
-            handler((BasePin)sender);
-        }
+        //private void PinClicked(object sender, EventArgs e)
+        //{
+        //    MyEventHandler handler = pinPressed;
+        //    handler((BasePin)sender);
+       // }
     }
 }

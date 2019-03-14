@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace VisualScripting
 {
@@ -15,9 +16,12 @@ namespace VisualScripting
         CreateNodeSearchBar createNodeSearchBar;
 
         List<BaseNode> currentNodes;
+        public List<VisualVariable> visualVariables;
 
         BasePin firstSelectedPin;
         BaseNode firstSelectedNode;
+
+        public List<Type> allNodesToShow = new List<Type>() { typeof(IfNode), typeof(PrintNode), typeof(MakeStringNode),typeof(MakeIntNode), typeof(ForLoopNode) };
 
         public Form1()
         {
@@ -27,9 +31,10 @@ namespace VisualScripting
         private void Form1_Load(object sender, EventArgs e)
         {
             currentNodes = new List<BaseNode>();
+            visualVariables = new List<VisualVariable>() { new VisualVariable(typeof(bool), "Naujas")};
             firstSelectedPin = null;
             firstSelectedNode = null;
-            SpawnNode(typeof(ConstructNode), new Point(50, 50));
+            SpawnNode(new Point(50, 50), typeof(ConstructNode));
         }
 
         private void MainScriptingPanel_MouseClick(object sender, MouseEventArgs e) //Show node search bar
@@ -40,24 +45,61 @@ namespace VisualScripting
                 {
                     createNodeSearchBar.Dispose();
                 }
-                createNodeSearchBar = new CreateNodeSearchBar(e.Location);
+                createNodeSearchBar = new CreateNodeSearchBar(e.Location, this);
                 MainScriptingPanel.Controls.Add(createNodeSearchBar);
                 createNodeSearchBar.partPressed += SpawnNode;
+
+                firstSelectedNode = null;
+                firstSelectedPin = null;
             }
+            else
+            {
+                firstSelectedNode = null;
+                firstSelectedPin = null;
+
+                if(createNodeSearchBar != null)
+                {
+                    createNodeSearchBar.Dispose();
+                }
+                createNodeSearchBar = null;
+            }
+            MainScriptingPanel.Refresh();
         }
 
-        void SpawnNode(Type _nodeType, Point _position) //Spawn node
+        void SpawnNode(Point _position, Type _nodeType = null, VisualVariable _visualVariable = null, VisualFunction _visualFunction = null) //Spawn node
         {
-            BaseNode newNode = (BaseNode)Activator.CreateInstance(_nodeType);
-            MainScriptingPanel.Controls.Add(newNode);
-            newNode.Location = _position;
+            if (_nodeType != null)
+            {
+                BaseNode newNode = (BaseNode)Activator.CreateInstance(_nodeType);
+                MainScriptingPanel.Controls.Add(newNode);
+                newNode.Location = _position;
 
-            currentNodes.Add(newNode);
+                currentNodes.Add(newNode);
 
-            newNode.MouseDown += StartMovingNode;
-            newNode.MouseUp += StopMovingNode;
-            newNode.pinPressed += PinPressed;
-            newNode.MouseMove += MainScriptingPanel_MouseMove;
+                newNode.MouseDown += StartMovingNode;
+                newNode.MouseUp += StopMovingNode;
+                newNode.MouseMove += MainScriptingPanel_MouseMove;
+
+                for(int i = 0; i < newNode.inputPins.Count; i++)
+                {
+                    newNode.inputPins[i].pinPressed += PinPressed;
+                }
+                for (int i = 0; i < newNode.outputPins.Count; i++)
+                {
+                    newNode.outputPins[i].pinPressed += PinPressed;
+                }
+
+            }
+            else if(_visualVariable != null)
+            {
+                VisualVariablePanel newVariable = new VisualVariablePanel(_visualVariable);
+                MainScriptingPanel.Controls.Add(newVariable);
+                newVariable.Location = _position;
+
+                visualVariables.Add(_visualVariable);
+                newVariable.outputPin.pinPressed += PinPressed;
+            }
+
 
             if(createNodeSearchBar != null)
             {
@@ -87,7 +129,7 @@ namespace VisualScripting
         {
             Graphics g;
             g = MainScriptingPanel.CreateGraphics();
-            Pen myPen = new Pen(Color.Black);
+            Pen myPen = new Pen(BasePin.GetPinColor(typeof(ExecutionPin)));
             myPen.Width = 2;
             foreach (BaseNode n in currentNodes) //Painting lines
             {
@@ -95,6 +137,7 @@ namespace VisualScripting
                 {
                     if (p.otherConnectedPin != null)
                     {
+                        myPen.Color = BasePin.GetPinColor(p.pinType);
                         Point pLoc = MainScriptingPanel.PointToClient(n.PointToScreen(p.Location));
                         Point oLoc = MainScriptingPanel.PointToClient(p.otherConnectedPin.Parent.PointToScreen(p.otherConnectedPin.Location));
                         g.DrawLine(myPen, pLoc.X, pLoc.Y, oLoc.X, oLoc.Y);
@@ -103,6 +146,7 @@ namespace VisualScripting
             }
             if(firstSelectedPin != null) //Draw line if second pin not selected
             {
+                myPen.Color = BasePin.GetPinColor(firstSelectedPin.pinType);
                 Point pLoc = MainScriptingPanel.PointToClient(firstSelectedPin.Parent.PointToScreen(firstSelectedPin.Location));
                 Point mLoc = MainScriptingPanel.PointToClient(Control.MousePosition);
                 g.DrawLine(myPen, pLoc.X, pLoc.Y, mLoc.X, mLoc.Y);
@@ -137,7 +181,10 @@ namespace VisualScripting
 
         private void MainScriptingPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            MainScriptingPanel.Refresh();
+            if (firstSelectedPin != null || firstSelectedNode != null)
+            {
+                MainScriptingPanel.Refresh();
+            }
         }
 
         private void CompileButton_Click(object sender, EventArgs e)
@@ -160,6 +207,10 @@ namespace VisualScripting
                     {
                         static void Main(string[] args)
                         {
+                        }
+
+                        public void Start(string args)
+                        {
                         
                         ";
             allCode += currentNodes[0].CompileToString();
@@ -168,7 +219,9 @@ namespace VisualScripting
                     }
                 }";
 
-            Console.Out.WriteLine(allCode);
+            VisualScriptCompiler visualCompiler = new VisualScriptCompiler(allCode);
+
+            visualCompiler = null;
         }
     }
 }

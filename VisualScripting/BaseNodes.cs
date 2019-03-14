@@ -40,12 +40,12 @@ namespace VisualScripting
 
         public override string CompileToString()
         {
-            string code = "Console.out.WriteLine(" + GetCodeFromInput(1) +");" + GetCodeFromOutput(0);
+            string code = "Console.Out.WriteLine(" + GetValueFromInput(1) +");" + GetCodeFromOutput(0);
             return code;
         }
     }
 
-    class MakeString : BaseNode
+    class MakeStringNode : BaseNode
     {
         new public static string nodeName = "Make string";
         public List<Type> inputs = new List<Type>() { };
@@ -53,7 +53,7 @@ namespace VisualScripting
 
         TextBox thisTextBox;
 
-        public MakeString()
+        public MakeStringNode()
         {
             this.Size = new Size(100, 30);
             SetupAllPins(inputs, outputs);
@@ -65,12 +65,12 @@ namespace VisualScripting
 
         public override string CompileToString()
         {
-            string code = thisTextBox.Text;
+            string code = '\u0022' + thisTextBox.Text + '\u0022';
             return code;
         }
     }
 
-    class MakeInt : BaseNode
+    class MakeIntNode : BaseNode
     {
         new public static string nodeName = "Make integer";
         public List<Type> inputs = new List<Type>() { };
@@ -78,7 +78,7 @@ namespace VisualScripting
 
         TextBox thisTextBox;
 
-        public MakeInt()
+        public MakeIntNode()
         {
             this.Size = new Size(50, 50);
             SetupAllPins(inputs, outputs);
@@ -112,7 +112,7 @@ namespace VisualScripting
 
         public override string CompileToString()
         {
-            string code = @"if(" + GetCodeFromInput(1) + @")
+            string code = @"if(" + GetValueFromInput(1) + @")
                 {"
                 + GetCodeFromOutput(0) +
                 @"}
@@ -120,6 +120,64 @@ namespace VisualScripting
                 {"
                 + GetCodeFromOutput(1) +
                 "}";
+            return code;
+        }
+    }
+
+    class ForLoopNode : BaseNode
+    {
+        new public static string nodeName = "For loop";
+        public List<Type> inputs = new List<Type>() { typeof(ExecutionPin), typeof(int), typeof(int)};
+        public List<Type> outputs = new List<Type>() { typeof(ExecutionPin),typeof(int), typeof(ExecutionPin) };
+
+        public ForLoopNode()
+        {
+            this.Size = new Size(100, 100);
+            SetupAllPins(inputs, outputs);
+        }
+
+        public override string CompileToString()
+        {
+            string higherSymbol = "";
+            if (Int32.Parse(GetValueFromInput(2)) > Int32.Parse(GetValueFromInput(1)))
+            {
+                higherSymbol = "<";
+            }
+            else
+            {
+                higherSymbol = ">";
+            }
+
+            string code = @"
+for(int i = " +GetValueFromInput(1) +";i "+ higherSymbol +" " +GetValueFromInput(2) +@";i++)
+{
+" + GetCodeFromOutput(0) + @"
+}"
++ GetCodeFromOutput(2);
+            return code;
+        }
+    }
+
+    class WhileLoopNode : BaseNode
+    {
+        new public static string nodeName = "While loop";
+        public List<Type> inputs = new List<Type>() { typeof(ExecutionPin), typeof(bool)};
+        public List<Type> outputs = new List<Type>() { typeof(ExecutionPin), typeof(ExecutionPin) };
+
+        public WhileLoopNode()
+        {
+            this.Size = new Size(100, 100);
+            SetupAllPins(inputs, outputs);
+        }
+
+        public override string CompileToString()
+        {
+
+            string code = @"
+while("+ GetValueFromInput(1)+@")
+{
+"+ GetCodeFromOutput(0) +@"
+}";
             return code;
         }
     }

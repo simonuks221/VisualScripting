@@ -10,15 +10,18 @@ namespace VisualScripting
 {
     public enum PinRole { Input, Output}
 
-    class BasePin : Panel
+    public class BasePin : Panel
     {
+        public delegate void MyEventHandler(BasePin pinPressed);
+        public event MyEventHandler pinPressed;
+
         public PinRole pinRole;
         public BasePin otherConnectedPin;
         public Type pinType;
 
         public BaseNode parentNode;
 
-        public BasePin(Type _pinType, PinRole _pinRole, BaseNode _parentNode)
+        public BasePin(Type _pinType, PinRole _pinRole, BaseNode _parentNode = null) //Fix this _parentNode stuff
         {
             otherConnectedPin = null;
             pinType = _pinType;
@@ -29,33 +32,45 @@ namespace VisualScripting
 
             Console.Out.WriteLine(pinType);
 
-            if(pinType == typeof(ExecutionPin))
+            this.BackColor = GetPinColor(pinType);
+
+            this.Click += BasePinClick;
+        }
+
+        private void BasePinClick(object sender, EventArgs e)
+        {
+            pinPressed(this);
+        }
+
+        public static Color GetPinColor(Type _ofType)
+        {
+            if (_ofType == typeof(ExecutionPin))
             {
-                this.BackColor = Color.Black;
+                return Color.Black;
             }
-            else if (pinType == typeof(int))
+            else if (_ofType == typeof(int))
             {
-                this.BackColor = Color.LawnGreen;
+                return Color.LawnGreen;
             }
-            else if(pinType == typeof(string))
+            else if (_ofType == typeof(string))
             {
-                this.BackColor = Color.Purple;
+                return Color.Purple;
             }
-            else if (pinType == typeof(char))
+            else if (_ofType == typeof(char))
             {
-                this.BackColor = Color.Pink;
+                return Color.Pink;
             }
-            else if (pinType == typeof(float))
+            else if (_ofType == typeof(float))
             {
-                this.BackColor = Color.DarkGreen;
+                return Color.DarkGreen;
             }
-            else if (pinType == typeof(bool))
+            else if (_ofType == typeof(bool))
             {
-                this.BackColor = Color.Red;
+                return Color.Red;
             }
             else
             {
-                this.BackColor = Color.Gray;
+                return Color.Gray;
             }
         }
     }
