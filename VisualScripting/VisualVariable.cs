@@ -60,37 +60,34 @@ namespace VisualScripting
             panelPressed(visualVariable);
         }
     }
-    public class VisualVariablePanel : Panel
+
+    public class VisualVariableNode : BaseNode
     {
         public VisualVariable visualVariable;
-        Label nameLabel;
-        public BasePin outputPin;
 
-        public VisualVariablePanel(VisualVariable _visualVariable)
+        new public static string nodeName = "Variable";
+        public List<Type> inputs = new List<Type>() {};
+        public List<Type> outputs = new List<Type>() {};
+
+        public VisualVariableNode(VisualVariable _visualVariable)
         {
+            this.Size = new Size(100, 50);
             if (_visualVariable != null)
             {
                 visualVariable = _visualVariable;
-
-                this.BackColor = Color.White;
-                this.Size = new Size(200, 10);
-
-                nameLabel = new Label();
-                this.Controls.Add(nameLabel);
-                nameLabel.Location = new Point(0, 0);
-                nameLabel.Size = new Size(190, 20);
-                nameLabel.Text = visualVariable.variableName;
-
-                outputPin = new BasePin(visualVariable.variableType, PinRole.Output); //Add parent here
-                this.Controls.Add(outputPin);
-                outputPin.Location = new Point(190, 0);
-                outputPin.pinValue = visualVariable.variableValue;
-                Console.Out.WriteLine(outputPin.pinValue);
             }
             else
             {
                 throw new Exception("Null variable created");
             }
+            outputs.Add(visualVariable.variableType);
+            SetupAllPins(inputs, outputs);
+        }
+
+        public override string CompileToString()
+        {
+            outputPins[0].pinValue = visualVariable.variableValue;
+            return "";
         }
     }
 }

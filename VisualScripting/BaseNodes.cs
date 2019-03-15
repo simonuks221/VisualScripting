@@ -204,5 +204,4 @@ while("+ GetValueFromInput(1)+@")
             return code;
         }
     }
-
 }

@@ -35,16 +35,23 @@ namespace VisualScripting
 
         public void SpawnNode(Point _position, Type _nodeType = null, VisualVariable _visualVariable = null, VisualFunction _visualFunction = null) //Spawn node
         {
-            if (_nodeType != null)
+            if (true)//(_nodeType != null)
             {
-                BaseNode newNode = (BaseNode)Activator.CreateInstance(_nodeType);
+                BaseNode newNode;
+                if (_visualVariable != null) //Spawn variable
+                {
+                    newNode = new VisualVariableNode(_visualVariable);
+                }
+                else
+                {
+                    newNode = (BaseNode)Activator.CreateInstance(_nodeType);
+                }
                 mainScriptingPanel.Controls.Add(newNode);
                 newNode.Location = _position;
 
                 currentNodes.Add(newNode);
 
                 newNode.MouseDown += StartMovingNode;
-                newNode.nodeLabel.MouseDown += StartMovingNode;
                 newNode.MouseUp += StopMovingNode;
                 newNode.MouseMove += MainScriptingPanel_MouseMove;
 
@@ -56,17 +63,8 @@ namespace VisualScripting
                 {
                     newNode.outputPins[i].pinPressed += PinPressed;
                 }
-
             }
-            else if (_visualVariable != null)
-            {
-                VisualVariablePanel newVariable = new VisualVariablePanel(_visualVariable);
-                mainScriptingPanel.Controls.Add(newVariable);
-                newVariable.Location = _position;
 
-                visualVariables.Add(_visualVariable);
-                newVariable.outputPin.pinPressed += PinPressed;
-            }
             if (createNodeSearchBar != null)
             {
                 createNodeSearchBar.Dispose();
