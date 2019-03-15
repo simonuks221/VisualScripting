@@ -19,6 +19,8 @@ namespace VisualScripting
         public BasePin otherConnectedPin;
         public Type pinType;
 
+        public Object pinValue;
+
         public BaseNode parentNode;
 
         public BasePin(Type _pinType, PinRole _pinRole, BaseNode _parentNode = null) //Fix this _parentNode stuff
@@ -30,8 +32,6 @@ namespace VisualScripting
 
             this.Size = new Size(10, 10);
 
-            Console.Out.WriteLine(pinType);
-
             this.BackColor = GetPinColor(pinType);
 
             this.Click += BasePinClick;
@@ -39,7 +39,6 @@ namespace VisualScripting
 
         private void BasePinClick(object sender, EventArgs e)
         {
-            Console.Out.WriteLine("pressed");
             pinPressed(this);
         }
 

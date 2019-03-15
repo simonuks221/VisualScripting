@@ -65,8 +65,8 @@ namespace VisualScripting
 
         public override string CompileToString()
         {
-            string code = '\u0022' + thisTextBox.Text + '\u0022';
-            return code;
+            outputPins[0].pinValue = "\"" + thisTextBox.Text + "\"";
+            return ""; //Not gona be used
         }
     }
 

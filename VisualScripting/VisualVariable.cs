@@ -12,7 +12,7 @@ namespace VisualScripting
     {
         public Type variableType;
         public string variableName;
-        public Object variableValue = "100";
+        public Object variableValue = "labas tadas";
 
         public VisualVariable(Type _variableType, string _variableName)
         {
@@ -37,7 +37,7 @@ namespace VisualScripting
                 visualVariable = _visualVariable;
 
                 this.BackColor = Color.White;
-                this.Size = new Size(200, 10);
+                this.Size = new Size(200, 15);
 
                 nameLabel = new Label();
                 this.Controls.Add(nameLabel);
@@ -84,6 +84,8 @@ namespace VisualScripting
                 outputPin = new BasePin(visualVariable.variableType, PinRole.Output); //Add parent here
                 this.Controls.Add(outputPin);
                 outputPin.Location = new Point(190, 0);
+                outputPin.pinValue = visualVariable.variableValue;
+                Console.Out.WriteLine(outputPin.pinValue);
             }
             else
             {

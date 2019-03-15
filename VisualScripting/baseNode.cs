@@ -21,7 +21,7 @@ namespace VisualScripting
 
         public static string nodeName = "Node name here";
 
-        Label nodeLabel;
+        public Label nodeLabel;
 
         public BaseNode()
         {
@@ -107,7 +107,26 @@ namespace VisualScripting
                 {
                     if (inputPins[index].otherConnectedPin != null)
                     {
-                        return inputPins[index].otherConnectedPin.parentNode.CompileToString();
+                        if(inputPins[index].otherConnectedPin.pinValue == null)
+                        {
+                            if (inputPins[index].otherConnectedPin.parentNode != null)
+                            {
+                                inputPins[index].otherConnectedPin.parentNode.CompileToString();
+                            }
+                        }
+
+                        if(inputPins[index].otherConnectedPin.pinType == typeof(string)) //Special cases for string and chars, not really supported by Object saving type
+                        {
+                            return "\"" + inputPins[index].otherConnectedPin.pinValue + "\"";
+                        }
+                        else if (inputPins[index].otherConnectedPin.pinType == typeof(char))
+                        {
+                            return "\'" + inputPins[index].otherConnectedPin.pinValue + "\'";
+                        }
+                        else
+                        {
+                            return inputPins[index].otherConnectedPin.pinValue.ToString();
+                        }
                     }
                     else //Output isnt connected, thats acceptable
                     {

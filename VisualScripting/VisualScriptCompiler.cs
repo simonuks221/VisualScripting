@@ -52,7 +52,7 @@ namespace VisualScripting
                     {
                         ConsoleForm.Instance.AddNewMessage(diagnostic.Id + diagnostic.GetMessage());
                     }
-                    ConsoleForm.Instance.AddNewMessage("/n" +_codeToCompile);
+                    Console.Out.WriteLine("/n" +_codeToCompile);
                 }
                 else
                 {
