@@ -51,9 +51,9 @@ namespace VisualScripting
 
                 currentNodes.Add(newNode);
 
-                newNode.MouseDown += StartMovingNode;
-                newNode.MouseUp += StopMovingNode;
-                newNode.MouseMove += MainScriptingPanel_MouseMove;
+                newNode.myMouseDown += StartMovingNode;
+                newNode.myMouseUp += StopMovingNode;
+                newNode.myMouseMove += MainScriptingPanel_MouseMove;
 
                 for (int i = 0; i < newNode.inputPins.Count; i++)
                 {
@@ -71,15 +71,15 @@ namespace VisualScripting
             }
         }
 
-        public void StopMovingNode(object sender, MouseEventArgs e) //Stop moving node
+        public void StopMovingNode(BaseNode _senderNode, MouseEventArgs e) //Stop moving node
         {
             firstSelectedNode = null;
             mainScriptingPanel.Refresh();
         }
 
-        public void StartMovingNode(object sender, MouseEventArgs e) //Start moving node
+        public void StartMovingNode(BaseNode _senderNode, MouseEventArgs e) //Start moving node
         {
-            firstSelectedNode = (BaseNode)sender;
+            firstSelectedNode = _senderNode;
             firstSelectedNodeOffset = new Size(e.Location.X * -1, e.Location.Y * -1);
             mainScriptingPanel.Refresh();
         }

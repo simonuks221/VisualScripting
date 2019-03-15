@@ -13,6 +13,12 @@ namespace VisualScripting
         //public delegate void MyEventHandler(BasePin pinPressed);
         //public event MyEventHandler pinPressed;
 
+        public delegate void MouseDownEventHandler(BaseNode senderNode, MouseEventArgs e);
+        public event MouseDownEventHandler myMouseDown;
+        public event MouseDownEventHandler myMouseUp;
+        public event MouseDownEventHandler myMouseMove;
+
+
         //public List<Type> inputs = new List<Type>() { typeof(ExecutionPin)};
         //public List<Type> outputs = new List<Type>() { typeof(ExecutionPin) };
 
@@ -30,6 +36,10 @@ namespace VisualScripting
 
         protected void SetupAllPins(List<Type> _inputs, List<Type> _outputs)
         {
+            this.MouseDown += mouseDown;
+            this.MouseUp += mouseUp;
+            this.MouseMove += mouseMove;
+
             this.BackColor = Color.LightGray;
 
             nodeLabel = new Label();
@@ -37,6 +47,10 @@ namespace VisualScripting
             nodeLabel.Location = new Point(0, 0);
             nodeLabel.Size = new Size(this.Size.Width, 13);
             nodeLabel.Text = this.GetType().GetField("nodeName").GetValue(null).ToString();
+
+            nodeLabel.MouseDown += mouseDown;
+            nodeLabel.MouseUp += mouseUp;
+            nodeLabel.MouseMove += mouseMove;
 
             inputPins = new List<BasePin>();
             outputPins = new List<BasePin>();
@@ -57,6 +71,8 @@ namespace VisualScripting
                 newPin.Location = new Point(0, i * 12 + 13);
                 inputPins.Add(newPin);
 
+                newPin.MouseMove += mouseMove;
+
                 //newPin.Click += PinClicked;
             }
 
@@ -76,8 +92,25 @@ namespace VisualScripting
                 newPin.Location = new Point(this.Size.Width - 10, i * 12 + 13);
                 outputPins.Add(newPin);
 
+                newPin.MouseMove += mouseMove;
+
                 //newPin.Click += PinClicked;
             }
+        }
+
+        private void mouseMove(object sender, MouseEventArgs e)
+        {
+            myMouseMove(this, e);
+        }
+
+        private void mouseUp(object sender, MouseEventArgs e)
+        {
+            myMouseUp(this, e);
+        }
+
+        private void mouseDown(object sender, MouseEventArgs e)
+        {
+            myMouseDown(this, e);
         }
 
         protected string GetCodeFromOutput(int index)
@@ -141,6 +174,7 @@ namespace VisualScripting
         {
             return "Not implemented node compilation";
         }
+
 
         //private void PinClicked(object sender, EventArgs e)
         //{
