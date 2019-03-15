@@ -75,11 +75,8 @@ namespace VisualScripting
         }
     }
 
-    class ExecutionPin// : BasePin
+    class ExecutionPin //Class for just identifying execution input/output pin
     {
-        //public ExecutionPin(PinRole _pinRole, BaseNode _parentNode) : base(typeof(ExecutionPin), _pinRole, _parentNode)
-        //{
-        //    this.BackColor = Color.Black;
-        //}
+
     }
 }

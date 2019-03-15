@@ -55,14 +55,7 @@ namespace VisualScripting
                 newNode.myMouseUp += StopMovingNode;
                 newNode.myMouseMove += MainScriptingPanel_MouseMove;
 
-                for (int i = 0; i < newNode.inputPins.Count; i++)
-                {
-                    newNode.inputPins[i].pinPressed += PinPressed;
-                }
-                for (int i = 0; i < newNode.outputPins.Count; i++)
-                {
-                    newNode.outputPins[i].pinPressed += PinPressed;
-                }
+                newNode.pinPressed += PinPressed;
             }
 
             if (createNodeSearchBar != null)

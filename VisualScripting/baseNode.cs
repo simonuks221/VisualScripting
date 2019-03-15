@@ -10,8 +10,8 @@ namespace VisualScripting
 {
     public class BaseNode : Panel
     {
-        //public delegate void MyEventHandler(BasePin pinPressed);
-        //public event MyEventHandler pinPressed;
+        public delegate void MyEventHandler(BasePin pinPressed);
+        public event MyEventHandler pinPressed;
 
         public delegate void MouseDownEventHandler(BaseNode senderNode, MouseEventArgs e);
         public event MouseDownEventHandler myMouseDown;
@@ -73,7 +73,7 @@ namespace VisualScripting
 
                 newPin.MouseMove += mouseMove;
 
-                //newPin.Click += PinClicked;
+                newPin.pinPressed += PinClicked;
             }
 
             for (int i = 0; i < _outputs.Count; i++)
@@ -81,7 +81,6 @@ namespace VisualScripting
                 BasePin newPin;
                 if (_outputs[i] == typeof(ExecutionPin))
                 {
-                    //newPin = new ExecutionPin(PinRole.Output, this);
                     newPin = new BasePin(_outputs[i], PinRole.Output, this);
                 }
                 else
@@ -94,7 +93,7 @@ namespace VisualScripting
 
                 newPin.MouseMove += mouseMove;
 
-                //newPin.Click += PinClicked;
+                newPin.pinPressed += PinClicked;
             }
         }
 
@@ -176,10 +175,9 @@ namespace VisualScripting
         }
 
 
-        //private void PinClicked(object sender, EventArgs e)
-        //{
-        //    MyEventHandler handler = pinPressed;
-        //    handler((BasePin)sender);
-       // }
+        private void PinClicked(BasePin _pinPressed)
+        {
+            pinPressed(_pinPressed);
+        }
     }
 }
