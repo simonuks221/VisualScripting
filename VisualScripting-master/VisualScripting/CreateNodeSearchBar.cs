@@ -28,7 +28,7 @@ namespace VisualScripting
 
             this.BackColor = Color.DimGray;
             this.Location = _panelLocation;
-            this.Size = new Size(200, thisForm.allNodesToShow.Count * 15 + 20);
+            this.Size = new Size(200, 80);
 
             mainTextBox = new TextBox();
             this.Controls.Add(mainTextBox);
@@ -41,7 +41,7 @@ namespace VisualScripting
             {
                 CreateNodePart newPart = new CreateNodePart(thisForm.allNodesToShow[i]);
                 this.Controls.Add(newPart);
-                newPart.Location = new Point(0, 20 + i * 15);
+                newPart.Location = new Point(0, 20 + i * 10);
                 newPart.panelPressed += PartPressed;
                 lastPositionY = newPart.Location.Y;
             }
@@ -51,7 +51,7 @@ namespace VisualScripting
             {
                 VisualVariablePanelPart newPart = new VisualVariablePanelPart(thisForm.visualVariables[i]);
                 this.Controls.Add(newPart);
-                newPart.Location = new Point(0, i * 15 + lastPositionY + 10);
+                newPart.Location = new Point(0, i * 10 + lastPositionY + 10);
                 newPart.panelPressed += VariablePressed;
                 lastPositionY = i * 10 + lastPositionY;
             }

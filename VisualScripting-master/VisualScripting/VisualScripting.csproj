@@ -83,9 +83,6 @@
     <Compile Include="BasePin.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ConsoleMessagePanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="CreateNodePart.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -40,7 +40,7 @@ namespace VisualScripting
 
         public override string CompileToString()
         {
-            string code = "ConsoleForm.Instance.AddNewMessage(" + GetValueFromInput(1) +");" + GetCodeFromOutput(0);
+            string code = "Console.Out.WriteLine(" + GetValueFromInput(1) +");" + GetCodeFromOutput(0);
             return code;
         }
     }
@@ -95,29 +95,6 @@ namespace VisualScripting
 
             }
             return integer.ToString();
-        }
-    }
-
-    class MakeBooleanNode : BaseNode
-    {
-        new public static string nodeName = "Make boolean";
-        public List<Type> inputs = new List<Type>() { };
-        public List<Type> outputs = new List<Type>() { typeof(bool) };
-
-        CheckBox thisCheckBox;
-
-        public MakeBooleanNode()
-        {
-            this.Size = new Size(50, 50);
-            SetupAllPins(inputs, outputs);
-            thisCheckBox = new CheckBox();
-            this.Controls.Add(thisCheckBox);
-            thisCheckBox.Location = new Point(10, 10);
-        }
-
-        public override string CompileToString()
-        {
-            return thisCheckBox.Checked.ToString();
         }
     }
 
@@ -204,5 +181,4 @@ while("+ GetValueFromInput(1)+@")
             return code;
         }
     }
-
 }

@@ -39,7 +39,6 @@ namespace VisualScripting
 
         private void BasePinClick(object sender, EventArgs e)
         {
-            Console.Out.WriteLine("pressed");
             pinPressed(this);
         }
 

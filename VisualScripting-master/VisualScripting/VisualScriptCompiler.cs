@@ -5,8 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Reflection;
-using System.Windows.Forms;
-using System.ComponentModel;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -21,23 +19,21 @@ namespace VisualScripting
     {
         public VisualScriptCompiler(string _codeToCompile)
         {
-            ConsoleForm.Instance.AddNewMessage("Started compiling");
+
             SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(_codeToCompile);
             string assemblyName = Path.GetRandomFileName();
             MetadataReference[] references = new MetadataReference[]
             {
             MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-            MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location),
-            MetadataReference.CreateFromFile(typeof(ConsoleForm).Assembly.Location),
-             MetadataReference.CreateFromFile(typeof(Form).Assembly.Location),
-             MetadataReference.CreateFromFile(typeof(IComponent).Assembly.Location)
-
+            MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location)
             };
+
             CSharpCompilation compilation = CSharpCompilation.Create(
         assemblyName,
         syntaxTrees: new[] { syntaxTree },
         references: references,
         options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
             using (var ms = new MemoryStream())
             {
                 EmitResult result = compilation.Emit(ms);
@@ -50,27 +46,24 @@ namespace VisualScripting
 
                     foreach (Diagnostic diagnostic in failures)
                     {
-                        ConsoleForm.Instance.AddNewMessage(diagnostic.Id + diagnostic.GetMessage());
+                        Console.Error.WriteLine("{0}: {1}", diagnostic.Id, diagnostic.GetMessage());
                     }
-                    ConsoleForm.Instance.AddNewMessage("/n" +_codeToCompile);
+
+                    Console.Out.WriteLine("/n" +_codeToCompile);
                 }
                 else
                 {
-                    ConsoleForm.Instance.AddNewMessage("End compiling");
                     ms.Seek(0, SeekOrigin.Begin);
                     Assembly assembly = Assembly.Load(ms.ToArray());
 
-                    Type type = assembly.GetType("VisualScripting.Program");
+                    Type type = assembly.GetType("NewProgram.Program");
                     object obj = Activator.CreateInstance(type);
-                    
                     type.InvokeMember("Start",
                         BindingFlags.Default | BindingFlags.InvokeMethod,
                         null,
                         obj,
                         new object[] { "Hello World" }
                         );
-
-                    
                 }
             }
         }

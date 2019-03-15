@@ -20,12 +20,12 @@ namespace VisualScripting
         {
             thisType = _thisType;
 
-            this.Size = new Size(200, 15);
+            this.Size = new Size(200, 10);
             this.BackColor = Color.White;
 
             typeLabel = new Label();
             this.Controls.Add(typeLabel);
-            typeLabel.Size = new Size(100, 15);
+            typeLabel.Size = new Size(100, 10);
             typeLabel.Location = new Point();
             var prop = thisType.GetField("nodeName").GetValue(null);
             typeLabel.Text = prop.ToString();

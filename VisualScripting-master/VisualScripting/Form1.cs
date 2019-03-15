@@ -20,9 +20,8 @@ namespace VisualScripting
 
         BasePin firstSelectedPin;
         BaseNode firstSelectedNode;
-        Size firstSelectedNodeOffset;
 
-        public List<Type> allNodesToShow = new List<Type>() {typeof(IfNode),typeof(PrintNode),typeof(MakeStringNode),typeof(MakeIntNode),typeof(MakeBooleanNode),typeof(ForLoopNode) };
+        public List<Type> allNodesToShow = new List<Type>() { typeof(IfNode), typeof(PrintNode), typeof(MakeStringNode),typeof(MakeIntNode), typeof(ForLoopNode) };
 
         public Form1()
         {
@@ -35,21 +34,18 @@ namespace VisualScripting
             visualVariables = new List<VisualVariable>() { new VisualVariable(typeof(bool), "Naujas")};
             firstSelectedPin = null;
             firstSelectedNode = null;
-            firstSelectedNodeOffset = new Size(0, 0);
             SpawnNode(new Point(50, 50), typeof(ConstructNode));
         }
 
-        //private void MainScriptingPanel_MouseClick(object sender, MouseEventArgs e) //Show node search bar
-        private void MainScriptingPanel_MouseClick(object sender, EventArgs e)
+        private void MainScriptingPanel_MouseClick(object sender, MouseEventArgs e) //Show node search bar
         {
-            MouseEventArgs r = (MouseEventArgs)e;
-            if (r.Button == MouseButtons.Right)
+            if (e.Button == MouseButtons.Right)
             {
                 if (createNodeSearchBar != null)
                 {
                     createNodeSearchBar.Dispose();
                 }
-                createNodeSearchBar = new CreateNodeSearchBar(r.Location, this);
+                createNodeSearchBar = new CreateNodeSearchBar(e.Location, this);
                 MainScriptingPanel.Controls.Add(createNodeSearchBar);
                 createNodeSearchBar.partPressed += SpawnNode;
 
@@ -120,8 +116,6 @@ namespace VisualScripting
         private void StartMovingNode(object sender, MouseEventArgs e) //Start moving node
         {
             firstSelectedNode = (BaseNode)sender;
-            firstSelectedNodeOffset = new Size(e.Location.X * -1, e.Location.Y * -1);
-            Console.Out.WriteLine(firstSelectedNodeOffset);
             MainScriptingPanel.Refresh();
         }
 
@@ -160,7 +154,7 @@ namespace VisualScripting
 
             if(firstSelectedNode != null) //Moving node
             {
-                firstSelectedNode.Location = MainScriptingPanel.PointToClient(Control.MousePosition) + firstSelectedNodeOffset;
+                firstSelectedNode.Location = MainScriptingPanel.PointToClient(Control.MousePosition);
             }
 
             g.Dispose();
@@ -206,15 +200,11 @@ namespace VisualScripting
                 using System.Linq;
                 using System.Text;
                 using System.Threading.Tasks;
-                using System.Windows.Forms;
-                using VisualScripting;
 
-                namespace VisualScripting
+                namespace NewProgram
                 {
                     class Program
                     {
-
-ConsoleForm n = new ConsoleForm();
                         static void Main(string[] args)
                         {
                         }
@@ -229,14 +219,11 @@ ConsoleForm n = new ConsoleForm();
                     }
                 }";
 
-            if (ConsoleForm.Instance == null)
-            {
-                ConsoleForm c = new ConsoleForm();
-                c.Show();
-            }
-
             VisualScriptCompiler visualCompiler = new VisualScriptCompiler(allCode);
             visualCompiler = null;
+
+            ConsoleForm c = new ConsoleForm();
+            c.Show();
         }
     }
 }
