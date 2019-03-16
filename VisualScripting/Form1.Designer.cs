@@ -74,6 +74,7 @@
             this.NewVariableButton.TabIndex = 3;
             this.NewVariableButton.Text = "Variable";
             this.NewVariableButton.UseVisualStyleBackColor = true;
+            this.NewVariableButton.Click += new System.EventHandler(this.NewVariableButton_Click);
             // 
             // NewFunctionButton
             // 

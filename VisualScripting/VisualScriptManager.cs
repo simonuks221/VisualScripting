@@ -140,10 +140,14 @@ namespace VisualScripting
 
             if (firstSelectedVariable != null)
             {
-                for (int i = 0; i < variableFunctionInfoPanel.Controls.Count; i++)
-                {
-                    variableFunctionInfoPanel.Controls[i].Dispose();
-                }
+                //for (int i = 0; i < variableFunctionInfoPanel.Controls.Count; i++)
+               // {
+               //     Console.Out.WriteLine(variableFunctionInfoPanel.Controls[i]);
+                    //variableFunctionInfoPanel.Controls[i].Dispose();
+               // }
+                Console.Out.WriteLine(variableFunctionInfoPanel.Controls.Count);
+                variableFunctionInfoPanel.Controls[0].Dispose();
+                variableFunctionInfoPanel.Controls[0].Dispose();
                 firstSelectedVariable = null;
             }
 
@@ -265,10 +269,11 @@ namespace VisualScripting
                 variableAndFunctionPanel.Controls[i].Dispose();
             }
 
-            foreach(VisualVariable variable in visualVariables)
+            for(int i = 0; i < visualVariables.Count; i++)
             {
-                VariablePanelPart panel = new VariablePanelPart(variable);
+                VariablePanelPart panel = new VariablePanelPart(visualVariables[i]);
                 variableAndFunctionPanel.Controls.Add(panel);
+                panel.Location = new Point(0, i * 20);
                 panel.panelPressed += variableAndFunctionpanelPartPressed;
             }
         }
@@ -281,12 +286,18 @@ namespace VisualScripting
             {
                 VisualVariable variable = CheckVariable.visualVariable;
                 firstSelectedVariable = variable;
+
                 TextBox variableValueTextBox = new TextBox();
                 variableFunctionInfoPanel.Controls.Add(variableValueTextBox);
-                variableValueTextBox.Location = new Point(10, 10);
-
+                variableValueTextBox.Location = new Point(5, 30);
                 variableValueTextBox.Text = variable.variableValue.ToString();
-                variableValueTextBox.TextChanged += ChangeVariablevaluetextChanged;
+                variableValueTextBox.TextChanged += ChangeVariablevalueTextChanged;
+
+                TextBox variableNameTextBox = new TextBox();
+                variableFunctionInfoPanel.Controls.Add(variableNameTextBox);
+                variableNameTextBox.Location = new Point(5, 5);
+                variableNameTextBox.Text = variable.variableName;
+                variableNameTextBox.TextChanged += ChangeVariableNameTextChanged;
             }
 
             if(createNodeSearchBar != null)
@@ -295,10 +306,24 @@ namespace VisualScripting
             }
         }
 
-        private void ChangeVariablevaluetextChanged(object sender, EventArgs e)
+        private void ChangeVariableNameTextChanged(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            firstSelectedVariable.variableName = textBox.Text;
+            UpdateVariableAndFunctionPanel();
+        }
+
+        private void ChangeVariablevalueTextChanged(object sender, EventArgs e)
         {
             TextBox textBox = (TextBox)sender;
             firstSelectedVariable.variableValue = textBox.Text;
+        }
+
+        public void AddNewVisualVariable()
+        {
+            visualVariables.Add(new VisualVariable(typeof(string), "Naujas"));
+
+            UpdateVariableAndFunctionPanel();
         }
     }
 }

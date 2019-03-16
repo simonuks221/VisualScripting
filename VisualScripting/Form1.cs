@@ -57,5 +57,10 @@ namespace VisualScripting
         {
             visualScriptManager.CompileAllToString();
         }
+
+        private void NewVariableButton_Click(object sender, EventArgs e)
+        {
+            visualScriptManager.AddNewVisualVariable();
+        }
     }
 }
