@@ -17,20 +17,25 @@ namespace VisualScripting
         BasePin firstSelectedPin;
         BaseNode firstSelectedNode;
         Size firstSelectedNodeOffset;
+        VisualVariable firstSelectedVariable;
 
         Panel mainScriptingPanel;
         Panel variableAndFunctionPanel;
+        Panel variableFunctionInfoPanel;
 
         public List<Type> allNodesToShow = new List<Type>() { typeof(IfNode), typeof(PrintNode), typeof(MakeStringNode), typeof(MakeIntNode), typeof(MakeBooleanNode), typeof(ForLoopNode) };
 
-        public VisualScriptManager(Panel _mainScriptingPanel, Panel _variableAndFunctionPanel)
+        public VisualScriptManager(Panel _mainScriptingPanel, Panel _variableAndFunctionPanel, Panel _variableFunctionInfoPanel)
         {
             mainScriptingPanel = _mainScriptingPanel;
             variableAndFunctionPanel = _variableAndFunctionPanel;
+            variableFunctionInfoPanel = _variableFunctionInfoPanel;
+
             currentNodes = new List<BaseNode>();
             visualVariables = new List<VisualVariable>() { new VisualVariable(typeof(string), "Naujas") };
             firstSelectedPin = null;
             firstSelectedNode = null;
+            firstSelectedVariable = null;
             firstSelectedNodeOffset = new Size(0, 0);
             SpawnNode(new Point(50, 50), new VisualNodeCreatePanelPart(typeof(ConstructNode))); //Spawns construct node
 
@@ -125,13 +130,23 @@ namespace VisualScripting
             {
                 firstSelectedNode = null;
                 firstSelectedPin = null;
-
+                
                 if (createNodeSearchBar != null)
                 {
                     createNodeSearchBar.Dispose();
                 }
                 createNodeSearchBar = null;
             }
+
+            if (firstSelectedVariable != null)
+            {
+                for (int i = 0; i < variableFunctionInfoPanel.Controls.Count; i++)
+                {
+                    variableFunctionInfoPanel.Controls[i].Dispose();
+                }
+                firstSelectedVariable = null;
+            }
+
             mainScriptingPanel.Refresh();
         }
 
@@ -260,12 +275,30 @@ namespace VisualScripting
 
         private void variableAndFunctionpanelPartPressed(BaseVariableAndFunctionPanelPart _panelPressed)
         {
-            var variable = (VariablePanelPart)_panelPressed;
+            var CheckVariable = (VariablePanelPart)_panelPressed;
 
-            if(variable != null) //variable pressed
+            if(CheckVariable != null) //variable pressed
             {
+                VisualVariable variable = CheckVariable.visualVariable;
+                firstSelectedVariable = variable;
+                TextBox variableValueTextBox = new TextBox();
+                variableFunctionInfoPanel.Controls.Add(variableValueTextBox);
+                variableValueTextBox.Location = new Point(10, 10);
 
+                variableValueTextBox.Text = variable.variableValue.ToString();
+                variableValueTextBox.TextChanged += ChangeVariablevaluetextChanged;
             }
+
+            if(createNodeSearchBar != null)
+            {
+                createNodeSearchBar.Dispose();
+            }
+        }
+
+        private void ChangeVariablevaluetextChanged(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            firstSelectedVariable.variableValue = textBox.Text;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace VisualScripting
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            visualScriptManager = new VisualScriptManager(MainScriptingPanel, VariableAndFunctionPanel);
+            visualScriptManager = new VisualScriptManager(MainScriptingPanel, VariableAndFunctionPanel, VariableFunctionInfoPanel);
             Form1_Resize(sender, e);
         }
 
@@ -39,8 +39,8 @@ namespace VisualScripting
             VariableAndFunctionPanel.Size = new Size(100, this.Size.Height - 60 - 93 - 100);
             VariableAndFunctionPanel.Location = new Point(11, 93);
 
-            VariableFunctionInfoPanel.Location = new Point(11, 280);
-            VariableFunctionInfoPanel.Size = new Size(100, 158);
+            VariableFunctionInfoPanel.Location = new Point(11, VariableAndFunctionPanel.Location.Y + VariableAndFunctionPanel.Size.Height + 10);
+            VariableFunctionInfoPanel.Size = new Size(100, this.Size.Height - VariableAndFunctionPanel.Location.Y - 300);
         }
 
         private void MainScriptingPanel_Paint(object sender, PaintEventArgs e) //Paint connections between pins
