@@ -9,14 +9,14 @@ using System.Windows.Forms;
 
 namespace VisualScripting
 {
-    public class BaseVariablePanelPart : Panel
+    public class BaseCreateNodePanelPart : Panel
     {
-        public delegate void MyEventHandler(VisualVariable thisVariable);
+        public delegate void MyEventHandler(BaseCreateNodePanelPart panel);
         public event MyEventHandler panelPressed;
 
         protected Label nameLabel;
 
-        public BaseVariablePanelPart()
+        public BaseCreateNodePanelPart()
         {
             this.BackColor = Color.White;
             this.Size = new Size(200, 15);
@@ -30,14 +30,26 @@ namespace VisualScripting
             this.Click += BaseVariablePanelpartClicked;
         }
 
-        private void BaseVariablePanelpartClicked(object sender, EventArgs e)
+        public virtual void BaseVariablePanelpartClicked(object sender, EventArgs e)
         {
             MyEventHandler handler = panelPressed;
-            panelPressed(visualVariable);
+            panelPressed(this);
         }
     }
 
-    public class VisualVariablePanelPart : BaseVariablePanelPart
+    public class VisualNodePanelPart : BaseCreateNodePanelPart
+    {
+        public Type nodeType;
+
+        public VisualNodePanelPart(Type _nodeType)
+        {
+            nodeType = _nodeType;
+
+            nameLabel.Text = nodeType.GetField("nodeName").GetValue(null).ToString();
+        }
+    }
+
+    public class VisualVariablePanelPart : BaseCreateNodePanelPart
     {
         public VisualVariable visualVariable;
 

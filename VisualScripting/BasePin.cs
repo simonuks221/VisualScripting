@@ -20,6 +20,8 @@ namespace VisualScripting
         public Type pinType;
 
         public Object pinValue;
+        public VisualVariable pinVariable;
+        public bool pinIsVariable = false;
 
         public BaseNode parentNode;
 

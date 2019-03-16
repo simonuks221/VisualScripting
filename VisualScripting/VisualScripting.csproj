@@ -86,9 +86,6 @@
     <Compile Include="ConsoleMessagePanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CreateNodePart.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="CreateNodeSearchBar.cs">
       <SubType>Component</SubType>
     </Compile>

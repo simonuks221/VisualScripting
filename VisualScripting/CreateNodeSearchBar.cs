@@ -10,7 +10,7 @@ namespace VisualScripting
 {
     class CreateNodeSearchBar : Panel
     {
-        public delegate void MyEventHandler(Point _position, Type _ofType = null, VisualVariable _ofVariable = null, VisualFunction _ofFunction = null);
+        public delegate void MyEventHandler(Point _position, BaseCreateNodePanelPart _panel);
         public event MyEventHandler partPressed;
 
         TextBox mainTextBox;
@@ -39,10 +39,10 @@ namespace VisualScripting
 
             for (int i = 0; i < thisVisualScriptManager.allNodesToShow.Count; i++)
             {
-                CreateNodePart newPart = new CreateNodePart(thisVisualScriptManager.allNodesToShow[i]);
+                VisualNodePanelPart newPart = new VisualNodePanelPart(thisVisualScriptManager.allNodesToShow[i]);
                 this.Controls.Add(newPart);
                 newPart.Location = new Point(0, 20 + i * 15);
-                newPart.panelPressed += PartPressed;
+                newPart.panelPressed += PanelPressed;
                 lastPositionY = newPart.Location.Y;
             }
             lastPositionY += 15;
@@ -52,21 +52,15 @@ namespace VisualScripting
                 VisualVariablePanelPart newPart = new VisualVariablePanelPart(thisVisualScriptManager.visualVariables[i]);
                 this.Controls.Add(newPart);
                 newPart.Location = new Point(0, i * 15 + lastPositionY);
-                newPart.panelPressed += VariablePressed;
+                newPart.panelPressed += PanelPressed;
                 lastPositionY = newPart.Location.Y;
             }
         }
 
-        private void VariablePressed(VisualVariable thisVariable)
+        private void PanelPressed(BaseCreateNodePanelPart _panel)
         {
             MyEventHandler handler = partPressed;
-            handler(panelLocation, null, thisVariable);
-        }
-
-        void PartPressed(Type _ofType) //Part of search bar pressed
-        {
-            MyEventHandler handler = partPressed;
-            handler(panelLocation, _ofType);
+            handler(panelLocation, _panel);
         }
     }
 }

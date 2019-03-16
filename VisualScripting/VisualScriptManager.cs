@@ -32,35 +32,41 @@ namespace VisualScripting
             firstSelectedPin = null;
             firstSelectedNode = null;
             firstSelectedNodeOffset = new Size(0, 0);
-            SpawnNode(new Point(50, 50), typeof(ConstructNode));
+            SpawnNode(new Point(50, 50), new VisualNodePanelPart(typeof(ConstructNode))); //Spawns construct node
 
             UpdateVariableAndFunctionPanel();
         }
 
-        public void SpawnNode(Point _position, Type _nodeType = null, VisualVariable _visualVariable = null, VisualFunction _visualFunction = null) //Spawn node
+        public void SpawnNode(Point _position, BaseCreateNodePanelPart _panel) //Spawn node
         {
-            if (true)//(_nodeType != null)
+            BaseNode newNode = null;
+
+            //Checking cast                             Needs better solution than this piece of crap, make an universal class that is arent of both:variable and node
+
+            var CheckNode = _panel as VisualNodePanelPart;
+            var CheckVariable = _panel as VisualVariablePanelPart;
+
+            if (CheckNode != null) //Node selected
             {
-                BaseNode newNode;
-                if (_visualVariable != null) //Spawn variable
-                {
-                    newNode = new VisualVariableNode(_visualVariable);
-                }
-                else
-                {
-                    newNode = (BaseNode)Activator.CreateInstance(_nodeType);
-                }
-                mainScriptingPanel.Controls.Add(newNode);
-                newNode.Location = _position;
-
-                currentNodes.Add(newNode);
-
-                newNode.myMouseDown += StartMovingNode;
-                newNode.myMouseUp += StopMovingNode;
-                newNode.myMouseMove += MainScriptingPanel_MouseMove;
-
-                newNode.pinPressed += PinPressed;
+                VisualNodePanelPart node = (VisualNodePanelPart)_panel;
+                newNode = (BaseNode)Activator.CreateInstance(node.nodeType);
             }
+            else if(CheckVariable != null) //variable selected
+            {
+                VisualVariablePanelPart variable = (VisualVariablePanelPart)_panel;
+                newNode = new VisualVariableNode(variable.visualVariable);
+            }
+
+
+            mainScriptingPanel.Controls.Add(newNode);
+            newNode.Location = _position;
+
+            currentNodes.Add(newNode);
+            newNode.myMouseDown += StartMovingNode;
+            newNode.myMouseUp += StopMovingNode;
+            newNode.myMouseMove += MainScriptingPanel_MouseMove;
+
+            newNode.pinPressed += PinPressed;
 
             if (createNodeSearchBar != null)
             {
@@ -176,33 +182,56 @@ namespace VisualScripting
         public void CompileAllToString()
         {
             string allCode = @"
-                using System; 
-                using System.Collections.Generic; 
-                using System.Linq;
-                using System.Text;
-                using System.Threading.Tasks;
-                using System.Windows.Forms;
-                using VisualScripting;
+using System; 
+using System.Collections.Generic; 
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using VisualScripting;
 
-                namespace VisualScripting
+namespace VisualScripting
+{
+    class Program
+    {";
+            for (int i = 0; i < visualVariables.Count; i++)
+            {
+                allCode += visualVariables[i].variableType + " " + visualVariables[i].variableName + " = ";
+
+                if(visualVariables[i].variableType == typeof(string)) //Special cases for strings and chars
                 {
-                    class Program
-                    {
+                    allCode += "\"";
+                }
+                else if(visualVariables[i].variableType == typeof(char))
+                {
+                    allCode += "\'";
+                }
 
-ConsoleForm n = new ConsoleForm();
-                        static void Main(string[] args)
-                        {
-                        }
+                allCode += visualVariables[i].variableValue;
 
-                        public void Start(string args)
-                        {
-                        
-                        ";
-            allCode += currentNodes[0].CompileToString();
-            allCode += @"
-                        }
-                    }
-                }";
+                if (visualVariables[i].variableType == typeof(string)) //Special cases for strings and chars
+                {
+                    allCode += "\"";
+                }
+                else if (visualVariables[i].variableType == typeof(char))
+                {
+                    allCode += "\'";
+                }
+
+                allCode += "; \n";
+            }
+
+         allCode += @"static void Main(string[] args)
+         {
+         }
+
+         public void Start(string args)
+         {";
+         allCode += currentNodes[0].CompileToString();
+         allCode += @"
+         }
+     }
+}";
 
             if (ConsoleForm.Instance == null)
             {
@@ -225,7 +254,7 @@ ConsoleForm n = new ConsoleForm();
             {
                 VisualVariablePanelPart panel = new VisualVariablePanelPart(variable);
                 variableAndFunctionPanel.Controls.Add(panel);
-                panel.panelPressed += VariableSelected;
+                //panel.panelPressed += VariableSelected;
             }
         }
 

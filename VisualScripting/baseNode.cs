@@ -139,25 +139,38 @@ namespace VisualScripting
                 {
                     if (inputPins[index].otherConnectedPin != null)
                     {
-                        if(inputPins[index].otherConnectedPin.pinValue == null)
+                        if (inputPins[index].otherConnectedPin.pinIsVariable) //Other connected pin is variable
                         {
-                            if (inputPins[index].otherConnectedPin.parentNode != null)
+                            if(inputPins[index].otherConnectedPin.pinVariable == null)
                             {
                                 inputPins[index].otherConnectedPin.parentNode.CompileToString();
                             }
+                            return inputPins[index].otherConnectedPin.pinVariable.variableName;
                         }
-
-                        if(inputPins[index].otherConnectedPin.pinType == typeof(string)) //Special cases for string and chars, not really supported by Object saving type
+                        else //Other connected pin isnt variable
                         {
-                            return "\"" + inputPins[index].otherConnectedPin.pinValue + "\"";
-                        }
-                        else if (inputPins[index].otherConnectedPin.pinType == typeof(char))
-                        {
-                            return "\'" + inputPins[index].otherConnectedPin.pinValue + "\'";
-                        }
-                        else
-                        {
+                            if (inputPins[index].otherConnectedPin.pinValue == null)
+                            {
+                                if (inputPins[index].otherConnectedPin.parentNode != null)
+                                {
+                                    inputPins[index].otherConnectedPin.parentNode.CompileToString();
+                                }
+                            }
                             return inputPins[index].otherConnectedPin.pinValue.ToString();
+                            /*
+                            if (inputPins[index].otherConnectedPin.pinType == typeof(string)) //Special cases for string and chars, not really supported by Object saving type
+                            {
+                                return "\"" + inputPins[index].otherConnectedPin.pinValue + "\"";
+                            }
+                            else if (inputPins[index].otherConnectedPin.pinType == typeof(char))
+                            {
+                                return "\'" + inputPins[index].otherConnectedPin.pinValue + "\'";
+                            }
+                            else
+                            {
+                                return inputPins[index].otherConnectedPin.pinValue.ToString();
+                            }
+                            */
                         }
                     }
                     else //Output isnt connected, thats acceptable
@@ -173,7 +186,6 @@ namespace VisualScripting
         {
             return "Not implemented node compilation";
         }
-
 
         private void PinClicked(BasePin _pinPressed)
         {

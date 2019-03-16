@@ -42,11 +42,12 @@ namespace VisualScripting
             }
             outputs.Add(visualVariable.variableType);
             SetupAllPins(inputs, outputs);
+            outputPins[0].pinIsVariable = true;
         }
 
         public override string CompileToString()
         {
-            outputPins[0].pinValue = visualVariable.variableValue;
+            outputPins[0].pinVariable = visualVariable;
             return "";
         }
     }
