@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace VisualScripting
 {
-    public class VisualVariable
+    public class VisualVariable //: BaseSpawnableItem W.I.P
     {
         public Type variableType;
         public string variableName;

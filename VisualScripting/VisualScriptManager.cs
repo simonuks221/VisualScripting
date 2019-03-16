@@ -32,7 +32,7 @@ namespace VisualScripting
             firstSelectedPin = null;
             firstSelectedNode = null;
             firstSelectedNodeOffset = new Size(0, 0);
-            SpawnNode(new Point(50, 50), new VisualNodePanelPart(typeof(ConstructNode))); //Spawns construct node
+            SpawnNode(new Point(50, 50), new VisualNodeCreatePanelPart(typeof(ConstructNode))); //Spawns construct node
 
             UpdateVariableAndFunctionPanel();
         }
@@ -43,17 +43,17 @@ namespace VisualScripting
 
             //Checking cast                             Needs better solution than this piece of crap, make an universal class that is arent of both:variable and node
 
-            var CheckNode = _panel as VisualNodePanelPart;
-            var CheckVariable = _panel as VisualVariablePanelPart;
+            var CheckNode = _panel as VisualNodeCreatePanelPart;
+            var CheckVariable = _panel as VisualVariableCreatePanelPart;
 
             if (CheckNode != null) //Node selected
             {
-                VisualNodePanelPart node = (VisualNodePanelPart)_panel;
+                VisualNodeCreatePanelPart node = (VisualNodeCreatePanelPart)_panel;
                 newNode = (BaseNode)Activator.CreateInstance(node.nodeType);
             }
             else if(CheckVariable != null) //variable selected
             {
-                VisualVariablePanelPart variable = (VisualVariablePanelPart)_panel;
+                VisualVariableCreatePanelPart variable = (VisualVariableCreatePanelPart)_panel;
                 newNode = new VisualVariableNode(variable.visualVariable);
             }
 
@@ -252,15 +252,20 @@ namespace VisualScripting
 
             foreach(VisualVariable variable in visualVariables)
             {
-                VisualVariablePanelPart panel = new VisualVariablePanelPart(variable);
+                VariablePanelPart panel = new VariablePanelPart(variable);
                 variableAndFunctionPanel.Controls.Add(panel);
-                //panel.panelPressed += VariableSelected;
+                panel.panelPressed += variableAndFunctionpanelPartPressed;
             }
         }
 
-        private void VariableSelected(VisualVariable thisVariable)
+        private void variableAndFunctionpanelPartPressed(BaseVariableAndFunctionPanelPart _panelPressed)
         {
-            Console.Out.WriteLine(thisVariable.variableValue);
+            var variable = (VariablePanelPart)_panelPressed;
+
+            if(variable != null) //variable pressed
+            {
+
+            }
         }
     }
 }

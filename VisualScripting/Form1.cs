@@ -36,8 +36,11 @@ namespace VisualScripting
             MainScriptingPanel.Size = new Size(this.Size.Width - 40 - 126, this.Size.Height - 60 - 12);
             MainScriptingPanel.Location = new Point(126, 12);
 
-            VariableAndFunctionPanel.Size = new Size(109, this.Size.Height - 60 - 93);
+            VariableAndFunctionPanel.Size = new Size(100, this.Size.Height - 60 - 93 - 100);
             VariableAndFunctionPanel.Location = new Point(11, 93);
+
+            VariableFunctionInfoPanel.Location = new Point(11, 280);
+            VariableFunctionInfoPanel.Size = new Size(100, 158);
         }
 
         private void MainScriptingPanel_Paint(object sender, PaintEventArgs e) //Paint connections between pins

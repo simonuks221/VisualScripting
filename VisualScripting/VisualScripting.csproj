@@ -106,7 +106,10 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VariablePanelPart.cs">
+    <Compile Include="BaseCreateNodePanelPartt.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="VariableAndFunctionPanelPart.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="VisualFunction.cs" />

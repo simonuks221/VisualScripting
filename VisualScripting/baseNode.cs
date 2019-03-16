@@ -8,6 +8,21 @@ using System.Drawing;
 
 namespace VisualScripting
 {
+    /* W.I.P
+    public class BaseSpawnableItem
+    {
+
+    }
+
+    public class VisualNode : BaseSpawnableItem
+    {
+        public static string nodeName = "Node name";
+        public static List<Type> inputs = new List<Type>() { };
+        public static List<Type> outputs = new List<Type>() { };
+        public static Size nodeSize = new Size(100, 100);
+    }
+    */
+
     public class BaseNode : Panel
     {
         public delegate void MyEventHandler(BasePin pinPressed);
@@ -31,7 +46,7 @@ namespace VisualScripting
 
         public BaseNode()
         {
-            
+
         }
 
         protected void SetupAllPins(List<Type> _inputs, List<Type> _outputs)

@@ -37,11 +37,11 @@ namespace VisualScripting
         }
     }
 
-    public class VisualNodePanelPart : BaseCreateNodePanelPart
+    public class VisualNodeCreatePanelPart : BaseCreateNodePanelPart
     {
         public Type nodeType;
 
-        public VisualNodePanelPart(Type _nodeType)
+        public VisualNodeCreatePanelPart(Type _nodeType)
         {
             nodeType = _nodeType;
 
@@ -49,11 +49,11 @@ namespace VisualScripting
         }
     }
 
-    public class VisualVariablePanelPart : BaseCreateNodePanelPart
+    public class VisualVariableCreatePanelPart : BaseCreateNodePanelPart
     {
         public VisualVariable visualVariable;
 
-        public VisualVariablePanelPart(VisualVariable _visualVariable)
+        public VisualVariableCreatePanelPart(VisualVariable _visualVariable)
         {
             if (_visualVariable != null)
             {

@@ -39,7 +39,7 @@ namespace VisualScripting
 
             for (int i = 0; i < thisVisualScriptManager.allNodesToShow.Count; i++)
             {
-                VisualNodePanelPart newPart = new VisualNodePanelPart(thisVisualScriptManager.allNodesToShow[i]);
+                VisualNodeCreatePanelPart newPart = new VisualNodeCreatePanelPart(thisVisualScriptManager.allNodesToShow[i]);
                 this.Controls.Add(newPart);
                 newPart.Location = new Point(0, 20 + i * 15);
                 newPart.panelPressed += PanelPressed;
@@ -49,7 +49,7 @@ namespace VisualScripting
 
             for (int i = 0; i < thisVisualScriptManager.visualVariables.Count; i++)
             {
-                VisualVariablePanelPart newPart = new VisualVariablePanelPart(thisVisualScriptManager.visualVariables[i]);
+                VisualVariableCreatePanelPart newPart = new VisualVariableCreatePanelPart(thisVisualScriptManager.visualVariables[i]);
                 this.Controls.Add(newPart);
                 newPart.Location = new Point(0, i * 15 + lastPositionY);
                 newPart.panelPressed += PanelPressed;

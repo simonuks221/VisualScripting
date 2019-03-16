@@ -33,6 +33,7 @@
             this.VariableAndFunctionPanel = new System.Windows.Forms.Panel();
             this.NewVariableButton = new System.Windows.Forms.Button();
             this.NewFunctionButton = new System.Windows.Forms.Button();
+            this.VariableFunctionInfoPanel = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // MainScriptingPanel
@@ -61,7 +62,7 @@
             this.VariableAndFunctionPanel.BackColor = System.Drawing.Color.Silver;
             this.VariableAndFunctionPanel.Location = new System.Drawing.Point(11, 93);
             this.VariableAndFunctionPanel.Name = "VariableAndFunctionPanel";
-            this.VariableAndFunctionPanel.Size = new System.Drawing.Size(109, 345);
+            this.VariableAndFunctionPanel.Size = new System.Drawing.Size(100, 181);
             this.VariableAndFunctionPanel.TabIndex = 2;
             // 
             // NewVariableButton
@@ -83,11 +84,20 @@
             this.NewFunctionButton.Text = "Function";
             this.NewFunctionButton.UseVisualStyleBackColor = true;
             // 
+            // VariableFunctionInfoPanel
+            // 
+            this.VariableFunctionInfoPanel.BackColor = System.Drawing.Color.Silver;
+            this.VariableFunctionInfoPanel.Location = new System.Drawing.Point(11, 280);
+            this.VariableFunctionInfoPanel.Name = "VariableFunctionInfoPanel";
+            this.VariableFunctionInfoPanel.Size = new System.Drawing.Size(100, 158);
+            this.VariableFunctionInfoPanel.TabIndex = 3;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.VariableFunctionInfoPanel);
             this.Controls.Add(this.NewFunctionButton);
             this.Controls.Add(this.NewVariableButton);
             this.Controls.Add(this.VariableAndFunctionPanel);
@@ -108,6 +118,7 @@
         private System.Windows.Forms.Panel VariableAndFunctionPanel;
         private System.Windows.Forms.Button NewVariableButton;
         private System.Windows.Forms.Button NewFunctionButton;
+        private System.Windows.Forms.Panel VariableFunctionInfoPanel;
     }
 }
 
