@@ -38,9 +38,9 @@
             // MainScriptingPanel
             // 
             this.MainScriptingPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.MainScriptingPanel.Location = new System.Drawing.Point(126, 31);
+            this.MainScriptingPanel.Location = new System.Drawing.Point(126, 12);
             this.MainScriptingPanel.Name = "MainScriptingPanel";
-            this.MainScriptingPanel.Size = new System.Drawing.Size(651, 407);
+            this.MainScriptingPanel.Size = new System.Drawing.Size(651, 426);
             this.MainScriptingPanel.TabIndex = 0;
             this.MainScriptingPanel.Click += new System.EventHandler(this.MainScriptingPanel_MouseClick);
             this.MainScriptingPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.MainScriptingPanel_Paint);
@@ -61,7 +61,7 @@
             this.VariableAndFunctionPanel.BackColor = System.Drawing.Color.Silver;
             this.VariableAndFunctionPanel.Location = new System.Drawing.Point(11, 93);
             this.VariableAndFunctionPanel.Name = "VariableAndFunctionPanel";
-            this.VariableAndFunctionPanel.Size = new System.Drawing.Size(109, 178);
+            this.VariableAndFunctionPanel.Size = new System.Drawing.Size(109, 345);
             this.VariableAndFunctionPanel.TabIndex = 2;
             // 
             // NewVariableButton

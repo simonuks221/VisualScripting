@@ -19,18 +19,22 @@ namespace VisualScripting
         Size firstSelectedNodeOffset;
 
         Panel mainScriptingPanel;
+        Panel variableAndFunctionPanel;
 
         public List<Type> allNodesToShow = new List<Type>() { typeof(IfNode), typeof(PrintNode), typeof(MakeStringNode), typeof(MakeIntNode), typeof(MakeBooleanNode), typeof(ForLoopNode) };
 
-        public VisualScriptManager(Panel _mainScriptingPanel)
+        public VisualScriptManager(Panel _mainScriptingPanel, Panel _variableAndFunctionPanel)
         {
             mainScriptingPanel = _mainScriptingPanel;
+            variableAndFunctionPanel = _variableAndFunctionPanel;
             currentNodes = new List<BaseNode>();
             visualVariables = new List<VisualVariable>() { new VisualVariable(typeof(string), "Naujas") };
             firstSelectedPin = null;
             firstSelectedNode = null;
             firstSelectedNodeOffset = new Size(0, 0);
             SpawnNode(new Point(50, 50), typeof(ConstructNode));
+
+            UpdateVariableAndFunctionPanel();
         }
 
         public void SpawnNode(Point _position, Type _nodeType = null, VisualVariable _visualVariable = null, VisualFunction _visualFunction = null) //Spawn node
@@ -208,6 +212,26 @@ ConsoleForm n = new ConsoleForm();
 
             VisualScriptCompiler visualCompiler = new VisualScriptCompiler(allCode);
             visualCompiler = null;
+        }
+
+        public void UpdateVariableAndFunctionPanel()
+        {
+            for(int i = 0; i < variableAndFunctionPanel.Controls.Count; i++)
+            {
+                variableAndFunctionPanel.Controls[i].Dispose();
+            }
+
+            foreach(VisualVariable variable in visualVariables)
+            {
+                VisualVariablePanelPart panel = new VisualVariablePanelPart(variable);
+                variableAndFunctionPanel.Controls.Add(panel);
+                panel.panelPressed += VariableSelected;
+            }
+        }
+
+        private void VariableSelected(VisualVariable thisVariable)
+        {
+            Console.Out.WriteLine(thisVariable.variableValue);
         }
     }
 }

@@ -21,46 +21,6 @@ namespace VisualScripting
         }
     }
 
-    public class VisualVariablePanelPart: Panel
-    {
-        public delegate void MyEventHandler(VisualVariable thisVariable);
-        public event MyEventHandler panelPressed;
-
-        public VisualVariable visualVariable;
-
-        Label nameLabel;
-
-        public VisualVariablePanelPart(VisualVariable _visualVariable)
-        {
-            if (_visualVariable != null)
-            {
-                visualVariable = _visualVariable;
-
-                this.BackColor = Color.White;
-                this.Size = new Size(200, 15);
-
-                nameLabel = new Label();
-                this.Controls.Add(nameLabel);
-                nameLabel.Location = new Point(0, 0);
-                nameLabel.Size = new Size(190, 20);
-                nameLabel.Text = visualVariable.variableName;
-
-                nameLabel.Click += VisualVariablePanelPart_Click;
-                this.Click += VisualVariablePanelPart_Click;
-            }
-            else
-            {
-                throw new Exception("Null variable created");
-            }
-        }
-
-        private void VisualVariablePanelPart_Click(object sender, EventArgs e)
-        {
-            MyEventHandler handler = panelPressed;
-            panelPressed(visualVariable);
-        }
-    }
-
     public class VisualVariableNode : BaseNode
     {
         public VisualVariable visualVariable;
