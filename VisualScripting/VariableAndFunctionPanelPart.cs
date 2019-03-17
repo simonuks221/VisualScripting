@@ -45,4 +45,14 @@ namespace VisualScripting
             nameLabel.Text = visualVariable.variableName;
         }
     }
+
+    class FunctionPanelPart : BaseVariableAndFunctionPanelPart
+    {
+        public VisualFunction visualFunction;
+        public FunctionPanelPart(VisualFunction _visualFunction)
+        {
+            visualFunction = _visualFunction;
+            nameLabel.Text = visualFunction.name;
+        }
+    }
 }

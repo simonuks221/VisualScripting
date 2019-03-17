@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace VisualScripting
 {
-    public class VisualFunction
+    public class VisualClass
     {
         public string name;
-        public List<Type> inputs;
-        public List<Type> outputs;
 
-        public VisualFunction(string _name)
+        public VisualClass(string _name)
         {
             name = _name;
         }

@@ -34,14 +34,15 @@
             this.NewVariableButton = new System.Windows.Forms.Button();
             this.NewFunctionButton = new System.Windows.Forms.Button();
             this.VariableFunctionInfoPanel = new System.Windows.Forms.Panel();
+            this.NavigationPanel = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // MainScriptingPanel
             // 
             this.MainScriptingPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.MainScriptingPanel.Location = new System.Drawing.Point(126, 12);
+            this.MainScriptingPanel.Location = new System.Drawing.Point(126, 35);
             this.MainScriptingPanel.Name = "MainScriptingPanel";
-            this.MainScriptingPanel.Size = new System.Drawing.Size(651, 426);
+            this.MainScriptingPanel.Size = new System.Drawing.Size(651, 403);
             this.MainScriptingPanel.TabIndex = 0;
             this.MainScriptingPanel.Click += new System.EventHandler(this.MainScriptingPanel_MouseClick);
             this.MainScriptingPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.MainScriptingPanel_Paint);
@@ -84,6 +85,7 @@
             this.NewFunctionButton.TabIndex = 4;
             this.NewFunctionButton.Text = "Function";
             this.NewFunctionButton.UseVisualStyleBackColor = true;
+            this.NewFunctionButton.Click += new System.EventHandler(this.NewFunctionButton_Click);
             // 
             // VariableFunctionInfoPanel
             // 
@@ -93,11 +95,20 @@
             this.VariableFunctionInfoPanel.Size = new System.Drawing.Size(100, 158);
             this.VariableFunctionInfoPanel.TabIndex = 3;
             // 
+            // NavigationPanel
+            // 
+            this.NavigationPanel.BackColor = System.Drawing.Color.Silver;
+            this.NavigationPanel.Location = new System.Drawing.Point(126, 12);
+            this.NavigationPanel.Name = "NavigationPanel";
+            this.NavigationPanel.Size = new System.Drawing.Size(651, 24);
+            this.NavigationPanel.TabIndex = 5;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.NavigationPanel);
             this.Controls.Add(this.VariableFunctionInfoPanel);
             this.Controls.Add(this.NewFunctionButton);
             this.Controls.Add(this.NewVariableButton);
@@ -120,6 +131,7 @@
         private System.Windows.Forms.Button NewVariableButton;
         private System.Windows.Forms.Button NewFunctionButton;
         private System.Windows.Forms.Panel VariableFunctionInfoPanel;
+        private System.Windows.Forms.Panel NavigationPanel;
     }
 }
 

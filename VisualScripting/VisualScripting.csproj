@@ -104,7 +104,11 @@
     <Compile Include="BaseNode.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="NavigationPanelPart.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="ProjectManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseCreateNodePanelPartt.cs">
       <SubType>Component</SubType>
@@ -112,7 +116,9 @@
     <Compile Include="VariableAndFunctionPanelPart.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="VisualClass.cs" />
     <Compile Include="VisualFunction.cs" />
+    <Compile Include="VisualProject.cs" />
     <Compile Include="VisualScriptCompiler.cs" />
     <Compile Include="VisualScriptManager.cs" />
     <Compile Include="VisualVariable.cs" />

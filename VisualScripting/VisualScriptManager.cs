@@ -13,11 +13,13 @@ namespace VisualScripting
         CreateNodeSearchBar createNodeSearchBar;
         List<BaseNode> currentNodes;
         public List<VisualVariable> visualVariables;
+        public List<VisualFunction> visualFunctions;
 
         BasePin firstSelectedPin;
         BaseNode firstSelectedNode;
         Size firstSelectedNodeOffset;
         VisualVariable firstSelectedVariable;
+        VisualFunction firstSelectedFunction;
 
         Panel mainScriptingPanel;
         Panel variableAndFunctionPanel;
@@ -35,9 +37,11 @@ namespace VisualScripting
 
             currentNodes = new List<BaseNode>();
             visualVariables = new List<VisualVariable>();
+            visualFunctions = new List<VisualFunction>();
             firstSelectedPin = null;
             firstSelectedNode = null;
             firstSelectedVariable = null;
+            firstSelectedFunction = null;
             firstSelectedNodeOffset = new Size(0, 0);
             SpawnNode(new Point(50, 50), new VisualNodeCreatePanelPart(typeof(ConstructNode))); //Spawns construct node
 
@@ -140,11 +144,10 @@ namespace VisualScripting
                 createNodeSearchBar = null;
             }
 
-            if (firstSelectedVariable != null)
-            {
-                ClearVariableFunctionInfoPanel();
-                firstSelectedVariable = null;
-            }
+            ClearVariableFunctionInfoPanel();
+            firstSelectedVariable = null;
+            firstSelectedFunction = null;
+
             mainScriptingPanel.Refresh();
         }
 
@@ -274,16 +277,35 @@ namespace VisualScripting
                 panel.Location = new Point(0, i * 20);
                 panel.panelPressed += variableAndFunctionpanelPartPressed;
             }
+            Point lastPanelLocation = Point.Empty;
+            if(visualVariables.Count > 0)
+            {
+                lastPanelLocation = variableAndFunctionPanel.Controls[visualVariables.Count].Location;
+            }
+            
+            for (int i = 0; i < visualFunctions.Count; i++)
+            {
+                FunctionPanelPart panel = new FunctionPanelPart(visualFunctions[i]);
+                variableAndFunctionPanel.Controls.Add(panel);
+                panel.Location = new Point(0, i * 20 + lastPanelLocation.Y);
+                panel.panelPressed += variableAndFunctionpanelPartPressed;
+            }
 
-            if(firstSelectedVariable != null) //variable is selected, update panels
+
+            if (firstSelectedVariable != null) //variable is selected, update panels
             {
                 variableAndFunctionpanelPartPressed(new VariablePanelPart(firstSelectedVariable));
+            }
+            else if (firstSelectedFunction != null)
+            {
+                variableAndFunctionpanelPartPressed(new FunctionPanelPart(firstSelectedFunction));
             }
         }
 
         private void variableAndFunctionpanelPartPressed(BaseVariableAndFunctionPanelPart _panelPressed)
         {
-            var CheckVariable = (VariablePanelPart)_panelPressed;
+            var CheckVariable = _panelPressed as VariablePanelPart;
+            var CheckFunction = _panelPressed as FunctionPanelPart;
 
             ClearVariableFunctionInfoPanel();
             
@@ -326,10 +348,31 @@ namespace VisualScripting
                 variableTypeComboBox.SelectedValueChanged += VariableTypeComboBoxSelectedValueChanged;
             }
 
+            if (CheckFunction != null)
+            {
+                VisualFunction function = CheckFunction.visualFunction;
+                firstSelectedFunction = function;
+
+                TextBox functionNameTextBox = new TextBox();
+                variableFunctionInfoPanel.Controls.Add(functionNameTextBox);
+                functionNameTextBox.Location = new Point(5, 5);
+                functionNameTextBox.Size = new Size(90, 13);
+                functionNameTextBox.Text = function.name;
+                functionNameTextBox.LostFocus += ChangeFunctionNameTextChanged;
+            }
+
             if(createNodeSearchBar != null)
             {
                 createNodeSearchBar.Dispose();
             }
+        }
+
+        private void ChangeFunctionNameTextChanged(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            firstSelectedFunction.name = textBox.Text;
+
+            UpdateVariableAndFunctionPanel();
         }
 
         private void VariableTypeComboBoxSelectedValueChanged(object sender, EventArgs e) //Type changed
@@ -356,7 +399,7 @@ namespace VisualScripting
             UpdateVariableAndFunctionPanel();
         }
 
-        bool VariableNameExists(string _name)
+        bool VariableOrFunctionNameExists(string _name)
         {
             for(int i = 0; i < visualVariables.Count; i++)
             {
@@ -366,6 +409,13 @@ namespace VisualScripting
                 }
             }
 
+            for(int i = 0; i < visualFunctions.Count; i++)
+            {
+                if(visualFunctions[i].name == _name)
+                {
+                    return true;
+                }
+            }
             return false;
         }
 
@@ -384,7 +434,7 @@ namespace VisualScripting
 
             string newVariableName = "a" + r.Next(0, 10000).ToString();
 
-            while (VariableNameExists(newVariableName))
+            while (VariableOrFunctionNameExists(newVariableName))
             {
                 newVariableName = "a" + r.Next(0, 10000).ToString();
             }
@@ -393,6 +443,22 @@ namespace VisualScripting
             UpdateVariableAndFunctionPanel();
         }
 
+        public void AddNewVisualFunction()
+        {
+            Random r = new Random();
+
+            string newFunctionName = "a" + r.Next(0, 10000).ToString();
+
+            while (VariableOrFunctionNameExists(newFunctionName))
+            {
+                newFunctionName = "a" + r.Next(0, 10000).ToString();
+            }
+
+            visualFunctions.Add(new VisualFunction(newFunctionName));
+            UpdateVariableAndFunctionPanel();
+        }
         #endregion
+
+
     }
 }
