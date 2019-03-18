@@ -21,7 +21,7 @@ namespace VisualScripting
         }
     }
 
-    public class VisualVariableNode : BaseNode
+    public class VisualVariableNode : BaseNodePanel
     {
         public VisualVariable visualVariable;
 

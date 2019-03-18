@@ -8,15 +8,15 @@ using System.Windows.Forms;
 
 namespace VisualScripting
 {
-    class VisualScriptManager
+    class VisualScriptEditorManager
     {
         CreateNodeSearchBar createNodeSearchBar;
-        List<BaseNode> currentNodes;
+        List<BaseNodePanel> currentNodes;
         public List<VisualVariable> visualVariables;
         public List<VisualFunction> visualFunctions;
 
         BasePin firstSelectedPin;
-        BaseNode firstSelectedNode;
+        BaseNodePanel firstSelectedNode;
         Size firstSelectedNodeOffset;
         VisualVariable firstSelectedVariable;
         VisualFunction firstSelectedFunction;
@@ -29,13 +29,13 @@ namespace VisualScripting
 
         public List<Type> allVariableTypesToShow = new List<Type>() {typeof(string), typeof(char), typeof(float), typeof(int) };
 
-        public VisualScriptManager(Panel _mainScriptingPanel, Panel _variableAndFunctionPanel, Panel _variableFunctionInfoPanel)
+        public VisualScriptEditorManager(Panel _mainScriptingPanel, Panel _variableAndFunctionPanel, Panel _variableFunctionInfoPanel)
         {
             mainScriptingPanel = _mainScriptingPanel;
             variableAndFunctionPanel = _variableAndFunctionPanel;
             variableFunctionInfoPanel = _variableFunctionInfoPanel;
 
-            currentNodes = new List<BaseNode>();
+            currentNodes = new List<BaseNodePanel>();
             visualVariables = new List<VisualVariable>();
             visualFunctions = new List<VisualFunction>();
             firstSelectedPin = null;
@@ -48,9 +48,14 @@ namespace VisualScripting
             UpdateVariableAndFunctionPanel();
         }
 
+        public void DisplayAllNodesOnEditor()
+        {
+
+        }
+
         public void SpawnNode(Point _position, BaseCreateNodePanelPart _panel) //Spawn node
         {
-            BaseNode newNode = null;
+            BaseNodePanel newNode = null;
 
             //Checking cast                             Needs better solution than this piece of crap, make an universal class that is arent of both:variable and node
 
@@ -60,7 +65,7 @@ namespace VisualScripting
             if (CheckNode != null) //Node selected
             {
                 VisualNodeCreatePanelPart node = (VisualNodeCreatePanelPart)_panel;
-                newNode = (BaseNode)Activator.CreateInstance(node.nodeType);
+                newNode = (BaseNodePanel)Activator.CreateInstance(node.nodeType);
             }
             else if(CheckVariable != null) //variable selected
             {
@@ -85,13 +90,13 @@ namespace VisualScripting
             }
         }
 
-        public void StopMovingNode(BaseNode _senderNode, MouseEventArgs e) //Stop moving node
+        public void StopMovingNode(BaseNodePanel _senderNode, MouseEventArgs e) //Stop moving node
         {
             firstSelectedNode = null;
             mainScriptingPanel.Refresh();
         }
 
-        public void StartMovingNode(BaseNode _senderNode, MouseEventArgs e) //Start moving node
+        public void StartMovingNode(BaseNodePanel _senderNode, MouseEventArgs e) //Start moving node
         {
             firstSelectedNode = _senderNode;
             firstSelectedNodeOffset = new Size(e.Location.X * -1, e.Location.Y * -1);
@@ -157,7 +162,7 @@ namespace VisualScripting
             g = mainScriptingPanel.CreateGraphics();
             Pen myPen = new Pen(BasePin.GetPinColor(typeof(ExecutionPin)));
             myPen.Width = 2;
-            foreach (BaseNode n in currentNodes) //Painting lines
+            foreach (BaseNodePanel n in currentNodes) //Painting lines
             {
                 foreach (BasePin p in n.inputPins) //Paint from input
                 {

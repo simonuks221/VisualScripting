@@ -23,9 +23,9 @@ namespace VisualScripting
         public VisualVariable pinVariable;
         public bool pinIsVariable = false;
 
-        public BaseNode parentNode;
+        public BaseNodePanel parentNode;
 
-        public BasePin(Type _pinType, PinRole _pinRole, BaseNode _parentNode = null) //Fix this _parentNode stuff
+        public BasePin(Type _pinType, PinRole _pinRole, BaseNodePanel _parentNode = null) //Fix this _parentNode stuff
         {
             otherConnectedPin = null;
             pinType = _pinType;

@@ -124,14 +124,13 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel MainScriptingPanel;
         private System.Windows.Forms.Button CompileButton;
-        private System.Windows.Forms.Panel VariableAndFunctionPanel;
         private System.Windows.Forms.Button NewVariableButton;
         private System.Windows.Forms.Button NewFunctionButton;
-        private System.Windows.Forms.Panel VariableFunctionInfoPanel;
-        private System.Windows.Forms.Panel NavigationPanel;
+        public System.Windows.Forms.Panel NavigationPanel;
+        public System.Windows.Forms.Panel MainScriptingPanel;
+        public System.Windows.Forms.Panel VariableAndFunctionPanel;
+        public System.Windows.Forms.Panel VariableFunctionInfoPanel;
     }
 }
 

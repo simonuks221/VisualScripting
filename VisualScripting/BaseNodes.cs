@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace VisualScripting
 {
-    class ConstructNode : BaseNode
+    class ConstructNode : BaseNodePanel
     {
         new public static string nodeName = "Start";
         public List<Type> inputs = new List<Type>() {};
@@ -26,7 +26,7 @@ namespace VisualScripting
         }
     }
 
-    class PrintNode : BaseNode
+    class PrintNode : BaseNodePanel
     {
         new public static string nodeName = "Print";
         public List<Type> inputs = new List<Type>() { typeof(ExecutionPin), typeof(string) };
@@ -45,7 +45,7 @@ namespace VisualScripting
         }
     }
 
-    class MakeStringNode : BaseNode
+    class MakeStringNode : BaseNodePanel
     {
         new public static string nodeName = "Make string";
         public List<Type> inputs = new List<Type>() { };
@@ -70,7 +70,7 @@ namespace VisualScripting
         }
     }
 
-    class MakeIntNode : BaseNode
+    class MakeIntNode : BaseNodePanel
     {
         new public static string nodeName = "Make integer";
         public List<Type> inputs = new List<Type>() { };
@@ -98,7 +98,7 @@ namespace VisualScripting
         }
     }
 
-    class MakeBooleanNode : BaseNode
+    class MakeBooleanNode : BaseNodePanel
     {
         new public static string nodeName = "Make boolean";
         public List<Type> inputs = new List<Type>() { };
@@ -121,7 +121,7 @@ namespace VisualScripting
         }
     }
 
-    class IfNode : BaseNode
+    class IfNode : BaseNodePanel
     {
         new public static string nodeName = "If";
         public List<Type> inputs = new List<Type>() {typeof(ExecutionPin), typeof(bool)};
@@ -147,7 +147,7 @@ namespace VisualScripting
         }
     }
 
-    class ForLoopNode : BaseNode
+    class ForLoopNode : BaseNodePanel
     {
         new public static string nodeName = "For loop";
         public List<Type> inputs = new List<Type>() { typeof(ExecutionPin), typeof(int), typeof(int)};
@@ -181,7 +181,7 @@ for(int i = " +GetValueFromInput(1) +";i "+ higherSymbol +" " +GetValueFromInput
         }
     }
 
-    class WhileLoopNode : BaseNode
+    class WhileLoopNode : BaseNodePanel
     {
         new public static string nodeName = "While loop";
         public List<Type> inputs = new List<Type>() { typeof(ExecutionPin), typeof(bool)};

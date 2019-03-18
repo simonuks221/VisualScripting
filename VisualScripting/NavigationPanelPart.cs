@@ -14,11 +14,16 @@ namespace VisualScripting
         public event MyEventHandler navigationPanelPressed;
 
         protected Label nameLabel;
+        public Button closeButton;
 
-        public BaseNavigationPanelPart()
+        public int navigationPanelPartIndex;
+
+        public BaseNavigationPanelPart(int _navigationPanelPartIndex)
         {
             this.Size = new Size(100, 20);
             this.BackColor = Color.White;
+
+            navigationPanelPartIndex = _navigationPanelPartIndex;
 
             nameLabel = new Label();
             this.Controls.Add(nameLabel);
@@ -27,6 +32,12 @@ namespace VisualScripting
 
             this.Click += ThisPanelPressed;
             nameLabel.Click += ThisPanelPressed;
+
+            closeButton = new Button();
+            this.Controls.Add(closeButton);
+            closeButton.Location = new Point(78, 0);
+            closeButton.Size = new Size(20, 20);
+            closeButton.Text = "X";
         }
 
         private void ThisPanelPressed(object sender, EventArgs e)
@@ -39,18 +50,18 @@ namespace VisualScripting
     {
         public VisualClass visualClass;
 
-        public VisualClassNavigationPanelPart(VisualClass _visualClass)
+        public VisualClassNavigationPanelPart(int index, VisualClass _visualClass) : base(index)
         {
             visualClass = _visualClass;
             nameLabel.Text = visualClass.name;
         }
     }
 
-    public class VisualFunctionnavigationPanelPart : BaseNavigationPanelPart
+    public class VisualFunctionNavigationPanelPart : BaseNavigationPanelPart
     {
         public VisualFunction visualFunction;
 
-        public VisualFunctionnavigationPanelPart(VisualFunction _visualFunction)
+        public VisualFunctionNavigationPanelPart(int index, VisualFunction _visualFunction) : base(index)
         {
             visualFunction = _visualFunction;
             nameLabel.Text = visualFunction.name;

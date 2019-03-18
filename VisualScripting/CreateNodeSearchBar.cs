@@ -17,11 +17,11 @@ namespace VisualScripting
 
         Point panelLocation;
 
-        VisualScriptManager thisVisualScriptManager;
+        VisualScriptEditorManager thisVisualScriptManager;
 
         //List<Type> nodesToShow = new List<Type>() {typeof(IfNode), typeof(PrintNode), typeof(MakeString)};
 
-        public CreateNodeSearchBar(Point _panelLocation, VisualScriptManager _thisVisualScriptManager)
+        public CreateNodeSearchBar(Point _panelLocation, VisualScriptEditorManager _thisVisualScriptManager)
         {
             panelLocation = _panelLocation;
             thisVisualScriptManager = _thisVisualScriptManager;

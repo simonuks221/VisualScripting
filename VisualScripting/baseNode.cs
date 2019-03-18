@@ -8,7 +8,6 @@ using System.Drawing;
 
 namespace VisualScripting
 {
-    /* W.I.P
     public class BaseSpawnableItem
     {
 
@@ -20,15 +19,20 @@ namespace VisualScripting
         public static List<Type> inputs = new List<Type>() { };
         public static List<Type> outputs = new List<Type>() { };
         public static Size nodeSize = new Size(100, 100);
-    }
-    */
+        public BaseNodePanel baseNodePanel;
 
-    public class BaseNode : Panel
+        public virtual string CompileToString()
+        {
+            return "Not implemented node compilation";
+        }
+    }
+
+    public class BaseNodePanel : Panel
     {
         public delegate void MyEventHandler(BasePin pinPressed);
         public event MyEventHandler pinPressed;
 
-        public delegate void MouseDownEventHandler(BaseNode senderNode, MouseEventArgs e);
+        public delegate void MouseDownEventHandler(BaseNodePanel senderNode, MouseEventArgs e);
         public event MouseDownEventHandler myMouseDown;
         public event MouseDownEventHandler myMouseUp;
         public event MouseDownEventHandler myMouseMove;
@@ -40,11 +44,9 @@ namespace VisualScripting
         public List<BasePin> inputPins;
         public List<BasePin> outputPins;
 
-        public static string nodeName = "Node name here";
-
         public Label nodeLabel;
 
-        public BaseNode()
+        public BaseNodePanel()
         {
 
         }
@@ -197,10 +199,7 @@ namespace VisualScripting
             return "Error, no input pin found";
         }
 
-        public virtual string CompileToString()
-        {
-            return "Not implemented node compilation";
-        }
+        
 
         private void PinClicked(BasePin _pinPressed)
         {

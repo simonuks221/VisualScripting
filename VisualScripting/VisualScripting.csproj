@@ -101,9 +101,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="BaseNode.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="BaseNode.cs" />
     <Compile Include="NavigationPanelPart.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -120,7 +118,7 @@
     <Compile Include="VisualFunction.cs" />
     <Compile Include="VisualProject.cs" />
     <Compile Include="VisualScriptCompiler.cs" />
-    <Compile Include="VisualScriptManager.cs" />
+    <Compile Include="VisualScriptEditorManager.cs" />
     <Compile Include="VisualVariable.cs" />
     <EmbeddedResource Include="ConsoleForm.resx">
       <DependentUpon>ConsoleForm.cs</DependentUpon>
