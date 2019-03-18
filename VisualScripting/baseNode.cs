@@ -20,10 +20,82 @@ namespace VisualScripting
         public static List<Type> outputs = new List<Type>() { };
         public static Size nodeSize = new Size(100, 100);
         public BaseNodePanel baseNodePanel;
+        public List<Control> specialControls = new List<Control>();
+        public Point nodeLocation = new Point(0, 0);
 
         public virtual string CompileToString()
         {
             return "Not implemented node compilation";
+        }
+
+        protected string GetCodeFromOutput(int index)
+        {
+            if (baseNodePanel.outputPins.Count > index)
+            {
+                if (baseNodePanel.outputPins[index] != null)
+                {
+                    if (baseNodePanel.outputPins[index].otherConnectedPin != null)
+                    {
+                        return baseNodePanel.outputPins[index].otherConnectedPin.parentNode.visualNode.CompileToString();
+                    }
+                    else //Output isnt connected, thats acceptable
+                    {
+                        return "";
+                    }
+                }
+            }
+            return "Error, no output pin found";
+        }
+
+        protected string GetValueFromInput(int index)
+        {
+            if (baseNodePanel.inputPins.Count > index)
+            {
+                if (baseNodePanel.inputPins[index] != null)
+                {
+                    if (baseNodePanel.inputPins[index].otherConnectedPin != null)
+                    {
+                        if (baseNodePanel.inputPins[index].otherConnectedPin.pinIsVariable) //Other connected pin is variable
+                        {
+                            if (baseNodePanel.inputPins[index].otherConnectedPin.pinVariable == null)
+                            {
+                                baseNodePanel.inputPins[index].otherConnectedPin.parentNode.visualNode.CompileToString();
+                            }
+                            return baseNodePanel.inputPins[index].otherConnectedPin.pinVariable.variableName;
+                        }
+                        else //Other connected pin isnt variable
+                        {
+                            if (baseNodePanel.inputPins[index].otherConnectedPin.pinValue == null)
+                            {
+                                if (baseNodePanel.inputPins[index].otherConnectedPin.parentNode != null)
+                                {
+                                    baseNodePanel.inputPins[index].otherConnectedPin.parentNode.visualNode.CompileToString();
+                                }
+                            }
+                            return baseNodePanel.inputPins[index].otherConnectedPin.pinValue.ToString();
+                            /*
+                            if (inputPins[index].otherConnectedPin.pinType == typeof(string)) //Special cases for string and chars, not really supported by Object saving type
+                            {
+                                return "\"" + inputPins[index].otherConnectedPin.pinValue + "\"";
+                            }
+                            else if (inputPins[index].otherConnectedPin.pinType == typeof(char))
+                            {
+                                return "\'" + inputPins[index].otherConnectedPin.pinValue + "\'";
+                            }
+                            else
+                            {
+                                return inputPins[index].otherConnectedPin.pinValue.ToString();
+                            }
+                            */
+                        }
+                    }
+                    else //Output isnt connected, thats acceptable
+                    {
+                        return "";
+                    }
+                }
+            }
+            return "Error, no input pin found";
         }
     }
 
@@ -37,18 +109,30 @@ namespace VisualScripting
         public event MouseDownEventHandler myMouseUp;
         public event MouseDownEventHandler myMouseMove;
 
-
-        //public List<Type> inputs = new List<Type>() { typeof(ExecutionPin)};
-        //public List<Type> outputs = new List<Type>() { typeof(ExecutionPin) };
-
         public List<BasePin> inputPins;
         public List<BasePin> outputPins;
 
         public Label nodeLabel;
+        public VisualNode visualNode;
 
-        public BaseNodePanel()
+        public BaseNodePanel(VisualNode _visualNode)
         {
+            visualNode = _visualNode;
+            var newInputs = visualNode.GetType().GetField("inputs").GetValue(null);
+            var newOutputs = visualNode.GetType().GetField("outputs").GetValue(null);
+            var newSize = visualNode.GetType().GetField("nodeSize").GetValue(null);
+            this.Size = (Size)newSize;
 
+            SetupAllPins(newInputs as List<Type>, newOutputs as List<Type>);
+            SetupSpecialControls();
+        }
+
+        protected void SetupSpecialControls()
+        {
+            for(int i = 0; i < visualNode.specialControls.Count; i++)
+            {
+                this.Controls.Add(visualNode.specialControls[i]);
+            }
         }
 
         protected void SetupAllPins(List<Type> _inputs, List<Type> _outputs)
@@ -63,7 +147,7 @@ namespace VisualScripting
             this.Controls.Add(nodeLabel);
             nodeLabel.Location = new Point(0, 0);
             nodeLabel.Size = new Size(this.Size.Width, 13);
-            nodeLabel.Text = this.GetType().GetField("nodeName").GetValue(null).ToString();
+            nodeLabel.Text = visualNode.GetType().GetField("nodeName").GetValue(null).ToString();
 
             nodeLabel.MouseDown += mouseDown;
             nodeLabel.MouseUp += mouseUp;
@@ -127,76 +211,6 @@ namespace VisualScripting
         private void mouseDown(object sender, MouseEventArgs e)
         {
             myMouseDown(this, e);
-        }
-
-        protected string GetCodeFromOutput(int index)
-        {
-            if(outputPins.Count > index)
-            {
-                if (outputPins[index] != null)
-                {
-                    if (outputPins[index].otherConnectedPin != null)
-                    {
-                        return outputPins[index].otherConnectedPin.parentNode.CompileToString();
-                    }
-                    else //Output isnt connected, thats acceptable
-                    {
-                        return "";
-                    }
-                }
-            }
-            return "Error, no output pin found";
-        }
-
-        protected string GetValueFromInput(int index)
-        {
-            if (inputPins.Count > index)
-            {
-                if (inputPins[index] != null)
-                {
-                    if (inputPins[index].otherConnectedPin != null)
-                    {
-                        if (inputPins[index].otherConnectedPin.pinIsVariable) //Other connected pin is variable
-                        {
-                            if(inputPins[index].otherConnectedPin.pinVariable == null)
-                            {
-                                inputPins[index].otherConnectedPin.parentNode.CompileToString();
-                            }
-                            return inputPins[index].otherConnectedPin.pinVariable.variableName;
-                        }
-                        else //Other connected pin isnt variable
-                        {
-                            if (inputPins[index].otherConnectedPin.pinValue == null)
-                            {
-                                if (inputPins[index].otherConnectedPin.parentNode != null)
-                                {
-                                    inputPins[index].otherConnectedPin.parentNode.CompileToString();
-                                }
-                            }
-                            return inputPins[index].otherConnectedPin.pinValue.ToString();
-                            /*
-                            if (inputPins[index].otherConnectedPin.pinType == typeof(string)) //Special cases for string and chars, not really supported by Object saving type
-                            {
-                                return "\"" + inputPins[index].otherConnectedPin.pinValue + "\"";
-                            }
-                            else if (inputPins[index].otherConnectedPin.pinType == typeof(char))
-                            {
-                                return "\'" + inputPins[index].otherConnectedPin.pinValue + "\'";
-                            }
-                            else
-                            {
-                                return inputPins[index].otherConnectedPin.pinValue.ToString();
-                            }
-                            */
-                        }
-                    }
-                    else //Output isnt connected, thats acceptable
-                    {
-                        return "";
-                    }
-                }
-            }
-            return "Error, no input pin found";
         }
 
         

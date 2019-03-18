@@ -8,16 +8,16 @@ using System.Drawing;
 
 namespace VisualScripting
 {
-    class ConstructNode : BaseNodePanel
+    class ConstructNode : VisualNode
     {
         new public static string nodeName = "Start";
-        public List<Type> inputs = new List<Type>() {};
-        public List<Type> outputs = new List<Type>() {typeof(ExecutionPin)};
+        new public static List<Type> inputs = new List<Type>();
+        new public static List<Type> outputs = new List<Type>() {typeof(ExecutionPin)};
+        new public static Size nodeSize = new Size(100, 100);
 
         public ConstructNode()
         {
-            this.Size = new Size(50, 50);
-            SetupAllPins(inputs, outputs);
+            
         }
 
         public override string CompileToString()
@@ -26,16 +26,16 @@ namespace VisualScripting
         }
     }
 
-    class PrintNode : BaseNodePanel
+    class PrintNode : VisualNode
     {
         new public static string nodeName = "Print";
-        public List<Type> inputs = new List<Type>() { typeof(ExecutionPin), typeof(string) };
-        public List<Type> outputs = new List<Type>() { typeof(ExecutionPin) };
+        new public static List<Type> inputs = new List<Type>() { typeof(ExecutionPin), typeof(string) };
+        new public static List<Type> outputs = new List<Type>() { typeof(ExecutionPin) };
+        new public static Size nodeSize = new Size(100, 100);
 
         public PrintNode()
         {
-            this.Size = new Size(50, 50);
-            SetupAllPins(inputs, outputs);
+            nodeSize = new Size(50, 50);
         }
 
         public override string CompileToString()
@@ -45,50 +45,52 @@ namespace VisualScripting
         }
     }
 
-    class MakeStringNode : BaseNodePanel
+    class MakeStringNode : VisualNode
     {
         new public static string nodeName = "Make string";
-        public List<Type> inputs = new List<Type>() { };
-        public List<Type> outputs = new List<Type>() { typeof(string) };
+        new public static List<Type> inputs = new List<Type>();
+        new public static List<Type> outputs = new List<Type>() { typeof(string) };
+        new public static Size nodeSize = new Size(100, 100);
 
-        TextBox thisTextBox;
 
         public MakeStringNode()
         {
-            this.Size = new Size(100, 30);
-            SetupAllPins(inputs, outputs);
-            thisTextBox = new TextBox();
-            this.Controls.Add(thisTextBox);
+            nodeSize = new Size(100, 30);
+
+            TextBox thisTextBox = new TextBox();
             thisTextBox.Location = new Point(10, 10);
             thisTextBox.Size = new Size(80, 27);
+            specialControls.Add(thisTextBox);
         }
 
         public override string CompileToString()
         {
-            outputPins[0].pinValue = "\"" + thisTextBox.Text + "\"";
+            TextBox thisTextBox = specialControls[0] as TextBox;
+
+            baseNodePanel.outputPins[0].pinValue = "\"" + thisTextBox.Text + "\"";
             return ""; //Not gona be used
         }
     }
 
-    class MakeIntNode : BaseNodePanel
+    class MakeIntNode : VisualNode
     {
         new public static string nodeName = "Make integer";
-        public List<Type> inputs = new List<Type>() { };
-        public List<Type> outputs = new List<Type>() { typeof(int) };
-
-        TextBox thisTextBox;
+        new public static List<Type> inputs = new List<Type>() { };
+        new public static List<Type> outputs = new List<Type>() { typeof(int) };
+        new public static Size nodeSize = new Size(100, 100);
 
         public MakeIntNode()
         {
-            this.Size = new Size(50, 50);
-            SetupAllPins(inputs, outputs);
-            thisTextBox = new TextBox();
-            this.Controls.Add(thisTextBox);
-            thisTextBox.Location = new System.Drawing.Point(10, 10);
+            nodeSize = new Size(50, 50);
+
+            TextBox thisTextBox = new TextBox();
+            thisTextBox.Location = new Point(10, 10);
+            specialControls.Add(thisTextBox);
         }
 
         public override string CompileToString()
         {
+            TextBox thisTextBox = specialControls[0] as TextBox;
             int integer = 0;
             if (Int32.TryParse(thisTextBox.Text, out integer))
             {
@@ -98,39 +100,40 @@ namespace VisualScripting
         }
     }
 
-    class MakeBooleanNode : BaseNodePanel
+    class MakeBooleanNode : VisualNode
     {
         new public static string nodeName = "Make boolean";
-        public List<Type> inputs = new List<Type>() { };
-        public List<Type> outputs = new List<Type>() { typeof(bool) };
-
-        CheckBox thisCheckBox;
+        new public static List<Type> inputs = new List<Type>() { };
+        new public static List<Type> outputs = new List<Type>() { typeof(bool) };
+        new public static Size nodeSize = new Size(100, 100);
 
         public MakeBooleanNode()
         {
-            this.Size = new Size(50, 50);
-            SetupAllPins(inputs, outputs);
-            thisCheckBox = new CheckBox();
-            this.Controls.Add(thisCheckBox);
+            nodeSize = new Size(50, 50);
+
+            CheckBox thisCheckBox = new CheckBox();
             thisCheckBox.Location = new Point(10, 10);
+            specialControls.Add(thisCheckBox);
         }
 
         public override string CompileToString()
         {
+            CheckBox thisCheckBox = specialControls[0] as CheckBox;
             return thisCheckBox.Checked.ToString();
         }
     }
 
-    class IfNode : BaseNodePanel
+    class IfNode : VisualNode
     {
         new public static string nodeName = "If";
-        public List<Type> inputs = new List<Type>() {typeof(ExecutionPin), typeof(bool)};
-        public List<Type> outputs = new List<Type>() {typeof(ExecutionPin), typeof(ExecutionPin) };
+        new public static List<Type> inputs = new List<Type>() {typeof(ExecutionPin), typeof(bool)};
+        new public static List<Type> outputs = new List<Type>() {typeof(ExecutionPin), typeof(ExecutionPin) };
+        new public static Size nodeSize = new Size(100, 100);
 
         public IfNode()
         {
-            this.Size = new Size(50, 50);
-            SetupAllPins(inputs, outputs);
+            nodeSize = new Size(50, 50);
+
         }
 
         public override string CompileToString()
@@ -147,16 +150,16 @@ namespace VisualScripting
         }
     }
 
-    class ForLoopNode : BaseNodePanel
+    class ForLoopNode : VisualNode
     {
         new public static string nodeName = "For loop";
-        public List<Type> inputs = new List<Type>() { typeof(ExecutionPin), typeof(int), typeof(int)};
-        public List<Type> outputs = new List<Type>() { typeof(ExecutionPin),typeof(int), typeof(ExecutionPin) };
+        new public static List<Type> inputs = new List<Type>() { typeof(ExecutionPin), typeof(int), typeof(int)};
+        new public static List<Type> outputs = new List<Type>() { typeof(ExecutionPin),typeof(int), typeof(ExecutionPin) };
+        new public static Size nodeSize = new Size(100, 100);
 
         public ForLoopNode()
         {
-            this.Size = new Size(100, 100);
-            SetupAllPins(inputs, outputs);
+            nodeSize = new Size(100, 100);
         }
 
         public override string CompileToString()
@@ -181,16 +184,16 @@ for(int i = " +GetValueFromInput(1) +";i "+ higherSymbol +" " +GetValueFromInput
         }
     }
 
-    class WhileLoopNode : BaseNodePanel
+    class WhileLoopNode : VisualNode
     {
         new public static string nodeName = "While loop";
-        public List<Type> inputs = new List<Type>() { typeof(ExecutionPin), typeof(bool)};
-        public List<Type> outputs = new List<Type>() { typeof(ExecutionPin), typeof(ExecutionPin) };
+        new public static List<Type> inputs = new List<Type>() { typeof(ExecutionPin), typeof(bool)};
+        new public static List<Type> outputs = new List<Type>() { typeof(ExecutionPin), typeof(ExecutionPin) };
+        new public static Size nodeSize = new Size(100, 100);
 
         public WhileLoopNode()
         {
-            this.Size = new Size(100, 100);
-            SetupAllPins(inputs, outputs);
+            nodeSize = new Size(100, 100);
         }
 
         public override string CompileToString()

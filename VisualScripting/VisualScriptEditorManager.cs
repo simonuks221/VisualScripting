@@ -11,7 +11,8 @@ namespace VisualScripting
     class VisualScriptEditorManager
     {
         CreateNodeSearchBar createNodeSearchBar;
-        List<BaseNodePanel> currentNodes;
+        List<BaseNodePanel> currentNodesPanels;
+        List<VisualNode> currentNodes;
         public List<VisualVariable> visualVariables;
         public List<VisualFunction> visualFunctions;
 
@@ -35,7 +36,8 @@ namespace VisualScripting
             variableAndFunctionPanel = _variableAndFunctionPanel;
             variableFunctionInfoPanel = _variableFunctionInfoPanel;
 
-            currentNodes = new List<BaseNodePanel>();
+            currentNodesPanels = new List<BaseNodePanel>();
+            currentNodes = new List<VisualNode>();
             visualVariables = new List<VisualVariable>();
             visualFunctions = new List<VisualFunction>();
             firstSelectedPin = null;
@@ -50,14 +52,15 @@ namespace VisualScripting
 
         public void DisplayAllNodesOnEditor()
         {
-
+            for(int i = 0; i < currentNodes.Count; i++)
+            {
+                currentNodesPanels[i].Visible = true;
+            }
         }
 
         public void SpawnNode(Point _position, BaseCreateNodePanelPart _panel) //Spawn node
         {
-            BaseNodePanel newNode = null;
-
-            //Checking cast                             Needs better solution than this piece of crap, make an universal class that is arent of both:variable and node
+            BaseNodePanel newNodePanel = null;
 
             var CheckNode = _panel as VisualNodeCreatePanelPart;
             var CheckVariable = _panel as VisualVariableCreatePanelPart;
@@ -65,24 +68,31 @@ namespace VisualScripting
             if (CheckNode != null) //Node selected
             {
                 VisualNodeCreatePanelPart node = (VisualNodeCreatePanelPart)_panel;
-                newNode = (BaseNodePanel)Activator.CreateInstance(node.nodeType);
+                VisualNode newNode = (VisualNode)Activator.CreateInstance(node.nodeType);
+                newNodePanel = new BaseNodePanel(newNode);
+                newNodePanel.visualNode = newNode;
+                newNode.baseNodePanel = newNodePanel;
+                currentNodes.Add(newNode);
             }
             else if(CheckVariable != null) //variable selected
             {
+                /*
                 VisualVariableCreatePanelPart variable = (VisualVariableCreatePanelPart)_panel;
-                newNode = new VisualVariableNode(variable.visualVariable);
+                VisualVariableNode node = new VisualVariableNode(new VisualNode(), variable.visualVariable);
+                newNodePanel = new VisualVariableNode(node, variable.visualVariable);
+                */
             }
 
 
-            mainScriptingPanel.Controls.Add(newNode);
-            newNode.Location = _position;
+            mainScriptingPanel.Controls.Add(newNodePanel);
+            newNodePanel.Location = _position;
 
-            currentNodes.Add(newNode);
-            newNode.myMouseDown += StartMovingNode;
-            newNode.myMouseUp += StopMovingNode;
-            newNode.myMouseMove += MainScriptingPanel_MouseMove;
+            currentNodesPanels.Add(newNodePanel);
+            newNodePanel.myMouseDown += StartMovingNode;
+            newNodePanel.myMouseUp += StopMovingNode;
+            newNodePanel.myMouseMove += MainScriptingPanel_MouseMove;
 
-            newNode.pinPressed += PinPressed;
+            newNodePanel.pinPressed += PinPressed;
 
             if (createNodeSearchBar != null)
             {
@@ -162,16 +172,19 @@ namespace VisualScripting
             g = mainScriptingPanel.CreateGraphics();
             Pen myPen = new Pen(BasePin.GetPinColor(typeof(ExecutionPin)));
             myPen.Width = 2;
-            foreach (BaseNodePanel n in currentNodes) //Painting lines
+            foreach (BaseNodePanel n in currentNodesPanels) //Painting lines
             {
-                foreach (BasePin p in n.inputPins) //Paint from input
+                if (n.inputPins != null)
                 {
-                    if (p.otherConnectedPin != null)
+                    foreach (BasePin p in n.inputPins) //Paint from input
                     {
-                        myPen.Color = BasePin.GetPinColor(p.pinType);
-                        Point pLoc = mainScriptingPanel.PointToClient(n.PointToScreen(p.Location));
-                        Point oLoc = mainScriptingPanel.PointToClient(p.otherConnectedPin.Parent.PointToScreen(p.otherConnectedPin.Location));
-                        g.DrawLine(myPen, pLoc.X, pLoc.Y, oLoc.X, oLoc.Y);
+                        if (p.otherConnectedPin != null)
+                        {
+                            myPen.Color = BasePin.GetPinColor(p.pinType);
+                            Point pLoc = mainScriptingPanel.PointToClient(n.PointToScreen(p.Location));
+                            Point oLoc = mainScriptingPanel.PointToClient(p.otherConnectedPin.Parent.PointToScreen(p.otherConnectedPin.Location));
+                            g.DrawLine(myPen, pLoc.X, pLoc.Y, oLoc.X, oLoc.Y);
+                        }
                     }
                 }
             }

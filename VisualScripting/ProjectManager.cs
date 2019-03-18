@@ -27,11 +27,10 @@ namespace VisualScripting
             visualProject = new VisualProject();
             showingVisualEditors = new List<VisualScriptEditorManager>();
             visualProject.visualClasses.Add(new VisualClass("Class1"));
-            visualProject.visualClasses.Add(new VisualClass("Class2"));
 
             showingVisualEditors.Add(new VisualScriptEditorManager(form.MainScriptingPanel, form.VariableAndFunctionPanel, form.VariableFunctionInfoPanel));
-            showingVisualEditors.Add(new VisualScriptEditorManager(form.MainScriptingPanel, form.VariableAndFunctionPanel, form.VariableFunctionInfoPanel));
-            
+
+            ChangeSelectedEditorIndex(0);
             UpdateNavigationPanel();
         }
 
@@ -86,8 +85,11 @@ namespace VisualScripting
             int numberOfControls = form.MainScriptingPanel.Controls.Count;
             for(int i = 0; i < numberOfControls; i++)
             {
-                form.MainScriptingPanel.Controls[0].Dispose();
+                form.MainScriptingPanel.Controls[0].Hide();
+                Console.Out.WriteLine("hid");
             }
+
+            showingVisualEditors[currentEditorIndex].DisplayAllNodesOnEditor();
         }
     }
 }

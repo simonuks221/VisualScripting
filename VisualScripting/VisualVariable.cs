@@ -8,16 +8,29 @@ using System.Drawing;
 
 namespace VisualScripting
 {
-    public class VisualVariable //: BaseSpawnableItem W.I.P
+    public class VisualVariable : VisualNode
     {
         public Type variableType;
         public string variableName;
         public Object variableValue = "labas tadas";
 
+        new public static string nodeName = "Variable";
+        new public List<Type> inputs = new List<Type>() { };
+        new public List<Type> outputs = new List<Type>() { };
+
         public VisualVariable(Type _variableType, string _variableName)
         {
             variableType = _variableType;
             variableName = _variableName;
+
+            nodeSize = new Size(100, 50);
+            outputs.Add(variableType);
+        }
+
+        public override string CompileToString()
+        {
+            baseNodePanel.outputPins[0].pinVariable = this;
+            return "";
         }
     }
 
@@ -25,13 +38,9 @@ namespace VisualScripting
     {
         public VisualVariable visualVariable;
 
-        new public static string nodeName = "Variable";
-        public List<Type> inputs = new List<Type>() {};
-        public List<Type> outputs = new List<Type>() {};
-
-        public VisualVariableNode(VisualVariable _visualVariable)
+        public VisualVariableNode(VisualNode _visualNode, VisualVariable _visualVariable) : base(_visualNode)
         {
-            this.Size = new Size(100, 50);
+            
             if (_visualVariable != null)
             {
                 visualVariable = _visualVariable;
@@ -40,15 +49,8 @@ namespace VisualScripting
             {
                 throw new Exception("Null variable created");
             }
-            outputs.Add(visualVariable.variableType);
-            SetupAllPins(inputs, outputs);
-            outputPins[0].pinIsVariable = true;
-        }
 
-        public override string CompileToString()
-        {
-            outputPins[0].pinVariable = visualVariable;
-            return "";
+            outputPins[0].pinIsVariable = true;
         }
     }
 }
