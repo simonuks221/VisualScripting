@@ -28,7 +28,7 @@ namespace VisualScripting
 
         private void MainScriptingPanel_MouseClick(object sender, EventArgs e)
         {
-            projectManager.showingVisualEditors[projectManager.currentEditorIndex].MainScriptingPanelMouseClick(sender, e);
+            projectManager.showingEditors[projectManager.currentEditorIndex].MainScriptingPanelMouseClick(sender, e);
         }
 
         private void Form1_Resize(object sender, EventArgs e) //For resizing main form window
@@ -47,27 +47,32 @@ namespace VisualScripting
 
         private void MainScriptingPanel_Paint(object sender, PaintEventArgs e) //Paint connections between pins
         {
-            projectManager.showingVisualEditors[projectManager.currentEditorIndex].MainScriptingPanel_Paint(sender, e);
+            projectManager.showingEditors[projectManager.currentEditorIndex].MainScriptingPanel_Paint(sender, e);
         }
 
         private void MainScriptingPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            projectManager.showingVisualEditors[projectManager.currentEditorIndex].MainScriptingPanel_MouseMove(sender, e);
+            projectManager.showingEditors[projectManager.currentEditorIndex].MainScriptingPanel_MouseMove(sender, e);
         }
 
         private void CompileButton_Click(object sender, EventArgs e)
         {
-            projectManager.showingVisualEditors[projectManager.currentEditorIndex].CompileAllToString();
+            //projectManager.showingEditors[projectManager.currentEditorIndex].CompileAllToString();
         }
 
         private void NewVariableButton_Click(object sender, EventArgs e)
         {
-            projectManager.showingVisualEditors[projectManager.currentEditorIndex].AddNewVisualVariable();
+            //projectManager.showingEditors[projectManager.currentEditorIndex].AddNewVisualVariable();
         }
 
         private void NewFunctionButton_Click(object sender, EventArgs e)
         {
-            projectManager.showingVisualEditors[projectManager.currentEditorIndex].AddNewVisualFunction();
+            //projectManager.showingEditors[projectManager.currentEditorIndex].AddNewVisualFunction();
+        }
+
+        private void AddNewClassButton_Click(object sender, EventArgs e)
+        {
+            projectManager.AddnewClass();
         }
     }
 }

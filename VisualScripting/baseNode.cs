@@ -8,12 +8,12 @@ using System.Drawing;
 
 namespace VisualScripting
 {
-    public class BaseSpawnableItem
+    public class VisualBase
     {
 
     }
 
-    public class VisualNode : BaseSpawnableItem
+    public class VisualNode : VisualBase
     {
         public static string nodeName = "Node name";
         public static List<Type> inputs = new List<Type>() { };

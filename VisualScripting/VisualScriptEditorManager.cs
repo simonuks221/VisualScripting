@@ -8,7 +8,31 @@ using System.Windows.Forms;
 
 namespace VisualScripting
 {
-    class VisualScriptEditorManager
+    public class BaseEditorManager
+    {
+        public virtual void MainScriptingPanel_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        public virtual void MainScriptingPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        public virtual void MainScriptingPanelMouseClick(object sender, EventArgs e)
+        {
+
+        }
+    }
+
+    public class AssetsEditorManager : BaseEditorManager
+    {
+
+    }
+
+
+    public class VisualScriptEditorManager : BaseEditorManager
     {
         CreateNodeSearchBar createNodeSearchBar;
         List<BaseNodePanel> currentNodesPanels;
@@ -26,12 +50,15 @@ namespace VisualScripting
         Panel variableAndFunctionPanel;
         Panel variableFunctionInfoPanel;
 
+        VisualBase visualBase;
+
         public List<Type> allNodesToShow = new List<Type>() { typeof(IfNode), typeof(PrintNode), typeof(MakeStringNode), typeof(MakeIntNode), typeof(MakeBooleanNode), typeof(ForLoopNode) };
 
         public List<Type> allVariableTypesToShow = new List<Type>() {typeof(string), typeof(char), typeof(float), typeof(int) };
 
-        public VisualScriptEditorManager(Panel _mainScriptingPanel, Panel _variableAndFunctionPanel, Panel _variableFunctionInfoPanel)
+        public VisualScriptEditorManager(VisualBase _visualBase, Panel _mainScriptingPanel, Panel _variableAndFunctionPanel, Panel _variableFunctionInfoPanel)
         {
+            visualBase = _visualBase;
             mainScriptingPanel = _mainScriptingPanel;
             variableAndFunctionPanel = _variableAndFunctionPanel;
             variableFunctionInfoPanel = _variableFunctionInfoPanel;
@@ -131,7 +158,7 @@ namespace VisualScripting
             }
         }
 
-        public void MainScriptingPanelMouseClick(object sender, EventArgs e)
+        public override void MainScriptingPanelMouseClick(object sender, EventArgs e)
         {
             MouseEventArgs r = (MouseEventArgs)e;
             if (r.Button == MouseButtons.Right)
@@ -166,7 +193,7 @@ namespace VisualScripting
             mainScriptingPanel.Refresh();
         }
 
-        public void MainScriptingPanel_Paint(object sender, PaintEventArgs e) //Paint connections between pins
+        public override void MainScriptingPanel_Paint(object sender, PaintEventArgs e) //Paint connections between pins
         {
             Graphics g;
             g = mainScriptingPanel.CreateGraphics();
@@ -205,7 +232,7 @@ namespace VisualScripting
             myPen.Dispose();
         }
 
-        public void MainScriptingPanel_MouseMove(object sender, MouseEventArgs e)
+        public override void MainScriptingPanel_MouseMove(object sender, MouseEventArgs e)
         {
             if (firstSelectedPin != null || firstSelectedNode != null)
             {
@@ -476,7 +503,5 @@ namespace VisualScripting
             UpdateVariableAndFunctionPanel();
         }
         #endregion
-
-
     }
 }

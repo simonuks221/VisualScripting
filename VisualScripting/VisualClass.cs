@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace VisualScripting
 {
-    public class VisualClass
+
+
+    public class VisualClass : VisualBase
     {
         public string name;
 

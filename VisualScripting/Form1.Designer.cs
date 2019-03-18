@@ -35,6 +35,7 @@
             this.NewFunctionButton = new System.Windows.Forms.Button();
             this.VariableFunctionInfoPanel = new System.Windows.Forms.Panel();
             this.NavigationPanel = new System.Windows.Forms.Panel();
+            this.AddNewClassButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // MainScriptingPanel
@@ -50,7 +51,7 @@
             // 
             // CompileButton
             // 
-            this.CompileButton.Location = new System.Drawing.Point(21, 2);
+            this.CompileButton.Location = new System.Drawing.Point(12, 22);
             this.CompileButton.Name = "CompileButton";
             this.CompileButton.Size = new System.Drawing.Size(75, 23);
             this.CompileButton.TabIndex = 1;
@@ -69,7 +70,7 @@
             // NewVariableButton
             // 
             this.NewVariableButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
-            this.NewVariableButton.Location = new System.Drawing.Point(21, 35);
+            this.NewVariableButton.Location = new System.Drawing.Point(12, 41);
             this.NewVariableButton.Name = "NewVariableButton";
             this.NewVariableButton.Size = new System.Drawing.Size(75, 23);
             this.NewVariableButton.TabIndex = 3;
@@ -79,7 +80,7 @@
             // 
             // NewFunctionButton
             // 
-            this.NewFunctionButton.Location = new System.Drawing.Point(21, 64);
+            this.NewFunctionButton.Location = new System.Drawing.Point(11, 64);
             this.NewFunctionButton.Name = "NewFunctionButton";
             this.NewFunctionButton.Size = new System.Drawing.Size(75, 23);
             this.NewFunctionButton.TabIndex = 4;
@@ -103,11 +104,22 @@
             this.NavigationPanel.Size = new System.Drawing.Size(651, 24);
             this.NavigationPanel.TabIndex = 5;
             // 
+            // AddNewClassButton
+            // 
+            this.AddNewClassButton.Location = new System.Drawing.Point(12, -7);
+            this.AddNewClassButton.Name = "AddNewClassButton";
+            this.AddNewClassButton.Size = new System.Drawing.Size(75, 23);
+            this.AddNewClassButton.TabIndex = 6;
+            this.AddNewClassButton.Text = "New class";
+            this.AddNewClassButton.UseVisualStyleBackColor = true;
+            this.AddNewClassButton.Click += new System.EventHandler(this.AddNewClassButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.AddNewClassButton);
             this.Controls.Add(this.NavigationPanel);
             this.Controls.Add(this.VariableFunctionInfoPanel);
             this.Controls.Add(this.NewFunctionButton);
@@ -131,6 +143,7 @@
         public System.Windows.Forms.Panel MainScriptingPanel;
         public System.Windows.Forms.Panel VariableAndFunctionPanel;
         public System.Windows.Forms.Panel VariableFunctionInfoPanel;
+        private System.Windows.Forms.Button AddNewClassButton;
     }
 }
 

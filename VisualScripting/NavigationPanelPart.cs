@@ -57,6 +57,16 @@ namespace VisualScripting
         }
     }
 
+    public class AssetsManagerNavigationPanelPart : BaseNavigationPanelPart
+    {
+        public VisualFunction visualFunction;
+
+        public AssetsManagerNavigationPanelPart(int index) : base(index)
+        {
+            nameLabel.Text = "Assets manager";
+        }
+    }
+
     public class VisualFunctionNavigationPanelPart : BaseNavigationPanelPart
     {
         public VisualFunction visualFunction;

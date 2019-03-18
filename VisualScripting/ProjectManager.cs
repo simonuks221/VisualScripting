@@ -14,7 +14,7 @@ namespace VisualScripting
 
         VisualProject visualProject;
 
-        public List<VisualScriptEditorManager> showingVisualEditors;
+        public List<BaseEditorManager> showingEditors;
         public int currentEditorIndex = 0;
 
         Form1 form;
@@ -25,10 +25,10 @@ namespace VisualScripting
             navigationPanel = form.NavigationPanel;
 
             visualProject = new VisualProject();
-            showingVisualEditors = new List<VisualScriptEditorManager>();
-            visualProject.visualClasses.Add(new VisualClass("Class1"));
+            showingEditors = new List<BaseEditorManager>();
 
-            showingVisualEditors.Add(new VisualScriptEditorManager(form.MainScriptingPanel, form.VariableAndFunctionPanel, form.VariableFunctionInfoPanel));
+            AssetsEditorManager assetEditor = new AssetsEditorManager();
+            showingEditors.Add(assetEditor);
 
             ChangeSelectedEditorIndex(0);
             UpdateNavigationPanel();
@@ -42,9 +42,19 @@ namespace VisualScripting
                 navigationPanel.Controls[0].Dispose();
             }
 
-            for (int i = 0; i < showingVisualEditors.Count; i++)
+            for (int i = 0; i < showingEditors.Count; i++)
             {
-                VisualClassNavigationPanelPart newPanel = new VisualClassNavigationPanelPart(i, visualProject.visualClasses[i]);
+                BaseNavigationPanelPart newPanel = null;
+                var checkAsset = showingEditors[i] as AssetsEditorManager;
+                if (checkAsset != null) //Asset editor
+                {
+                    newPanel = new AssetsManagerNavigationPanelPart(i);
+                }
+                else //Not asset ediotr
+                {
+                    newPanel = new VisualClassNavigationPanelPart(i, visualProject.visualClasses[i - 1]);
+
+                }
                 navigationPanel.Controls.Add(newPanel);
                 newPanel.Location = new Point(i * 105 + 2, 2);
                 newPanel.navigationPanelPressed += NavigationPanelPartPressed;
@@ -56,7 +66,7 @@ namespace VisualScripting
         {
             Control ctr = sender as Control;
             BaseNavigationPanelPart panel = ctr.Parent as BaseNavigationPanelPart;
-            showingVisualEditors.RemoveAt(panel.navigationPanelPartIndex);
+            showingEditors.RemoveAt(panel.navigationPanelPartIndex);
 
             currentEditorIndex = 0;
 
@@ -65,16 +75,21 @@ namespace VisualScripting
 
         private void NavigationPanelPartPressed(BaseNavigationPanelPart panelPressed)
         {
-            var CheckClass = panelPressed as VisualClassNavigationPanelPart;
+            var checkClass = panelPressed as VisualClassNavigationPanelPart;
             var checkFunction = panelPressed as VisualFunctionNavigationPanelPart;
+            var checkAsset = panelPressed as AssetsManagerNavigationPanelPart; ;
 
-            if(CheckClass != null) //Class
+            if (checkClass != null) //Class
             {
-                ChangeSelectedEditorIndex(CheckClass.navigationPanelPartIndex);
+                ChangeSelectedEditorIndex(checkClass.navigationPanelPartIndex);
             }
             else if(checkFunction != null) //Function
             {
                 ChangeSelectedEditorIndex(checkFunction.navigationPanelPartIndex);
+            }
+            else if(checkAsset != null)
+            {
+                ChangeSelectedEditorIndex(checkAsset.navigationPanelPartIndex);
             }
         }
 
@@ -89,7 +104,28 @@ namespace VisualScripting
                 Console.Out.WriteLine("hid");
             }
 
-            showingVisualEditors[currentEditorIndex].DisplayAllNodesOnEditor();
+            var checkCodeEditor = showingEditors[currentEditorIndex] as VisualScriptEditorManager;
+            var checkAssetEditor = showingEditors[currentEditorIndex] as AssetsEditorManager;
+
+            if (checkCodeEditor != null) //Editing class
+            {
+                VisualScriptEditorManager editor = checkCodeEditor as VisualScriptEditorManager;
+                editor.DisplayAllNodesOnEditor();
+            }
+            if(checkAssetEditor != null)
+            {
+                
+            }
+        }
+
+        public void AddnewClass()
+        {
+            VisualClass newVisualClass = new VisualClass("nauja klase");
+            visualProject.visualClasses.Add(newVisualClass);
+            VisualScriptEditorManager newEditorManager = new VisualScriptEditorManager(newVisualClass, form.MainScriptingPanel, form.VariableAndFunctionPanel, form.VariableFunctionInfoPanel);
+            showingEditors.Add(newEditorManager);
+
+            UpdateNavigationPanel();
         }
     }
 }
