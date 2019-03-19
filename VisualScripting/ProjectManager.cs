@@ -101,7 +101,12 @@ namespace VisualScripting
             for(int i = 0; i < numberOfControls; i++)
             {
                 form.MainScriptingPanel.Controls[0].Hide();
-                Console.Out.WriteLine("hid");
+                Console.Out.WriteLine(form.MainScriptingPanel.Controls[0].Location);
+            }
+
+            foreach(Control c in form.MainScriptingPanel.Controls)
+            {
+                c.Hide();
             }
 
             var checkCodeEditor = showingEditors[currentEditorIndex] as VisualScriptEditorManager;
@@ -110,7 +115,7 @@ namespace VisualScripting
             if (checkCodeEditor != null) //Editing class
             {
                 VisualScriptEditorManager editor = checkCodeEditor as VisualScriptEditorManager;
-                editor.DisplayAllNodesOnEditor();
+                editor.DisplayAllOnMainPanel();
             }
             if(checkAssetEditor != null)
             {

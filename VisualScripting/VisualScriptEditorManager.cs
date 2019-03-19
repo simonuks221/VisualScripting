@@ -24,11 +24,19 @@ namespace VisualScripting
         {
 
         }
+
+        public virtual void DisplayAllOnMainPanel()
+        {
+
+        }
     }
 
     public class AssetsEditorManager : BaseEditorManager
     {
-
+        public override void DisplayAllOnMainPanel()
+        {
+            
+        }
     }
 
 
@@ -77,12 +85,13 @@ namespace VisualScripting
             UpdateVariableAndFunctionPanel();
         }
 
-        public void DisplayAllNodesOnEditor()
+        public override void DisplayAllOnMainPanel()
         {
             for(int i = 0; i < currentNodes.Count; i++)
             {
                 currentNodesPanels[i].Visible = true;
             }
+            mainScriptingPanel.Refresh();
         }
 
         public void SpawnNode(Point _position, BaseCreateNodePanelPart _panel) //Spawn node
@@ -109,7 +118,6 @@ namespace VisualScripting
                 newNodePanel = new VisualVariableNode(node, variable.visualVariable);
                 */
             }
-
 
             mainScriptingPanel.Controls.Add(newNodePanel);
             newNodePanel.Location = _position;
