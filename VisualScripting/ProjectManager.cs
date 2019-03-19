@@ -8,11 +8,11 @@ using System.Windows.Forms;
 
 namespace VisualScripting
 {
-    class ProjectManager
+    public class ProjectManager
     {
         Panel navigationPanel;
 
-        VisualProject visualProject;
+        public VisualProject visualProject;
 
         public List<BaseEditorManager> showingEditors;
         public int currentEditorIndex = 0;
@@ -22,12 +22,13 @@ namespace VisualScripting
         public ProjectManager(Form1 _form)
         {
             form = _form;
+            form.projectManager = this;
             navigationPanel = form.NavigationPanel;
 
             visualProject = new VisualProject();
             showingEditors = new List<BaseEditorManager>();
 
-            AssetsEditorManager assetEditor = new AssetsEditorManager();
+            AssetsEditorManager assetEditor = new AssetsEditorManager(form);
             showingEditors.Add(assetEditor);
 
             ChangeSelectedEditorIndex(0);
@@ -53,12 +54,16 @@ namespace VisualScripting
                 else //Not asset ediotr
                 {
                     newPanel = new VisualClassNavigationPanelPart(i, visualProject.visualClasses[i - 1]);
-
                 }
                 navigationPanel.Controls.Add(newPanel);
                 newPanel.Location = new Point(i * 105 + 2, 2);
                 newPanel.navigationPanelPressed += NavigationPanelPartPressed;
                 newPanel.closeButton.Click += NavigationPanelPartClose;
+
+                if(i == currentEditorIndex)
+                {
+                    newPanel.BackColor = Color.LightYellow;
+                }
             }
         }
 
@@ -93,22 +98,19 @@ namespace VisualScripting
             }
         }
 
-        void ChangeSelectedEditorIndex(int _newIndex)
+        public void ChangeSelectedEditorIndex(int _newIndex)
         {
             currentEditorIndex = _newIndex;
 
             int numberOfControls = form.MainScriptingPanel.Controls.Count;
             for(int i = 0; i < numberOfControls; i++)
             {
-                form.MainScriptingPanel.Controls[0].Hide();
-                Console.Out.WriteLine(form.MainScriptingPanel.Controls[0].Location);
+                form.MainScriptingPanel.Controls[i].Hide();
             }
 
-            foreach(Control c in form.MainScriptingPanel.Controls)
-            {
-                c.Hide();
-            }
+            showingEditors[currentEditorIndex].DisplayAllOnMainPanel();
 
+            /*
             var checkCodeEditor = showingEditors[currentEditorIndex] as VisualScriptEditorManager;
             var checkAssetEditor = showingEditors[currentEditorIndex] as AssetsEditorManager;
 
@@ -120,14 +122,24 @@ namespace VisualScripting
             if(checkAssetEditor != null)
             {
                 
-            }
+            }*/
+
+            UpdateNavigationPanel();
         }
 
-        public void AddnewClass()
+        public void AddNewClass()
         {
             VisualClass newVisualClass = new VisualClass("nauja klase");
             visualProject.visualClasses.Add(newVisualClass);
-            VisualScriptEditorManager newEditorManager = new VisualScriptEditorManager(newVisualClass, form.MainScriptingPanel, form.VariableAndFunctionPanel, form.VariableFunctionInfoPanel);
+
+            AddNewShowingEditor(newVisualClass);
+
+            ChangeSelectedEditorIndex(showingEditors.Count - 1);
+        }
+
+        public void AddNewShowingEditor(VisualBase _visualBase)
+        {
+            VisualScriptEditorManager newEditorManager = new VisualScriptEditorManager(form, _visualBase);
             showingEditors.Add(newEditorManager);
 
             UpdateNavigationPanel();

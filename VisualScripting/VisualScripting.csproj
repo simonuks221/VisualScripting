@@ -78,6 +78,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssetButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="BaseNodes.cs">
       <SubType>Component</SubType>
     </Compile>

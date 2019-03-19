@@ -10,6 +10,13 @@ namespace VisualScripting
 {
     public class BaseEditorManager
     {
+        public Form1 form;
+
+        public BaseEditorManager(Form1 _form)
+        {
+            form = _form;
+        }
+
         public virtual void MainScriptingPanel_MouseMove(object sender, MouseEventArgs e)
         {
 
@@ -33,12 +40,48 @@ namespace VisualScripting
 
     public class AssetsEditorManager : BaseEditorManager
     {
-        public override void DisplayAllOnMainPanel()
+        public AssetsEditorManager(Form1 _form) : base(_form)
         {
             
         }
-    }
 
+        public override void DisplayAllOnMainPanel()
+        {
+            form.MainScriptingPanel.BackColor = Color.Silver;
+
+            VisualProject visualProject = form.projectManager.visualProject;
+
+            int amountOfPanelsInRow = (int)Math.Floor((double)form.MainScriptingPanel.Size.Width / (double)100);
+            int amountOfRows = (int)Math.Ceiling((double)visualProject.visualClasses.Count / (double)amountOfPanelsInRow);
+
+            for (int y = 0; y < amountOfRows; y++)
+            {
+                for (int x = 0; x < amountOfPanelsInRow; x++)
+                {
+                    if (!(visualProject.visualClasses.Count <= y * amountOfPanelsInRow + x))
+                    {
+                        ClassAssetButton newPanel = new ClassAssetButton(visualProject.visualClasses[y * amountOfPanelsInRow + x]);
+                        form.MainScriptingPanel.Controls.Add(newPanel);
+                        newPanel.Location = new Point(x * 100, y * 100);
+                        newPanel.assetPressed += AssetPressed;
+                    }
+                }
+            }
+        }
+
+        private void AssetPressed(BaseAssetButton _asset)
+        {
+            var CheckVisualClass = _asset as ClassAssetButton;
+
+            if (CheckVisualClass != null) //Class selected
+            {
+                ClassAssetButton button = (ClassAssetButton)CheckVisualClass;
+                form.projectManager.AddNewShowingEditor(button.visualClass);
+
+                form.projectManager.ChangeSelectedEditorIndex(form.projectManager.showingEditors.Count - 1);
+            }
+        }
+    }
 
     public class VisualScriptEditorManager : BaseEditorManager
     {
@@ -54,22 +97,15 @@ namespace VisualScripting
         VisualVariable firstSelectedVariable;
         VisualFunction firstSelectedFunction;
 
-        Panel mainScriptingPanel;
-        Panel variableAndFunctionPanel;
-        Panel variableFunctionInfoPanel;
-
-        VisualBase visualBase;
+        public VisualBase visualBase;
 
         public List<Type> allNodesToShow = new List<Type>() { typeof(IfNode), typeof(PrintNode), typeof(MakeStringNode), typeof(MakeIntNode), typeof(MakeBooleanNode), typeof(ForLoopNode) };
 
         public List<Type> allVariableTypesToShow = new List<Type>() {typeof(string), typeof(char), typeof(float), typeof(int) };
 
-        public VisualScriptEditorManager(VisualBase _visualBase, Panel _mainScriptingPanel, Panel _variableAndFunctionPanel, Panel _variableFunctionInfoPanel)
+        public VisualScriptEditorManager(Form1 _form, VisualBase _visualBase) : base(_form)
         {
             visualBase = _visualBase;
-            mainScriptingPanel = _mainScriptingPanel;
-            variableAndFunctionPanel = _variableAndFunctionPanel;
-            variableFunctionInfoPanel = _variableFunctionInfoPanel;
 
             currentNodesPanels = new List<BaseNodePanel>();
             currentNodes = new List<VisualNode>();
@@ -87,11 +123,13 @@ namespace VisualScripting
 
         public override void DisplayAllOnMainPanel()
         {
-            for(int i = 0; i < currentNodes.Count; i++)
+            form.MainScriptingPanel.BackColor = Color.FromArgb(225, 225, 225);
+
+            for (int i = 0; i < currentNodes.Count; i++)
             {
                 currentNodesPanels[i].Visible = true;
             }
-            mainScriptingPanel.Refresh();
+            form.MainScriptingPanel.Refresh();
         }
 
         public void SpawnNode(Point _position, BaseCreateNodePanelPart _panel) //Spawn node
@@ -119,7 +157,7 @@ namespace VisualScripting
                 */
             }
 
-            mainScriptingPanel.Controls.Add(newNodePanel);
+            form.MainScriptingPanel.Controls.Add(newNodePanel);
             newNodePanel.Location = _position;
 
             currentNodesPanels.Add(newNodePanel);
@@ -138,14 +176,14 @@ namespace VisualScripting
         public void StopMovingNode(BaseNodePanel _senderNode, MouseEventArgs e) //Stop moving node
         {
             firstSelectedNode = null;
-            mainScriptingPanel.Refresh();
+            form.MainScriptingPanel.Refresh();
         }
 
         public void StartMovingNode(BaseNodePanel _senderNode, MouseEventArgs e) //Start moving node
         {
             firstSelectedNode = _senderNode;
             firstSelectedNodeOffset = new Size(e.Location.X * -1, e.Location.Y * -1);
-            mainScriptingPanel.Refresh();
+            form.MainScriptingPanel.Refresh();
         }
 
         public void PinPressed(BasePin _pinPressed)
@@ -161,7 +199,7 @@ namespace VisualScripting
                     _pinPressed.otherConnectedPin = firstSelectedPin;
                     firstSelectedPin.otherConnectedPin = _pinPressed;
                     firstSelectedPin = null;
-                    mainScriptingPanel.Refresh();
+                    form.MainScriptingPanel.Refresh();
                 }
             }
         }
@@ -176,7 +214,7 @@ namespace VisualScripting
                     createNodeSearchBar.Dispose();
                 }
                 createNodeSearchBar = new CreateNodeSearchBar(r.Location, this);
-                mainScriptingPanel.Controls.Add(createNodeSearchBar);
+                form.MainScriptingPanel.Controls.Add(createNodeSearchBar);
                 createNodeSearchBar.partPressed += SpawnNode;
 
                 firstSelectedNode = null;
@@ -198,13 +236,13 @@ namespace VisualScripting
             firstSelectedVariable = null;
             firstSelectedFunction = null;
 
-            mainScriptingPanel.Refresh();
+            form.MainScriptingPanel.Refresh();
         }
 
         public override void MainScriptingPanel_Paint(object sender, PaintEventArgs e) //Paint connections between pins
         {
             Graphics g;
-            g = mainScriptingPanel.CreateGraphics();
+            g = form.MainScriptingPanel.CreateGraphics();
             Pen myPen = new Pen(BasePin.GetPinColor(typeof(ExecutionPin)));
             myPen.Width = 2;
             foreach (BaseNodePanel n in currentNodesPanels) //Painting lines
@@ -216,8 +254,8 @@ namespace VisualScripting
                         if (p.otherConnectedPin != null)
                         {
                             myPen.Color = BasePin.GetPinColor(p.pinType);
-                            Point pLoc = mainScriptingPanel.PointToClient(n.PointToScreen(p.Location));
-                            Point oLoc = mainScriptingPanel.PointToClient(p.otherConnectedPin.Parent.PointToScreen(p.otherConnectedPin.Location));
+                            Point pLoc = form.MainScriptingPanel.PointToClient(n.PointToScreen(p.Location));
+                            Point oLoc = form.MainScriptingPanel.PointToClient(p.otherConnectedPin.Parent.PointToScreen(p.otherConnectedPin.Location));
                             g.DrawLine(myPen, pLoc.X, pLoc.Y, oLoc.X, oLoc.Y);
                         }
                     }
@@ -226,14 +264,14 @@ namespace VisualScripting
             if (firstSelectedPin != null) //Draw line if second pin not selected
             {
                 myPen.Color = BasePin.GetPinColor(firstSelectedPin.pinType);
-                Point pLoc = mainScriptingPanel.PointToClient(firstSelectedPin.Parent.PointToScreen(firstSelectedPin.Location));
-                Point mLoc = mainScriptingPanel.PointToClient(Control.MousePosition);
+                Point pLoc = form.MainScriptingPanel.PointToClient(firstSelectedPin.Parent.PointToScreen(firstSelectedPin.Location));
+                Point mLoc = form.MainScriptingPanel.PointToClient(Control.MousePosition);
                 g.DrawLine(myPen, pLoc.X, pLoc.Y, mLoc.X, mLoc.Y);
             }
 
             if (firstSelectedNode != null) //Moving node
             {
-                firstSelectedNode.Location = mainScriptingPanel.PointToClient(Control.MousePosition) + firstSelectedNodeOffset;
+                firstSelectedNode.Location = form.MainScriptingPanel.PointToClient(Control.MousePosition) + firstSelectedNodeOffset;
             }
 
             g.Dispose();
@@ -244,7 +282,7 @@ namespace VisualScripting
         {
             if (firstSelectedPin != null || firstSelectedNode != null)
             {
-                mainScriptingPanel.Refresh();
+                form.MainScriptingPanel.Refresh();
             }
         }
 
@@ -318,28 +356,28 @@ namespace VisualScripting
         {
             ClearVariableFunctionInfoPanel();
 
-            for (int i = 0; i < variableAndFunctionPanel.Controls.Count; i++)
+            for (int i = 0; i < form.VariableAndFunctionPanel.Controls.Count; i++)
             {
-                variableAndFunctionPanel.Controls[i].Dispose();
+                form.VariableAndFunctionPanel.Controls[i].Dispose();
             }
 
             for(int i = 0; i < visualVariables.Count; i++)
             {
                 VariablePanelPart panel = new VariablePanelPart(visualVariables[i]);
-                variableAndFunctionPanel.Controls.Add(panel);
+                form.VariableAndFunctionPanel.Controls.Add(panel);
                 panel.Location = new Point(0, i * 20);
                 panel.panelPressed += variableAndFunctionpanelPartPressed;
             }
             Point lastPanelLocation = Point.Empty;
             if(visualVariables.Count > 0)
             {
-                lastPanelLocation = variableAndFunctionPanel.Controls[visualVariables.Count].Location;
+                lastPanelLocation = form.VariableAndFunctionPanel.Controls[visualVariables.Count].Location;
             }
             
             for (int i = 0; i < visualFunctions.Count; i++)
             {
                 FunctionPanelPart panel = new FunctionPanelPart(visualFunctions[i]);
-                variableAndFunctionPanel.Controls.Add(panel);
+                form.VariableAndFunctionPanel.Controls.Add(panel);
                 panel.Location = new Point(0, i * 20 + lastPanelLocation.Y);
                 panel.panelPressed += variableAndFunctionpanelPartPressed;
             }
@@ -369,14 +407,14 @@ namespace VisualScripting
                 firstSelectedVariable = variable;
 
                 TextBox variableNameTextBox = new TextBox();
-                variableFunctionInfoPanel.Controls.Add(variableNameTextBox);
+                form.VariableFunctionInfoPanel.Controls.Add(variableNameTextBox);
                 variableNameTextBox.Location = new Point(5, 5);
                 variableNameTextBox.Size = new Size(90, 13);
                 variableNameTextBox.Text = variable.variableName;
                 variableNameTextBox.LostFocus += ChangeVariableNameTextChanged;
 
                 TextBox variableValueTextBox = new TextBox();
-                variableFunctionInfoPanel.Controls.Add(variableValueTextBox);
+                form.VariableFunctionInfoPanel.Controls.Add(variableValueTextBox);
                 variableValueTextBox.Location = new Point(5, 30);
                 variableValueTextBox.Size = new Size(90, 13);
 
@@ -392,7 +430,7 @@ namespace VisualScripting
                 variableValueTextBox.LostFocus += ChangeVariablevalueTextChanged;
 
                 ComboBox variableTypeComboBox = new ComboBox();
-                variableFunctionInfoPanel.Controls.Add(variableTypeComboBox);
+                form.VariableFunctionInfoPanel.Controls.Add(variableTypeComboBox);
                 variableTypeComboBox.Location = new Point(5, 48);
                 variableTypeComboBox.Size = new Size(90, 13);
                 variableTypeComboBox.Items.AddRange(allVariableTypesToShow.ToArray());
@@ -407,7 +445,7 @@ namespace VisualScripting
                 firstSelectedFunction = function;
 
                 TextBox functionNameTextBox = new TextBox();
-                variableFunctionInfoPanel.Controls.Add(functionNameTextBox);
+                form.VariableFunctionInfoPanel.Controls.Add(functionNameTextBox);
                 functionNameTextBox.Location = new Point(5, 5);
                 functionNameTextBox.Size = new Size(90, 13);
                 functionNameTextBox.Text = function.name;
@@ -474,10 +512,10 @@ namespace VisualScripting
 
         void ClearVariableFunctionInfoPanel()
         {
-            int amountOfChildren = variableFunctionInfoPanel.Controls.Count;
+            int amountOfChildren = form.VariableFunctionInfoPanel.Controls.Count;
             for(int i = 0; i < amountOfChildren; i++)
             {
-                variableFunctionInfoPanel.Controls[0].Dispose();
+                form.VariableFunctionInfoPanel.Controls[0].Dispose();
             }
         }
 

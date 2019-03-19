@@ -13,7 +13,7 @@ namespace VisualScripting
 {
     public partial class Form1 : Form
     {
-        ProjectManager projectManager;
+        public ProjectManager projectManager;
 
         public Form1()
         {
@@ -72,7 +72,7 @@ namespace VisualScripting
 
         private void AddNewClassButton_Click(object sender, EventArgs e)
         {
-            projectManager.AddnewClass();
+            projectManager.AddNewClass();
         }
     }
 }

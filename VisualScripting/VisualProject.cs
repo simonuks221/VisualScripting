@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VisualScripting
 {
-    class VisualProject
+    public class VisualProject
     {
         public List<VisualClass> visualClasses;
 
