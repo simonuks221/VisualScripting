@@ -10,7 +10,17 @@ namespace VisualScripting
 {
     public class VisualBase
     {
+        public static string name;
 
+        public VisualBase()
+        {
+            
+        }
+
+        public virtual string CompileToString()
+        {
+            throw new Exception("Not implemented");
+        }
     }
 
     public class VisualNode : VisualBase
@@ -22,11 +32,6 @@ namespace VisualScripting
         public BaseNodePanel baseNodePanel;
         public List<Control> specialControls = new List<Control>();
         public Point nodeLocation = new Point(0, 0);
-
-        public virtual string CompileToString()
-        {
-            return "Not implemented node compilation";
-        }
 
         protected string GetCodeFromOutput(int index)
         {
@@ -212,8 +217,6 @@ namespace VisualScripting
         {
             myMouseDown(this, e);
         }
-
-        
 
         private void PinClicked(BasePin _pinPressed)
         {

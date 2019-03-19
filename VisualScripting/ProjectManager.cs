@@ -144,5 +144,37 @@ namespace VisualScripting
 
             UpdateNavigationPanel();
         }
+
+        public void CompileAllToString()
+        {
+            string allCode = @"
+using System; 
+using System.Collections.Generic; 
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using VisualScripting;
+
+namespace VisualScripting
+{";
+
+            for (int i = 0; i < visualProject.visualClasses.Count; i++)
+            {
+                allCode += visualProject.visualClasses[i].CompileToString();
+            }
+
+    
+allCode += "}";
+
+            if (ConsoleForm.Instance == null)
+            {
+                ConsoleForm c = new ConsoleForm();
+                c.Show();
+            }
+
+            VisualScriptCompiler visualCompiler = new VisualScriptCompiler(allCode);
+            visualCompiler = null;
+        }
     }
 }

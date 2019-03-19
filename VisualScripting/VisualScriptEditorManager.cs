@@ -87,7 +87,8 @@ namespace VisualScripting
     {
         CreateNodeSearchBar createNodeSearchBar;
         List<BaseNodePanel> currentNodesPanels;
-        List<VisualNode> currentNodes;
+
+        public List<VisualNode> currentNodes;
         public List<VisualVariable> visualVariables;
         public List<VisualFunction> visualFunctions;
 
@@ -284,70 +285,6 @@ namespace VisualScripting
             {
                 form.MainScriptingPanel.Refresh();
             }
-        }
-
-        public void CompileAllToString()
-        {
-            string allCode = @"
-using System; 
-using System.Collections.Generic; 
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using VisualScripting;
-
-namespace VisualScripting
-{
-    class Program
-    {";
-            for (int i = 0; i < visualVariables.Count; i++)
-            {
-                allCode += visualVariables[i].variableType + " " + visualVariables[i].variableName + " = ";
-
-                if(visualVariables[i].variableType == typeof(string)) //Special cases for strings and chars
-                {
-                    allCode += "\"";
-                }
-                else if(visualVariables[i].variableType == typeof(char))
-                {
-                    allCode += "\'";
-                }
-
-                allCode += visualVariables[i].variableValue;
-
-                if (visualVariables[i].variableType == typeof(string)) //Special cases for strings and chars
-                {
-                    allCode += "\"";
-                }
-                else if (visualVariables[i].variableType == typeof(char))
-                {
-                    allCode += "\'";
-                }
-
-                allCode += "; \n";
-            }
-
-         allCode += @"static void Main(string[] args)
-         {
-         }
-
-         public void Start(string args)
-         {";
-         allCode += currentNodes[0].CompileToString();
-         allCode += @"
-         }
-     }
-}";
-
-            if (ConsoleForm.Instance == null)
-            {
-                ConsoleForm c = new ConsoleForm();
-                c.Show();
-            }
-
-            VisualScriptCompiler visualCompiler = new VisualScriptCompiler(allCode);
-            visualCompiler = null;
         }
 
         #region VisualVariableStuff

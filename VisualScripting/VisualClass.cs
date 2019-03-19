@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace VisualScripting
 {
-
-
     public class VisualClass : VisualBase
     {
         public string name;
@@ -15,6 +13,13 @@ namespace VisualScripting
         public VisualClass(string _name)
         {
             name = _name;
+        }
+
+        public override string CompileToString()
+        {
+            string allCode ="";
+
+            return allCode;
         }
     }
 }

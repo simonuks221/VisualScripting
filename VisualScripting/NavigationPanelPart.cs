@@ -53,6 +53,7 @@ namespace VisualScripting
         public VisualClassNavigationPanelPart(int index, VisualClass _visualClass) : base(index)
         {
             visualClass = _visualClass;
+            
             nameLabel.Text = visualClass.name;
         }
     }
@@ -64,6 +65,7 @@ namespace VisualScripting
         public AssetsManagerNavigationPanelPart(int index) : base(index)
         {
             nameLabel.Text = "Assets manager";
+            closeButton.Hide();
         }
     }
 
