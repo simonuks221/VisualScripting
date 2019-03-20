@@ -54,7 +54,7 @@ namespace VisualScripting
         {
             visualClass = _visualClass;
             
-            nameLabel.Text = visualClass.name;
+            nameLabel.Text = visualClass.className;
         }
     }
 

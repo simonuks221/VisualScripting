@@ -129,7 +129,7 @@ namespace VisualScripting
 
         public void AddNewClass()
         {
-            VisualClass newVisualClass = new VisualClass("nauja klase");
+            VisualClass newVisualClass = new VisualClass("naujaKlase");
             visualProject.visualClasses.Add(newVisualClass);
 
             AddNewShowingEditor(newVisualClass);
@@ -139,8 +139,13 @@ namespace VisualScripting
 
         public void AddNewShowingEditor(VisualBase _visualBase)
         {
-            VisualScriptEditorManager newEditorManager = new VisualScriptEditorManager(form, _visualBase);
-            showingEditors.Add(newEditorManager);
+            var CheckClass = _visualBase as VisualClass;
+
+            if (CheckClass != null)
+            {
+                VisualClassScriptEditorManager newEditorManager = new VisualClassScriptEditorManager(form, (VisualClass)_visualBase);
+                showingEditors.Add(newEditorManager);
+            }
 
             UpdateNavigationPanel();
         }
@@ -157,23 +162,23 @@ using System.Windows.Forms;
 using VisualScripting;
 
 namespace VisualScripting
-{";
-
+{ ";
+            allCode += "\n";
             for (int i = 0; i < visualProject.visualClasses.Count; i++)
             {
-                allCode += visualProject.visualClasses[i].CompileToString();
+                allCode += visualProject.visualClasses[i].CompileToString() + " \n ";
             }
 
     
 allCode += "}";
-
+            Console.Out.WriteLine(allCode);
             if (ConsoleForm.Instance == null)
             {
                 ConsoleForm c = new ConsoleForm();
                 c.Show();
             }
 
-            VisualScriptCompiler visualCompiler = new VisualScriptCompiler(allCode);
+            VisualScriptCompiler visualCompiler = new VisualScriptCompiler(allCode, this);
             visualCompiler = null;
         }
     }

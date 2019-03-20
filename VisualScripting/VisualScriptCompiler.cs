@@ -19,7 +19,7 @@ namespace VisualScripting
 {
     class VisualScriptCompiler
     {
-        public VisualScriptCompiler(string _codeToCompile)
+        public VisualScriptCompiler(string _codeToCompile, ProjectManager _projectManager)
         {
             ConsoleForm.Instance.AddNewMessage("Started compiling");
             SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(_codeToCompile);
@@ -60,17 +60,15 @@ namespace VisualScripting
                     ms.Seek(0, SeekOrigin.Begin);
                     Assembly assembly = Assembly.Load(ms.ToArray());
 
-                    Type type = assembly.GetType("VisualScripting.Program");
+                    Type type = assembly.GetType("VisualScripting." + _projectManager.visualProject.visualClasses[0].className);
                     object obj = Activator.CreateInstance(type);
                     
-                    type.InvokeMember("Start",
+                    type.InvokeMember(_projectManager.visualProject.visualClasses[0].className, //Invoke constructor
                         BindingFlags.Default | BindingFlags.InvokeMethod,
                         null,
                         obj,
-                        new object[] { "Hello World" }
+                        new object[] { }// "Hello World" }
                         );
-
-                    
                 }
             }
         }

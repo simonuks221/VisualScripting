@@ -57,7 +57,7 @@ namespace VisualScripting
 
         private void CompileButton_Click(object sender, EventArgs e)
         {
-            //projectManager.showingEditors[projectManager.currentEditorIndex].CompileAllToString();
+            projectManager.CompileAllToString();
         }
 
         private void NewVariableButton_Click(object sender, EventArgs e)

@@ -83,14 +83,11 @@ namespace VisualScripting
         }
     }
 
-    public class VisualScriptEditorManager : BaseEditorManager
+    public class VisualClassScriptEditorManager : BaseEditorManager
     {
         CreateNodeSearchBar createNodeSearchBar;
         List<BaseNodePanel> currentNodesPanels;
 
-        public List<VisualNode> currentNodes;
-        public List<VisualVariable> visualVariables;
-        public List<VisualFunction> visualFunctions;
 
         BasePin firstSelectedPin;
         BaseNodePanel firstSelectedNode;
@@ -98,20 +95,17 @@ namespace VisualScripting
         VisualVariable firstSelectedVariable;
         VisualFunction firstSelectedFunction;
 
-        public VisualBase visualBase;
+        public VisualClass visualClass;
 
         public List<Type> allNodesToShow = new List<Type>() { typeof(IfNode), typeof(PrintNode), typeof(MakeStringNode), typeof(MakeIntNode), typeof(MakeBooleanNode), typeof(ForLoopNode) };
 
         public List<Type> allVariableTypesToShow = new List<Type>() {typeof(string), typeof(char), typeof(float), typeof(int) };
 
-        public VisualScriptEditorManager(Form1 _form, VisualBase _visualBase) : base(_form)
+        public VisualClassScriptEditorManager(Form1 _form, VisualClass _visualClass) : base(_form)
         {
-            visualBase = _visualBase;
+            visualClass = _visualClass;
 
             currentNodesPanels = new List<BaseNodePanel>();
-            currentNodes = new List<VisualNode>();
-            visualVariables = new List<VisualVariable>();
-            visualFunctions = new List<VisualFunction>();
             firstSelectedPin = null;
             firstSelectedNode = null;
             firstSelectedVariable = null;
@@ -126,7 +120,7 @@ namespace VisualScripting
         {
             form.MainScriptingPanel.BackColor = Color.FromArgb(225, 225, 225);
 
-            for (int i = 0; i < currentNodes.Count; i++)
+            for (int i = 0; i < visualClass.currentNodes.Count; i++)
             {
                 currentNodesPanels[i].Visible = true;
             }
@@ -147,7 +141,7 @@ namespace VisualScripting
                 newNodePanel = new BaseNodePanel(newNode);
                 newNodePanel.visualNode = newNode;
                 newNode.baseNodePanel = newNodePanel;
-                currentNodes.Add(newNode);
+                visualClass.currentNodes.Add(newNode);
             }
             else if(CheckVariable != null) //variable selected
             {
@@ -298,22 +292,22 @@ namespace VisualScripting
                 form.VariableAndFunctionPanel.Controls[i].Dispose();
             }
 
-            for(int i = 0; i < visualVariables.Count; i++)
+            for(int i = 0; i < visualClass.visualVariables.Count; i++)
             {
-                VariablePanelPart panel = new VariablePanelPart(visualVariables[i]);
+                VariablePanelPart panel = new VariablePanelPart(visualClass.visualVariables[i]);
                 form.VariableAndFunctionPanel.Controls.Add(panel);
                 panel.Location = new Point(0, i * 20);
                 panel.panelPressed += variableAndFunctionpanelPartPressed;
             }
             Point lastPanelLocation = Point.Empty;
-            if(visualVariables.Count > 0)
+            if(visualClass.visualVariables.Count > 0)
             {
-                lastPanelLocation = form.VariableAndFunctionPanel.Controls[visualVariables.Count].Location;
+                lastPanelLocation = form.VariableAndFunctionPanel.Controls[visualClass.visualVariables.Count].Location;
             }
             
-            for (int i = 0; i < visualFunctions.Count; i++)
+            for (int i = 0; i < visualClass.visualFunctions.Count; i++)
             {
-                FunctionPanelPart panel = new FunctionPanelPart(visualFunctions[i]);
+                FunctionPanelPart panel = new FunctionPanelPart(visualClass.visualFunctions[i]);
                 form.VariableAndFunctionPanel.Controls.Add(panel);
                 panel.Location = new Point(0, i * 20 + lastPanelLocation.Y);
                 panel.panelPressed += variableAndFunctionpanelPartPressed;
@@ -429,17 +423,17 @@ namespace VisualScripting
 
         bool VariableOrFunctionNameExists(string _name)
         {
-            for(int i = 0; i < visualVariables.Count; i++)
+            for(int i = 0; i < visualClass.visualVariables.Count; i++)
             {
-                if(visualVariables[i].variableName == _name)
+                if(visualClass.visualVariables[i].variableName == _name)
                 {
                     return true;
                 }
             }
 
-            for(int i = 0; i < visualFunctions.Count; i++)
+            for(int i = 0; i < visualClass.visualFunctions.Count; i++)
             {
-                if(visualFunctions[i].name == _name)
+                if(visualClass.visualFunctions[i].name == _name)
                 {
                     return true;
                 }
@@ -467,7 +461,7 @@ namespace VisualScripting
                 newVariableName = "a" + r.Next(0, 10000).ToString();
             }
 
-            visualVariables.Add(new VisualVariable(typeof(string), newVariableName));
+            visualClass.visualVariables.Add(new VisualVariable(typeof(string), newVariableName));
             UpdateVariableAndFunctionPanel();
         }
 
@@ -482,7 +476,7 @@ namespace VisualScripting
                 newFunctionName = "a" + r.Next(0, 10000).ToString();
             }
 
-            visualFunctions.Add(new VisualFunction(newFunctionName));
+            visualClass.visualFunctions.Add(new VisualFunction(newFunctionName));
             UpdateVariableAndFunctionPanel();
         }
         #endregion

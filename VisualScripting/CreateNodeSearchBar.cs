@@ -17,18 +17,18 @@ namespace VisualScripting
 
         Point panelLocation;
 
-        VisualScriptEditorManager thisVisualScriptManager;
+        VisualClassScriptEditorManager thisVisualScriptManager;
 
         //List<Type> nodesToShow = new List<Type>() {typeof(IfNode), typeof(PrintNode), typeof(MakeString)};
 
-        public CreateNodeSearchBar(Point _panelLocation, VisualScriptEditorManager _thisVisualScriptManager)
+        public CreateNodeSearchBar(Point _panelLocation, VisualClassScriptEditorManager _thisVisualScriptManager)
         {
             panelLocation = _panelLocation;
             thisVisualScriptManager = _thisVisualScriptManager;
 
             this.BackColor = Color.DimGray;
             this.Location = _panelLocation;
-            this.Size = new Size(200, (thisVisualScriptManager.allNodesToShow.Count + thisVisualScriptManager.visualVariables.Count) * 15 + 20);
+            this.Size = new Size(200, (thisVisualScriptManager.allNodesToShow.Count + thisVisualScriptManager.visualClass.visualVariables.Count) * 15 + 20);
 
             mainTextBox = new TextBox();
             this.Controls.Add(mainTextBox);
@@ -47,9 +47,9 @@ namespace VisualScripting
             }
             lastPositionY += 15;
 
-            for (int i = 0; i < thisVisualScriptManager.visualVariables.Count; i++)
+            for (int i = 0; i < thisVisualScriptManager.visualClass.visualVariables.Count; i++)
             {
-                VisualVariableCreatePanelPart newPart = new VisualVariableCreatePanelPart(thisVisualScriptManager.visualVariables[i]);
+                VisualVariableCreatePanelPart newPart = new VisualVariableCreatePanelPart(thisVisualScriptManager.visualClass.visualVariables[i]);
                 this.Controls.Add(newPart);
                 newPart.Location = new Point(0, i * 15 + lastPositionY);
                 newPart.panelPressed += PanelPressed;
