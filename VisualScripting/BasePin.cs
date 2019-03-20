@@ -10,31 +10,44 @@ namespace VisualScripting
 {
     public enum PinRole { Input, Output}
 
+    public class VisualPin : VisualBase
+    {
+        public PinRole pinRole;
+        public VisualPin otherConnectedPin;
+        public Type pinType;
+        public VisualNode visualNode;
+
+        public bool pinIsVariable = false;
+        public BasePin basePin;
+
+        public Object pinValue;
+        public VisualVariable pinVariable;
+
+        public VisualPin(PinRole _pinRole, Type _type, bool _isVariable)
+        {
+            pinRole = _pinRole;
+            pinType = _type;
+            pinIsVariable = _isVariable;
+        }
+    }
+
     public class BasePin : Panel
     {
         public delegate void MyEventHandler(BasePin pinPressed);
         public event MyEventHandler pinPressed;
-
-        public PinRole pinRole;
-        public BasePin otherConnectedPin;
-        public Type pinType;
-
-        public Object pinValue;
-        public VisualVariable pinVariable;
-        public bool pinIsVariable = false;
-
+        
         public BaseNodePanel parentNode;
 
-        public BasePin(Type _pinType, PinRole _pinRole, BaseNodePanel _parentNode = null) //Fix this _parentNode stuff
+        public VisualPin visualPin;
+
+        public BasePin(VisualPin _visualPin, BaseNodePanel _parentNode = null) //Fix this _parentNode stuff
         {
-            otherConnectedPin = null;
-            pinType = _pinType;
-            pinRole = _pinRole;
+            visualPin = _visualPin;
             parentNode = _parentNode;
 
             this.Size = new Size(10, 10);
 
-            this.BackColor = GetPinColor(pinType);
+            this.BackColor = GetPinColor(visualPin.pinType);
 
             this.Click += BasePinClick;
         }

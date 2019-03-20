@@ -11,8 +11,8 @@ namespace VisualScripting
     class ConstructNode : VisualNode
     {
         new public static string nodeName = "Start";
-        new public static List<Type> inputs = new List<Type>();
-        new public static List<Type> outputs = new List<Type>() {typeof(ExecutionPin)};
+        new public static List<VisualPin> inputs = new List<VisualPin>();
+        new public static List<VisualPin> outputs = new List<VisualPin>() {new VisualPin(PinRole.Output, typeof(ExecutionPin), false)};
         new public static Size nodeSize = new Size(100, 100);
 
         public ConstructNode()
@@ -29,8 +29,8 @@ namespace VisualScripting
     class PrintNode : VisualNode
     {
         new public static string nodeName = "Print";
-        new public static List<Type> inputs = new List<Type>() { typeof(ExecutionPin), typeof(string) };
-        new public static List<Type> outputs = new List<Type>() { typeof(ExecutionPin) };
+        new public static List<VisualPin> inputs = new List<VisualPin>() { new VisualPin(PinRole.Input, typeof(ExecutionPin), false) ,new VisualPin(PinRole.Input, typeof(string), false)};
+        new public static List<VisualPin> outputs = new List<VisualPin>() { new VisualPin(PinRole.Output, typeof(ExecutionPin), false) };
         new public static Size nodeSize = new Size(100, 100);
 
         public PrintNode()
@@ -48,8 +48,8 @@ namespace VisualScripting
     class MakeStringNode : VisualNode
     {
         new public static string nodeName = "Make string";
-        new public static List<Type> inputs = new List<Type>();
-        new public static List<Type> outputs = new List<Type>() { typeof(string) };
+        new public static List<VisualPin> inputs = new List<VisualPin>();
+        new public static List<VisualPin> outputs = new List<VisualPin>() {new VisualPin(PinRole.Output, typeof(string), false)};
         new public static Size nodeSize = new Size(100, 100);
 
 
@@ -67,7 +67,7 @@ namespace VisualScripting
         {
             TextBox thisTextBox = specialControls[0] as TextBox;
 
-            baseNodePanel.outputPins[0].pinValue = "\"" + thisTextBox.Text + "\"";
+            outputs[0].pinValue = "\"" + thisTextBox.Text + "\"";
             return ""; //Not gona be used
         }
     }
@@ -75,8 +75,8 @@ namespace VisualScripting
     class MakeIntNode : VisualNode
     {
         new public static string nodeName = "Make integer";
-        new public static List<Type> inputs = new List<Type>() { };
-        new public static List<Type> outputs = new List<Type>() { typeof(int) };
+        new public static List<VisualPin> inputs = new List<VisualPin>() { };
+        new public static List<VisualPin> outputs = new List<VisualPin>() {new VisualPin(PinRole.Output, typeof(int), false)};
         new public static Size nodeSize = new Size(100, 100);
 
         public MakeIntNode()
@@ -103,8 +103,8 @@ namespace VisualScripting
     class MakeBooleanNode : VisualNode
     {
         new public static string nodeName = "Make boolean";
-        new public static List<Type> inputs = new List<Type>() { };
-        new public static List<Type> outputs = new List<Type>() { typeof(bool) };
+        new public static List<VisualPin> inputs = new List<VisualPin>() { };
+        new public static List<VisualPin> outputs = new List<VisualPin>() {new VisualPin(PinRole.Output, typeof(bool),false) };
         new public static Size nodeSize = new Size(100, 100);
 
         public MakeBooleanNode()
@@ -126,8 +126,8 @@ namespace VisualScripting
     class IfNode : VisualNode
     {
         new public static string nodeName = "If";
-        new public static List<Type> inputs = new List<Type>() {typeof(ExecutionPin), typeof(bool)};
-        new public static List<Type> outputs = new List<Type>() {typeof(ExecutionPin), typeof(ExecutionPin) };
+        new public static List<VisualPin> inputs = new List<VisualPin>() { new VisualPin(PinRole.Input, typeof(ExecutionPin), false), new VisualPin(PinRole.Input, typeof(bool), false)};
+        new public static List<VisualPin> outputs = new List<VisualPin>() { new VisualPin(PinRole.Output, typeof(ExecutionPin), false), new VisualPin(PinRole.Output, typeof(ExecutionPin), false) };
         new public static Size nodeSize = new Size(100, 100);
 
         public IfNode()
@@ -153,8 +153,8 @@ namespace VisualScripting
     class ForLoopNode : VisualNode
     {
         new public static string nodeName = "For loop";
-        new public static List<Type> inputs = new List<Type>() { typeof(ExecutionPin), typeof(int), typeof(int)};
-        new public static List<Type> outputs = new List<Type>() { typeof(ExecutionPin),typeof(int), typeof(ExecutionPin) };
+        new public static List<VisualPin> inputs = new List<VisualPin>() { new VisualPin(PinRole.Input, typeof(ExecutionPin), false), new VisualPin(PinRole.Input, typeof(int), false), new VisualPin(PinRole.Input, typeof(int), false) };
+        new public static List<VisualPin> outputs = new List<VisualPin>() { new VisualPin(PinRole.Output, typeof(ExecutionPin), false), new VisualPin(PinRole.Output, typeof(int), true), new VisualPin(PinRole.Output, typeof(ExecutionPin), false) };
         new public static Size nodeSize = new Size(100, 100);
 
         public ForLoopNode()
@@ -187,8 +187,8 @@ for(int i = " +GetValueFromInput(1) +";i "+ higherSymbol +" " +GetValueFromInput
     class WhileLoopNode : VisualNode
     {
         new public static string nodeName = "While loop";
-        new public static List<Type> inputs = new List<Type>() { typeof(ExecutionPin), typeof(bool)};
-        new public static List<Type> outputs = new List<Type>() { typeof(ExecutionPin), typeof(ExecutionPin) };
+        new public static List<VisualPin> inputs = new List<VisualPin>() { new VisualPin(PinRole.Input, typeof(ExecutionPin), false), new VisualPin(PinRole.Input, typeof(bool), false)};
+        new public static List<VisualPin> outputs = new List<VisualPin>() { new VisualPin(PinRole.Output, typeof(ExecutionPin), false), new VisualPin(PinRole.Output, typeof(ExecutionPin), false) };
         new public static Size nodeSize = new Size(100, 100);
 
         public WhileLoopNode()

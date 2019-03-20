@@ -195,10 +195,10 @@ namespace VisualScripting
             }
             else
             {
-                if (_pinPressed.pinType == firstSelectedPin.pinType && _pinPressed.pinRole != firstSelectedPin.pinRole)
+                if (_pinPressed.visualPin.pinType == firstSelectedPin.visualPin.pinType && _pinPressed.visualPin.pinRole != firstSelectedPin.visualPin.pinRole)
                 {
-                    _pinPressed.otherConnectedPin = firstSelectedPin;
-                    firstSelectedPin.otherConnectedPin = _pinPressed;
+                    _pinPressed.visualPin.otherConnectedPin = firstSelectedPin.visualPin;
+                    firstSelectedPin.visualPin.otherConnectedPin = _pinPressed.visualPin;
                     firstSelectedPin = null;
                     form.MainScriptingPanel.Refresh();
                 }
@@ -252,11 +252,11 @@ namespace VisualScripting
                 {
                     foreach (BasePin p in n.inputPins) //Paint from input
                     {
-                        if (p.otherConnectedPin != null)
+                        if (p.visualPin.otherConnectedPin != null)
                         {
-                            myPen.Color = BasePin.GetPinColor(p.pinType);
+                            myPen.Color = BasePin.GetPinColor(p.visualPin.pinType);
                             Point pLoc = form.MainScriptingPanel.PointToClient(n.PointToScreen(p.Location));
-                            Point oLoc = form.MainScriptingPanel.PointToClient(p.otherConnectedPin.Parent.PointToScreen(p.otherConnectedPin.Location));
+                            Point oLoc = form.MainScriptingPanel.PointToClient(p.visualPin.otherConnectedPin.visualNode.baseNodePanel.PointToScreen(p.visualPin.otherConnectedPin.basePin.Location));
                             g.DrawLine(myPen, pLoc.X, pLoc.Y, oLoc.X, oLoc.Y);
                         }
                     }
@@ -264,7 +264,7 @@ namespace VisualScripting
             }
             if (firstSelectedPin != null) //Draw line if second pin not selected
             {
-                myPen.Color = BasePin.GetPinColor(firstSelectedPin.pinType);
+                myPen.Color = BasePin.GetPinColor(firstSelectedPin.visualPin.pinType);
                 Point pLoc = form.MainScriptingPanel.PointToClient(firstSelectedPin.Parent.PointToScreen(firstSelectedPin.Location));
                 Point mLoc = form.MainScriptingPanel.PointToClient(Control.MousePosition);
                 g.DrawLine(myPen, pLoc.X, pLoc.Y, mLoc.X, mLoc.Y);

@@ -26,8 +26,8 @@ namespace VisualScripting
     public class VisualNode : VisualBase
     {
         public static string nodeName = "Node name";
-        public static List<Type> inputs = new List<Type>() { };
-        public static List<Type> outputs = new List<Type>() { };
+        public static List<VisualPin> inputs = new List<VisualPin>() { };
+        public static List<VisualPin> outputs = new List<VisualPin>() { };
         public static Size nodeSize = new Size(100, 100);
         public BaseNodePanel baseNodePanel;
         public List<Control> specialControls = new List<Control>();
@@ -35,13 +35,13 @@ namespace VisualScripting
 
         protected string GetCodeFromOutput(int index)
         {
-            if (baseNodePanel.outputPins.Count > index)
+            if (outputs.Count > index)
             {
-                if (baseNodePanel.outputPins[index] != null)
+                if (outputs[index] != null)
                 {
-                    if (baseNodePanel.outputPins[index].otherConnectedPin != null)
+                    if (outputs[index].otherConnectedPin != null)
                     {
-                        return baseNodePanel.outputPins[index].otherConnectedPin.parentNode.visualNode.CompileToString();
+                        return outputs[index].otherConnectedPin.visualNode.CompileToString();
                     }
                     else //Output isnt connected, thats acceptable
                     {
@@ -54,30 +54,30 @@ namespace VisualScripting
 
         protected string GetValueFromInput(int index)
         {
-            if (baseNodePanel.inputPins.Count > index)
+            if (inputs.Count > index)
             {
-                if (baseNodePanel.inputPins[index] != null)
+                if (inputs[index] != null)
                 {
-                    if (baseNodePanel.inputPins[index].otherConnectedPin != null)
+                    if (inputs[index].otherConnectedPin != null)
                     {
-                        if (baseNodePanel.inputPins[index].otherConnectedPin.pinIsVariable) //Other connected pin is variable
+                        if (inputs[index].otherConnectedPin.pinIsVariable) //Other connected pin is variable
                         {
-                            if (baseNodePanel.inputPins[index].otherConnectedPin.pinVariable == null)
+                            if (inputs[index].otherConnectedPin.pinVariable == null)
                             {
-                                baseNodePanel.inputPins[index].otherConnectedPin.parentNode.visualNode.CompileToString();
+                                inputs[index].otherConnectedPin.visualNode.CompileToString();
                             }
-                            return baseNodePanel.inputPins[index].otherConnectedPin.pinVariable.variableName;
+                            return inputs[index].otherConnectedPin.pinVariable.variableName;
                         }
                         else //Other connected pin isnt variable
                         {
-                            if (baseNodePanel.inputPins[index].otherConnectedPin.pinValue == null)
+                            if (inputs[index].otherConnectedPin.pinValue == null)
                             {
-                                if (baseNodePanel.inputPins[index].otherConnectedPin.parentNode != null)
+                                if (inputs[index].otherConnectedPin.visualNode != null)
                                 {
-                                    baseNodePanel.inputPins[index].otherConnectedPin.parentNode.visualNode.CompileToString();
+                                    inputs[index].otherConnectedPin.visualNode.CompileToString();
                                 }
                             }
-                            return baseNodePanel.inputPins[index].otherConnectedPin.pinValue.ToString();
+                            return inputs[index].otherConnectedPin.pinValue.ToString();
                             /*
                             if (inputPins[index].otherConnectedPin.pinType == typeof(string)) //Special cases for string and chars, not really supported by Object saving type
                             {
@@ -128,7 +128,7 @@ namespace VisualScripting
             var newSize = visualNode.GetType().GetField("nodeSize").GetValue(null);
             this.Size = (Size)newSize;
 
-            SetupAllPins(newInputs as List<Type>, newOutputs as List<Type>);
+            SetupAllPins(newInputs as List<VisualPin>, newOutputs as List<VisualPin>);
             SetupSpecialControls();
         }
 
@@ -140,7 +140,7 @@ namespace VisualScripting
             }
         }
 
-        protected void SetupAllPins(List<Type> _inputs, List<Type> _outputs)
+        protected void SetupAllPins(List<VisualPin> _inputs, List<VisualPin> _outputs)
         {
             this.MouseDown += mouseDown;
             this.MouseUp += mouseUp;
@@ -163,8 +163,9 @@ namespace VisualScripting
 
             for (int i = 0; i < _inputs.Count; i++)
             {
-                BasePin newPin;
-                if (_inputs[i] == typeof(ExecutionPin))
+                BasePin newPin = new BasePin(_inputs[i], this);
+                /*
+                if (_inputs[i].pinType == typeof(ExecutionPin))
                 {
                     //newPin = new ExecutionPin(PinRole.Input, this);
                     newPin = new BasePin(_inputs[i], PinRole.Input, this);
@@ -173,18 +174,22 @@ namespace VisualScripting
                 {
                     newPin = new BasePin(_inputs[i], PinRole.Input, this);
                 }
+                */
+
                 this.Controls.Add(newPin);
                 newPin.Location = new Point(0, i * 12 + 13);
                 inputPins.Add(newPin);
+                newPin.visualPin.visualNode = visualNode;
+                _inputs[i].basePin = newPin;
 
                 newPin.MouseMove += mouseMove;
-
                 newPin.pinPressed += PinClicked;
             }
 
             for (int i = 0; i < _outputs.Count; i++)
             {
                 BasePin newPin;
+                /*
                 if (_outputs[i] == typeof(ExecutionPin))
                 {
                     newPin = new BasePin(_outputs[i], PinRole.Output, this);
@@ -193,12 +198,15 @@ namespace VisualScripting
                 {
                     newPin = new BasePin(_outputs[i], PinRole.Output, this);
                 }
+                */
+                newPin = new BasePin(_outputs[i], this);
                 this.Controls.Add(newPin);
                 newPin.Location = new Point(this.Size.Width - 10, i * 12 + 13);
                 outputPins.Add(newPin);
+                newPin.visualPin.visualNode = visualNode;
+                _outputs[i].basePin = newPin;
 
                 newPin.MouseMove += mouseMove;
-
                 newPin.pinPressed += PinClicked;
             }
         }

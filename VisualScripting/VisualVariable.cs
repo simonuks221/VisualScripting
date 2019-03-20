@@ -15,8 +15,8 @@ namespace VisualScripting
         public Object variableValue = "labas tadas";
 
         new public static string nodeName = "Variable";
-        new public List<Type> inputs = new List<Type>() { };
-        new public List<Type> outputs = new List<Type>() { };
+        new public List<VisualPin> inputs = new List<VisualPin>() { };
+        new public List<VisualPin> outputs = new List<VisualPin>() { };
 
         public VisualVariable(Type _variableType, string _variableName)
         {
@@ -24,12 +24,12 @@ namespace VisualScripting
             variableName = _variableName;
 
             nodeSize = new Size(100, 50);
-            outputs.Add(variableType);
+            outputs.Add(new VisualPin(PinRole.Output,variableType, true));
         }
 
         public override string CompileToString()
         {
-            baseNodePanel.outputPins[0].pinVariable = this;
+            outputs[0].pinVariable = this;
             return "";
         }
     }
@@ -49,8 +49,6 @@ namespace VisualScripting
             {
                 throw new Exception("Null variable created");
             }
-
-            outputPins[0].pinIsVariable = true;
         }
     }
 }
