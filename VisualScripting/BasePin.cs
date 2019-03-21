@@ -52,8 +52,6 @@ namespace VisualScripting
 
             this.Size = new Size(23, 10);
 
-            this.Click += BasePinClick;
-
             actualPinPanel = new Panel();
             this.Controls.Add(actualPinPanel);
             actualPinPanel.Size = new Size(10, 10);
@@ -68,6 +66,7 @@ namespace VisualScripting
                     break;
             }
             actualPinPanel.BackColor = GetPinColor(visualPin.pinType);
+            actualPinPanel.Click += BasePinClick;
 
             pinText = new Label();
             this.Controls.Add(pinText);

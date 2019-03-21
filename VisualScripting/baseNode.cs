@@ -88,8 +88,10 @@ namespace VisualScripting
                         {
                             if (visualInputs[index].otherConnectedPin.pinValue == null)
                             {
+                                Console.Out.WriteLine("yra");
                                 if (visualInputs[index].otherConnectedPin.visualNode != null)
                                 {
+                                    
                                     visualInputs[index].otherConnectedPin.visualNode.CompileToString();
                                 }
                             }
@@ -209,6 +211,7 @@ namespace VisualScripting
             {
                 VisualPin newVisualPin = new VisualPin(PinRole.Output, _outputs[i].type, false, _outputs[i].pinName);
                 visualNode.visualOutputs.Add(newVisualPin);
+
                 BasePin newPin = new BasePin(visualNode.visualOutputs[i], this);
                 /*
                 if (_outputs[i] == typeof(ExecutionPin))

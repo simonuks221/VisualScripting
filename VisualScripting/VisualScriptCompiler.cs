@@ -33,6 +33,7 @@ namespace VisualScripting
              MetadataReference.CreateFromFile(typeof(IComponent).Assembly.Location)
 
             };
+            
             CSharpCompilation compilation = CSharpCompilation.Create(
         assemblyName,
         syntaxTrees: new[] { syntaxTree },
@@ -60,10 +61,10 @@ namespace VisualScripting
                     ms.Seek(0, SeekOrigin.Begin);
                     Assembly assembly = Assembly.Load(ms.ToArray());
 
-                    Type type = assembly.GetType("VisualScripting." + _projectManager.visualProject.visualClasses[0].className);
+                    Type type = assembly.GetType("VisualScripting.Program");
                     object obj = Activator.CreateInstance(type);
                     
-                    type.InvokeMember(_projectManager.visualProject.visualClasses[0].className, //Invoke constructor
+                    type.InvokeMember("Constructor", //Invoke constructor
                         BindingFlags.Default | BindingFlags.InvokeMethod,
                         null,
                         obj,
@@ -71,6 +72,10 @@ namespace VisualScripting
                         );
                 }
             }
+            references = null;
+            syntaxTree = null;
+            assemblyName = null;
+            compilation = null;
         }
     }
 }

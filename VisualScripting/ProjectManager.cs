@@ -31,6 +31,11 @@ namespace VisualScripting
             AssetsEditorManager assetEditor = new AssetsEditorManager(form);
             showingEditors.Add(assetEditor);
 
+            VisualClass newClass = new VisualClass("Program");
+            VisualClassScriptEditorManager scriptEdditor = new VisualClassScriptEditorManager(form, newClass);
+            showingEditors.Add(scriptEdditor);
+            visualProject.visualClasses.Add(newClass);
+
             ChangeSelectedEditorIndex(0);
             UpdateNavigationPanel();
         }

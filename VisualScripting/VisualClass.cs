@@ -31,7 +31,9 @@ namespace VisualScripting
                 allCode += visualVariables[i].variableName + " = " + visualVariables[i].variableValue + "; \n";
             }
 
+            allCode += "public void Constructor() \n {";
             allCode += currentNodes[0].CompileToString(); //Construct node needs to be first
+            allCode += "\n }";
 
             for(int i = 0; i < visualFunctions.Count; i++)
             {

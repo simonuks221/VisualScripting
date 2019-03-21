@@ -22,7 +22,8 @@ namespace VisualScripting
 
         public override string CompileToString()
         {
-            return GetCodeFromOutput(0);
+            string allCode = GetCodeFromOutput(0); 
+            return allCode;
         }
     }
 
@@ -119,7 +120,8 @@ namespace VisualScripting
         public override string CompileToString()
         {
             CheckBox thisCheckBox = specialControls[0] as CheckBox;
-            return thisCheckBox.Checked.ToString();
+            visualOutputs[0].pinValue = thisCheckBox.Checked.ToString().ToLower();
+            return "";
         }
     }
 
