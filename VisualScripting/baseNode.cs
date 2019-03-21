@@ -11,14 +11,14 @@ namespace VisualScripting
     public struct VisualNodeC
     {
         public Type type;
+        public string pinName;
 
-        public VisualNodeC(Type _type)
+        public VisualNodeC(Type _type, string _name = "")
         {
             type = _type;
+            pinName = _name;
         }
     }
-
-
 
     public class VisualBase
     {
@@ -179,7 +179,7 @@ namespace VisualScripting
 
             for (int i = 0; i < _inputs.Count; i++)
             {
-                VisualPin newVisualPin= new VisualPin(PinRole.Input, _inputs[i].type, false);
+                VisualPin newVisualPin= new VisualPin(PinRole.Input, _inputs[i].type, false, _inputs[i].pinName);
                 visualNode.visualInputs.Add(newVisualPin);
 
                 BasePin newPin = new BasePin(visualNode.visualInputs[i], this);
@@ -207,7 +207,7 @@ namespace VisualScripting
 
             for (int i = 0; i < _outputs.Count; i++)
             {
-                VisualPin newVisualPin = new VisualPin(PinRole.Output, _outputs[i].type, false);
+                VisualPin newVisualPin = new VisualPin(PinRole.Output, _outputs[i].type, false, _outputs[i].pinName);
                 visualNode.visualOutputs.Add(newVisualPin);
                 BasePin newPin = new BasePin(visualNode.visualOutputs[i], this);
                 /*
@@ -221,7 +221,7 @@ namespace VisualScripting
                 }
                 */
                 this.Controls.Add(newPin);
-                newPin.Location = new Point(this.Size.Width - 10, i * 12 + 13);
+                newPin.Location = new Point(this.Size.Width - 23, i * 12 + 13);
                 outputPins.Add(newPin);
                 newPin.visualPin.visualNode = visualNode;
                 visualNode.visualOutputs[i].basePin = newPin;

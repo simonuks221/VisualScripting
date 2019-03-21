@@ -81,12 +81,8 @@
     <Compile Include="AssetButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="BaseNodes.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="BasePin.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="BaseNodes.cs" />
+    <Compile Include="BasePin.cs" />
     <Compile Include="ConsoleMessagePanel.cs">
       <SubType>Component</SubType>
     </Compile>

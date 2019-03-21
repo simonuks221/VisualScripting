@@ -24,7 +24,7 @@ namespace VisualScripting
             variableName = _variableName;
 
             nodeSize = new Size(100, 50);
-            outputs.Add(new VisualPin(PinRole.Output,variableType, true));
+            outputs.Add(new VisualPin(PinRole.Output,variableType, true, ""));
         }
 
         public override string CompileToString()

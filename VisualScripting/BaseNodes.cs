@@ -127,7 +127,7 @@ namespace VisualScripting
     {
         new public static string nodeName = "If";
         new public static List<VisualNodeC> inputs = new List<VisualNodeC>() { new VisualNodeC(typeof(ExecutionPin)), new VisualNodeC(typeof(bool))};
-        new public static List<VisualNodeC> outputs = new List<VisualNodeC>() { new VisualNodeC(typeof(ExecutionPin)), new VisualNodeC(typeof(ExecutionPin))};
+        new public static List<VisualNodeC> outputs = new List<VisualNodeC>() { new VisualNodeC(typeof(ExecutionPin), "true"), new VisualNodeC(typeof(ExecutionPin), "false")};
         new public static Size nodeSize = new Size(100, 100);
 
         public IfNode()

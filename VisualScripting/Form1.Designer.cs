@@ -106,7 +106,7 @@
             // 
             // AddNewClassButton
             // 
-            this.AddNewClassButton.Location = new System.Drawing.Point(12, -7);
+            this.AddNewClassButton.Location = new System.Drawing.Point(12, 3);
             this.AddNewClassButton.Name = "AddNewClassButton";
             this.AddNewClassButton.Size = new System.Drawing.Size(75, 23);
             this.AddNewClassButton.TabIndex = 6;

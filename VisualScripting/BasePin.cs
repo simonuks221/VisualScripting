@@ -22,12 +22,14 @@ namespace VisualScripting
 
         public Object pinValue;
         public VisualVariable pinVariable;
+        public string pinName;
 
-        public VisualPin(PinRole _pinRole, Type _type, bool _isVariable)
+        public VisualPin(PinRole _pinRole, Type _type, bool _isVariable, string _pinName)
         {
             pinRole = _pinRole;
             pinType = _type;
             pinIsVariable = _isVariable;
+            pinName = _pinName;
         }
     }
 
@@ -40,16 +42,48 @@ namespace VisualScripting
 
         public VisualPin visualPin;
 
+        public Panel actualPinPanel;
+        public Label pinText;
+
         public BasePin(VisualPin _visualPin, BaseNodePanel _parentNode = null) //Fix this _parentNode stuff
         {
             visualPin = _visualPin;
             parentNode = _parentNode;
 
-            this.Size = new Size(10, 10);
-
-            this.BackColor = GetPinColor(visualPin.pinType);
+            this.Size = new Size(23, 10);
 
             this.Click += BasePinClick;
+
+            actualPinPanel = new Panel();
+            this.Controls.Add(actualPinPanel);
+            actualPinPanel.Size = new Size(10, 10);
+
+            switch (visualPin.pinRole)
+            {
+                case PinRole.Input:
+                    actualPinPanel.Location = new Point(0, 0);
+                    break;
+                case PinRole.Output:
+                    actualPinPanel.Location = new Point(this.Size.Width - 10, 0);
+                    break;
+            }
+            actualPinPanel.BackColor = GetPinColor(visualPin.pinType);
+
+            pinText = new Label();
+            this.Controls.Add(pinText);
+            pinText.Size = new Size(13, 10);
+
+            switch (visualPin.pinRole)
+            {
+                case PinRole.Input:
+                    pinText.Location = new Point(this.Size.Width - 13, 0);
+                    break;
+                case PinRole.Output:
+                    pinText.Location = new Point(0, 0);
+                    break;
+            }
+            pinText.Font = new Font("Arial", 4, FontStyle.Bold);
+            pinText.Text = visualPin.pinName;
         }
 
         private void BasePinClick(object sender, EventArgs e)
