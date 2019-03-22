@@ -86,30 +86,8 @@ namespace VisualScripting
                         }
                         else //Other connected pin isnt variable
                         {
-                            if (visualInputs[index].otherConnectedPin.pinValue == null)
-                            {
-                                Console.Out.WriteLine("yra");
-                                if (visualInputs[index].otherConnectedPin.visualNode != null)
-                                {
-                                    
-                                    visualInputs[index].otherConnectedPin.visualNode.CompileToString();
-                                }
-                            }
+                            visualInputs[index].otherConnectedPin.visualNode.CompileToString();
                             return visualInputs[index].otherConnectedPin.pinValue.ToString();
-                            /*
-                            if (inputPins[index].otherConnectedPin.pinType == typeof(string)) //Special cases for string and chars, not really supported by Object saving type
-                            {
-                                return "\"" + inputPins[index].otherConnectedPin.pinValue + "\"";
-                            }
-                            else if (inputPins[index].otherConnectedPin.pinType == typeof(char))
-                            {
-                                return "\'" + inputPins[index].otherConnectedPin.pinValue + "\'";
-                            }
-                            else
-                            {
-                                return inputPins[index].otherConnectedPin.pinValue.ToString();
-                            }
-                            */
                         }
                     }
                     else //Output isnt connected, thats acceptable

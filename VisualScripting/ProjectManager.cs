@@ -48,6 +48,7 @@ namespace VisualScripting
                 navigationPanel.Controls[0].Dispose();
             }
 
+            int assetEditorMinus = 0;
             for (int i = 0; i < showingEditors.Count; i++)
             {
                 BaseNavigationPanelPart newPanel = null;
@@ -55,10 +56,11 @@ namespace VisualScripting
                 if (checkAsset != null) //Asset editor
                 {
                     newPanel = new AssetsManagerNavigationPanelPart(i);
+                    assetEditorMinus = 1;
                 }
-                else //Not asset ediotr
+                else //Not asset editor
                 {
-                    newPanel = new VisualClassNavigationPanelPart(i, visualProject.visualClasses[i - 1]);
+                    newPanel = new VisualClassNavigationPanelPart(i, visualProject.visualClasses[i - assetEditorMinus]);
                 }
                 navigationPanel.Controls.Add(newPanel);
                 newPanel.Location = new Point(i * 105 + 2, 2);
@@ -134,12 +136,31 @@ namespace VisualScripting
 
         public void AddNewClass()
         {
-            VisualClass newVisualClass = new VisualClass("naujaKlase");
+            Random r = new Random();
+            string newClassName = "a" + r.Next(0, 1000);
+            while (ClassNameExists(newClassName))
+            {
+                newClassName = "a" + r.Next(0, 1000);
+            }
+
+            VisualClass newVisualClass = new VisualClass(newClassName);
             visualProject.visualClasses.Add(newVisualClass);
 
             AddNewShowingEditor(newVisualClass);
 
             ChangeSelectedEditorIndex(showingEditors.Count - 1);
+        }
+
+        bool ClassNameExists(string _name)
+        {
+            for (int i = 0; i < visualProject.visualClasses.Count; i++)
+            {
+                if(visualProject.visualClasses[i].className == _name)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void AddNewShowingEditor(VisualBase _visualBase)

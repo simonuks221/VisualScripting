@@ -76,10 +76,39 @@ namespace VisualScripting
             if (CheckVisualClass != null) //Class selected
             {
                 ClassAssetButton button = (ClassAssetButton)CheckVisualClass;
-                form.projectManager.AddNewShowingEditor(button.visualClass);
 
-                form.projectManager.ChangeSelectedEditorIndex(form.projectManager.showingEditors.Count - 1);
+                int existingClassManagerIndex = ClassNavigationPanelExists(button.visualClass);
+
+                if (existingClassManagerIndex == -1) //new editor
+                {
+                    form.projectManager.AddNewShowingEditor(button.visualClass);
+                    form.projectManager.ChangeSelectedEditorIndex(form.projectManager.showingEditors.Count - 1);
+                }
+                else //Editor already opened
+                {
+                    form.projectManager.ChangeSelectedEditorIndex(existingClassManagerIndex);
+                }
+
+                
             }
+        }
+
+        int ClassNavigationPanelExists(VisualClass _visualClass)
+        {
+            for (int i = 0; i < form.projectManager.showingEditors.Count; i++)
+            {
+                var classEditor = form.projectManager.showingEditors[i] as VisualClassScriptEditorManager;
+
+                if (classEditor != null)
+                {
+                    VisualClassScriptEditorManager editor = (VisualClassScriptEditorManager)classEditor;
+                    if (editor.visualClass == _visualClass)
+                    {
+                        return i;
+                    }
+                }
+            }
+            return -1;
         }
     }
 

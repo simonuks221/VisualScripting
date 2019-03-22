@@ -42,7 +42,7 @@ namespace VisualScripting
         public ClassAssetButton(VisualClass _visualClass) : base()
         {
             visualClass = _visualClass;
-            assetLabel.Text = visualClass.ToString();
+            assetLabel.Text = visualClass.className;
         }
     }
 }
