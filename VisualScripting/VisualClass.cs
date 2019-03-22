@@ -28,7 +28,24 @@ namespace VisualScripting
 
             for(int i = 0; i < visualVariables.Count; i++)
             {
-                allCode += visualVariables[i].variableName + " = " + visualVariables[i].variableValue + "; \n";
+                allCode += visualVariables[i].variableType + " " + visualVariables[i].variableName + " = ";
+
+                if(visualVariables[i].variableType == typeof(string))
+                {
+                    allCode += "\"";
+                    allCode += visualVariables[i].variableValue;
+                    allCode += "\"" + ";";
+                }
+                else if (visualVariables[i].variableType == typeof(char))
+                {
+                    allCode += "\'";
+                    allCode += visualVariables[i].variableValue;
+                    allCode += "\'" + ";";
+                }
+                else
+                {
+                    allCode += visualVariables[i].variableValue + "; \n";
+                }
             }
 
             allCode += "public void Constructor() \n {";

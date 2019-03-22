@@ -62,7 +62,7 @@ namespace VisualScripting
 
         private void NewVariableButton_Click(object sender, EventArgs e)
         {
-            //projectManager.showingEditors[projectManager.currentEditorIndex].AddNewVisualVariable();
+            projectManager.showingEditors[projectManager.currentEditorIndex].AddNewVariableButtonPressed();
         }
 
         private void NewFunctionButton_Click(object sender, EventArgs e)

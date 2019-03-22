@@ -51,13 +51,11 @@ namespace VisualScripting
         new public static string nodeName = "Make string";
         new public static List<VisualNodeC> inputs = new List<VisualNodeC>();
         new public static List<VisualNodeC> outputs = new List<VisualNodeC>() {new VisualNodeC(typeof(string))};
-        new public static Size nodeSize = new Size(100, 100);
+        new public static Size nodeSize = new Size(100, 30);
 
 
         public MakeStringNode()
         {
-            nodeSize = new Size(100, 30);
-
             TextBox thisTextBox = new TextBox();
             thisTextBox.Location = new Point(10, 10);
             thisTextBox.Size = new Size(80, 27);

@@ -12,11 +12,13 @@ namespace VisualScripting
     {
         public Type type;
         public string pinName;
+        public bool isVariable;
 
-        public VisualNodeC(Type _type, string _name = "")
+        public VisualNodeC(Type _type, string _name = "", bool _isVariable = false)
         {
             type = _type;
             pinName = _name;
+            isVariable = _isVariable;
         }
     }
 
@@ -159,7 +161,7 @@ namespace VisualScripting
 
             for (int i = 0; i < _inputs.Count; i++)
             {
-                VisualPin newVisualPin= new VisualPin(PinRole.Input, _inputs[i].type, false, _inputs[i].pinName);
+                VisualPin newVisualPin= new VisualPin(PinRole.Input, _inputs[i].type, _inputs[i].isVariable, _inputs[i].pinName);
                 visualNode.visualInputs.Add(newVisualPin);
 
                 BasePin newPin = new BasePin(visualNode.visualInputs[i], this);
@@ -187,7 +189,7 @@ namespace VisualScripting
 
             for (int i = 0; i < _outputs.Count; i++)
             {
-                VisualPin newVisualPin = new VisualPin(PinRole.Output, _outputs[i].type, false, _outputs[i].pinName);
+                VisualPin newVisualPin = new VisualPin(PinRole.Output, _outputs[i].type, _outputs[i].isVariable, _outputs[i].pinName);
                 visualNode.visualOutputs.Add(newVisualPin);
 
                 BasePin newPin = new BasePin(visualNode.visualOutputs[i], this);

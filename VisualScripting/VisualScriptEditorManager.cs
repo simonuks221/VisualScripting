@@ -36,6 +36,11 @@ namespace VisualScripting
         {
 
         }
+
+        public virtual void AddNewVariableButtonPressed()
+        {
+
+        }
     }
 
     public class AssetsEditorManager : BaseEditorManager
@@ -174,11 +179,10 @@ namespace VisualScripting
             }
             else if(CheckVariable != null) //variable selected
             {
-                /*
-                VisualVariableCreatePanelPart variable = (VisualVariableCreatePanelPart)_panel;
-                VisualVariableNode node = new VisualVariableNode(new VisualNode(), variable.visualVariable);
-                newNodePanel = new VisualVariableNode(node, variable.visualVariable);
-                */
+                VisualVariableCreatePanelPart variablePanel = (VisualVariableCreatePanelPart)_panel;
+                VisualVariableNodePanel node = new VisualVariableNodePanel(new VisualNode(), variablePanel.visualVariable);
+                newNodePanel = new VisualVariableNodePanel(variablePanel.visualVariable, variablePanel.visualVariable);
+                variablePanel.visualVariable.baseNodePanel = newNodePanel;
             }
 
             form.MainScriptingPanel.Controls.Add(newNodePanel);
@@ -279,6 +283,7 @@ namespace VisualScripting
                         {
                             myPen.Color = BasePin.GetPinColor(p.visualPin.pinType);
                             Point pLoc = form.MainScriptingPanel.PointToClient(n.PointToScreen(p.Location));
+                            Console.Out.WriteLine(p.visualPin.otherConnectedPin.visualNode.baseNodePanel + " aaaaaaa");
                             Point oLoc = form.MainScriptingPanel.PointToClient(p.visualPin.otherConnectedPin.visualNode.baseNodePanel.PointToScreen(p.visualPin.otherConnectedPin.basePin.Location));
                             g.DrawLine(myPen, pLoc.X, pLoc.Y, oLoc.X, oLoc.Y);
                         }
@@ -318,20 +323,18 @@ namespace VisualScripting
 
             for (int i = 0; i < form.VariableAndFunctionPanel.Controls.Count; i++)
             {
-                form.VariableAndFunctionPanel.Controls[i].Dispose();
+                form.VariableAndFunctionPanel.Controls[0].Dispose();
             }
 
-            for(int i = 0; i < visualClass.visualVariables.Count; i++)
+            Point lastPanelLocation = Point.Empty;
+
+            for (int i = 0; i < visualClass.visualVariables.Count; i++)
             {
                 VariablePanelPart panel = new VariablePanelPart(visualClass.visualVariables[i]);
                 form.VariableAndFunctionPanel.Controls.Add(panel);
                 panel.Location = new Point(0, i * 20);
                 panel.panelPressed += variableAndFunctionpanelPartPressed;
-            }
-            Point lastPanelLocation = Point.Empty;
-            if(visualClass.visualVariables.Count > 0)
-            {
-                lastPanelLocation = form.VariableAndFunctionPanel.Controls[visualClass.visualVariables.Count].Location;
+                lastPanelLocation = panel.Location;
             }
             
             for (int i = 0; i < visualClass.visualFunctions.Count; i++)
@@ -479,7 +482,7 @@ namespace VisualScripting
             }
         }
 
-        public void AddNewVisualVariable()
+        public override void AddNewVariableButtonPressed()
         {
             Random r = new Random();
 

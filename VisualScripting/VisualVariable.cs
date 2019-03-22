@@ -14,31 +14,32 @@ namespace VisualScripting
         public string variableName;
         public Object variableValue = "labas tadas";
 
-        new public static string nodeName = "Variable";
-        new public List<VisualPin> inputs = new List<VisualPin>() { };
-        new public List<VisualPin> outputs = new List<VisualPin>() { };
+        new public static string nodeName = "Variable"; //Not really used
+        new public static List<VisualNodeC> inputs = new List<VisualNodeC>() { };
+        new public static List<VisualNodeC> outputs = new List<VisualNodeC>() { };
+        new public static Size nodeSize = new Size(100, 30);
 
         public VisualVariable(Type _variableType, string _variableName)
         {
             variableType = _variableType;
             variableName = _variableName;
 
-            nodeSize = new Size(100, 50);
-            outputs.Add(new VisualPin(PinRole.Output,variableType, true, ""));
+            outputs.Add(new VisualNodeC(variableType, variableName, true));
         }
 
         public override string CompileToString()
         {
-            outputs[0].pinVariable = this;
+            visualOutputs[0].pinIsVariable = true;
+            visualOutputs[0].pinVariable = this;
             return "";
         }
     }
 
-    public class VisualVariableNode : BaseNodePanel
+    public class VisualVariableNodePanel : BaseNodePanel
     {
         public VisualVariable visualVariable;
 
-        public VisualVariableNode(VisualNode _visualNode, VisualVariable _visualVariable) : base(_visualNode)
+        public VisualVariableNodePanel(VisualNode _visualNode, VisualVariable _visualVariable) : base(_visualNode)
         {
             
             if (_visualVariable != null)
