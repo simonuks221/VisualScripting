@@ -80,7 +80,7 @@
             // 
             // NewFunctionButton
             // 
-            this.NewFunctionButton.Location = new System.Drawing.Point(11, 64);
+            this.NewFunctionButton.Location = new System.Drawing.Point(12, 64);
             this.NewFunctionButton.Name = "NewFunctionButton";
             this.NewFunctionButton.Size = new System.Drawing.Size(75, 23);
             this.NewFunctionButton.TabIndex = 4;

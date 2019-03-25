@@ -131,7 +131,7 @@ namespace VisualScripting
 
         public VisualClass visualClass;
 
-        public List<Type> allNodesToShow = new List<Type>() { typeof(IfNode), typeof(PrintNode), typeof(MakeStringNode), typeof(MakeIntNode), typeof(MakeBooleanNode), typeof(ForLoopNode) };
+        public List<Type> allNodesToShow = new List<Type>() { typeof(IfNode), typeof(PrintNode), typeof(MakeStringNode), typeof(MakeIntNode), typeof(MakeBooleanNode), typeof(ForLoopNode), typeof(ConvertIntToString) };
 
         public List<Type> allVariableTypesToShow = new List<Type>() {typeof(string), typeof(char), typeof(float), typeof(int) };
 
@@ -199,6 +199,37 @@ namespace VisualScripting
             {
                 createNodeSearchBar.Dispose();
             }
+
+            if(firstSelectedPin != null)
+            {
+                if(firstSelectedPin.visualPin.pinRole == PinRole.Input) //Selected input
+                {
+                    foreach(VisualPin p in newNodePanel.visualNode.visualOutputs)
+                    {
+                        if(p.pinType == firstSelectedPin.visualPin.pinType)
+                        {
+                            p.otherConnectedPin = firstSelectedPin.visualPin;
+                            firstSelectedPin.visualPin.otherConnectedPin = p;
+                            firstSelectedPin = null;
+                            break;
+                        }
+                    }
+                }
+                else //Selected output
+                {
+                    foreach (VisualPin p in newNodePanel.visualNode.visualInputs)
+                    {
+                        if (p.pinType == firstSelectedPin.visualPin.pinType)
+                        {
+                            p.otherConnectedPin = firstSelectedPin.visualPin;
+                            firstSelectedPin.visualPin.otherConnectedPin = p;
+                            firstSelectedPin = null;
+                            break;
+                        }
+                    }
+                }
+            }
+            form.MainScriptingPanel.Refresh();
         }
 
         public void StopMovingNode(BaseNodePanel _senderNode, MouseEventArgs e) //Stop moving node
@@ -241,12 +272,50 @@ namespace VisualScripting
                 {
                     createNodeSearchBar.Dispose();
                 }
-                createNodeSearchBar = new CreateNodeSearchBar(r.Location, this);
+
+                if(firstSelectedPin == null) //Pin not selected
+                {
+                    createNodeSearchBar = new CreateNodeSearchBar(r.Location, this, allNodesToShow);
+                }
+                else  //Pin selected
+                {
+                    List<Type> newNodesToShow = new List<Type>();
+                    if(firstSelectedPin.visualPin.pinRole == PinRole.Input) //Selected Input
+                    {
+                        foreach (Type t in allNodesToShow)
+                        {
+                            List<VisualNodeC> outputs =  (List<VisualNodeC>)t.GetField("outputs").GetValue(null);
+                            foreach(VisualNodeC pin in outputs)
+                            {
+                                if(pin.type == firstSelectedPin.visualPin.pinType)
+                                {
+                                    newNodesToShow.Add(t);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else //Selected Output
+                    {
+                        foreach (Type t in allNodesToShow)
+                        {
+                            List<VisualNodeC> inputs = (List<VisualNodeC>)t.GetField("inputs").GetValue(null);
+                            foreach (VisualNodeC pin in inputs)
+                            {
+                                if (pin.type == firstSelectedPin.visualPin.pinType)
+                                {
+                                    newNodesToShow.Add(t);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    createNodeSearchBar = new CreateNodeSearchBar(r.Location, this, newNodesToShow);
+                }
                 form.MainScriptingPanel.Controls.Add(createNodeSearchBar);
                 createNodeSearchBar.partPressed += SpawnNode;
 
                 firstSelectedNode = null;
-                firstSelectedPin = null;
             }
             else
             {

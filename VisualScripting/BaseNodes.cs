@@ -46,6 +46,7 @@ namespace VisualScripting
         }
     }
 
+
     class MakeStringNode : VisualNode
     {
         new public static string nodeName = "Make string";
@@ -76,12 +77,10 @@ namespace VisualScripting
         new public static string nodeName = "Make integer";
         new public static List<VisualNodeC> inputs = new List<VisualNodeC>() { };
         new public static List<VisualNodeC> outputs = new List<VisualNodeC>() {new VisualNodeC(typeof(int))};
-        new public static Size nodeSize = new Size(100, 100);
+        new public static Size nodeSize = new Size(50, 50);
 
         public MakeIntNode()
         {
-            nodeSize = new Size(50, 50);
-
             TextBox thisTextBox = new TextBox();
             thisTextBox.Location = new Point(10, 10);
             specialControls.Add(thisTextBox);
@@ -95,7 +94,8 @@ namespace VisualScripting
             {
 
             }
-            return integer.ToString();
+            visualOutputs[0].pinValue = integer;
+            return "";
         }
     }
 
@@ -122,6 +122,23 @@ namespace VisualScripting
             return "";
         }
     }
+
+
+    class ConvertIntToString : VisualNode
+    {
+        new public static string nodeName = "Int to string";
+        new public static List<VisualNodeC> inputs = new List<VisualNodeC>() { new VisualNodeC(typeof(int)) };
+        new public static List<VisualNodeC> outputs = new List<VisualNodeC>() { new VisualNodeC(typeof(string)) };
+        new public static Size nodeSize = new Size(40, 40);
+
+        public override string CompileToString()
+        {
+            int integer = Int32.Parse(GetValueFromInput(0));
+            visualOutputs[0].pinValue = "\"" +  integer + "\"";
+            return ""; //Not gona be used
+        }
+    }
+
 
     class IfNode : VisualNode
     {
