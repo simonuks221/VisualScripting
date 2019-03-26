@@ -20,18 +20,20 @@ namespace VisualScripting
         VisualClassScriptEditorManager thisVisualScriptManager;
 
         List<Type> nodesToShow;
+        List<VisualVariable> variablesToShow;
 
         //List<Type> nodesToShow = new List<Type>() {typeof(IfNode), typeof(PrintNode), typeof(MakeString)};
 
-        public CreateNodeSearchBar(Point _panelLocation, VisualClassScriptEditorManager _thisVisualScriptManager, List<Type> _nodesToShow)
+        public CreateNodeSearchBar(Point _panelLocation, VisualClassScriptEditorManager _thisVisualScriptManager, List<Type> _nodesToShow, List<VisualVariable> _variablesToShow)
         {
             panelLocation = _panelLocation;
             thisVisualScriptManager = _thisVisualScriptManager;
             nodesToShow = _nodesToShow;
+            variablesToShow = _variablesToShow;
 
             this.BackColor = Color.DimGray;
             this.Location = _panelLocation;
-            this.Size = new Size(200, nodesToShow.Count * 15 + 20);
+            this.Size = new Size(200, (nodesToShow.Count + variablesToShow.Count) * 15 + 20);
 
             mainTextBox = new TextBox();
             this.Controls.Add(mainTextBox);
@@ -41,23 +43,28 @@ namespace VisualScripting
 
             for (int i = 0; i < nodesToShow.Count; i++)
             {
-                DisplayNodePanelPart(i, this.Controls.Count - 1);
+                DisplayNodePanelPart(nodesToShow[i], i);
+            }
+
+            for(int i = 0; i < variablesToShow.Count; i++)
+            {
+                DisplayNodePanelPart(typeof(VisualVariable), i);
             }
         }
 
-        private void DisplayNodePanelPart(int _typeIndex, int _listIndex)
+        private void DisplayNodePanelPart(Type _type, int _typeIndex)
         {
             BaseCreateNodePanelPart newPart = null;
-            if (nodesToShow[_typeIndex] == typeof(VisualVariable)) //variable
+            if (_type == typeof(VisualVariable)) //variable
             {
-                newPart = new VisualVariableCreatePanelPart(thisVisualScriptManager.visualClass.visualVariables[_typeIndex]);
+                newPart = new VisualVariableCreatePanelPart(variablesToShow[_typeIndex]);
             }
             else //Not variable
             {
                 newPart = new VisualNodeCreatePanelPart(nodesToShow[_typeIndex]);
             }
             this.Controls.Add(newPart);
-            newPart.Location = new Point(0, 20 + _listIndex * 15);
+            newPart.Location = new Point(0, 20 + (this.Controls.Count - 2) * 15);
             newPart.panelPressed += PanelPressed;
         }
 
@@ -72,12 +79,20 @@ namespace VisualScripting
             for(int i = 0; i < nodesToShow.Count; i++)
             {
                 string typeName = nodesToShow[i].GetField("nodeName").GetValue(null).ToString().ToLower();
-
                 if (typeName.Contains(mainTextBox.Text.ToLower()))
                 {
-                    DisplayNodePanelPart(i, this.Controls.Count - 1);
+                    DisplayNodePanelPart(nodesToShow[i], i);
                 }
             }
+            for (int i = 0; i < variablesToShow.Count; i++)
+            {
+                string typeName = variablesToShow[i].variableName.ToLower();
+                if (typeName.Contains(mainTextBox.Text.ToLower()))
+                {
+                    DisplayNodePanelPart(typeof(VisualVariable), i);
+                }
+            }
+
         }
 
         private void PanelPressed(BaseCreateNodePanelPart _panel)

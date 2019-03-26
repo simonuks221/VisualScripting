@@ -275,11 +275,12 @@ namespace VisualScripting
 
                 if(firstSelectedPin == null) //Pin not selected
                 {
-                    createNodeSearchBar = new CreateNodeSearchBar(r.Location, this, allNodesToShow);
+                    createNodeSearchBar = new CreateNodeSearchBar(r.Location, this, allNodesToShow, visualClass.visualVariables);
                 }
                 else  //Pin selected
                 {
                     List<Type> newNodesToShow = new List<Type>();
+                    List<VisualVariable> newVariablesToShow = new List<VisualVariable>();
                     if(firstSelectedPin.visualPin.pinRole == PinRole.Input) //Selected Input
                     {
                         foreach (Type t in allNodesToShow)
@@ -292,6 +293,13 @@ namespace VisualScripting
                                     newNodesToShow.Add(t);
                                     break;
                                 }
+                            }
+                        }
+                        foreach (VisualVariable v in visualClass.visualVariables)
+                        {
+                            if (v.variableType == firstSelectedPin.visualPin.pinType)
+                            {
+                                newVariablesToShow.Add(v);
                             }
                         }
                     }
@@ -310,7 +318,7 @@ namespace VisualScripting
                             }
                         }
                     }
-                    createNodeSearchBar = new CreateNodeSearchBar(r.Location, this, newNodesToShow);
+                    createNodeSearchBar = new CreateNodeSearchBar(r.Location, this, newNodesToShow, newVariablesToShow);
                 }
                 form.MainScriptingPanel.Controls.Add(createNodeSearchBar);
                 createNodeSearchBar.partPressed += SpawnNode;
