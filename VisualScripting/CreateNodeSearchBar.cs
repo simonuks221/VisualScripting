@@ -33,7 +33,6 @@ namespace VisualScripting
 
             this.BackColor = Color.DimGray;
             this.Location = _panelLocation;
-            this.Size = new Size(200, (nodesToShow.Count + variablesToShow.Count) * 15 + 20);
 
             mainTextBox = new TextBox();
             this.Controls.Add(mainTextBox);
@@ -66,6 +65,8 @@ namespace VisualScripting
             this.Controls.Add(newPart);
             newPart.Location = new Point(0, 20 + (this.Controls.Count - 2) * 15);
             newPart.panelPressed += PanelPressed;
+
+            this.Size = new Size(200, (this.Controls.Count - 1) * 15 + 20); //Keep size dynamic
         }
 
         private void MainTextBoxTextChanged(object sender, EventArgs e)
@@ -92,7 +93,6 @@ namespace VisualScripting
                     DisplayNodePanelPart(typeof(VisualVariable), i);
                 }
             }
-
         }
 
         private void PanelPressed(BaseCreateNodePanelPart _panel)
