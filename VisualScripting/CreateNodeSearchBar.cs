@@ -21,15 +21,17 @@ namespace VisualScripting
 
         List<Type> nodesToShow;
         List<VisualVariable> variablesToShow;
+        List<VisualFunction> functionsToShow;
 
         //List<Type> nodesToShow = new List<Type>() {typeof(IfNode), typeof(PrintNode), typeof(MakeString)};
 
-        public CreateNodeSearchBar(Point _panelLocation, VisualClassScriptEditorManager _thisVisualScriptManager, List<Type> _nodesToShow, List<VisualVariable> _variablesToShow)
+        public CreateNodeSearchBar(Point _panelLocation, VisualClassScriptEditorManager _thisVisualScriptManager, List<Type> _nodesToShow, List<VisualVariable> _variablesToShow, List<VisualFunction> _functionsToShow)
         {
             panelLocation = _panelLocation;
             thisVisualScriptManager = _thisVisualScriptManager;
             nodesToShow = _nodesToShow;
             variablesToShow = _variablesToShow;
+            functionsToShow = _functionsToShow;
 
             this.BackColor = Color.DimGray;
             this.Location = _panelLocation;
@@ -49,6 +51,15 @@ namespace VisualScripting
             {
                 DisplayNodePanelPart(typeof(VisualVariable), i);
             }
+
+            for (int i = 0; i < functionsToShow.Count; i++)
+            {
+                DisplayNodePanelPart(typeof(VisualFunction), i);
+            }
+
+            //mainTextBox.Visible = true;
+            // mainTextBox.Enabled = true; //Not working focus on search bar
+            //thisVisualScriptManager.form.ActiveControl = mainTextBox;
         }
 
         private void DisplayNodePanelPart(Type _type, int _typeIndex)
@@ -58,7 +69,11 @@ namespace VisualScripting
             {
                 newPart = new VisualVariableCreatePanelPart(variablesToShow[_typeIndex]);
             }
-            else //Not variable
+            else if(_type == typeof(VisualFunction)) //Function
+            {
+                newPart = new VisualFunctionCreatePanelPart(functionsToShow[_typeIndex]);
+            }
+            else //Basic node
             {
                 newPart = new VisualNodeCreatePanelPart(nodesToShow[_typeIndex]);
             }

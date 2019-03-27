@@ -10,7 +10,7 @@ namespace VisualScripting
 {
     public class BaseAssetButton : Panel
     {
-        protected Label assetLabel;
+
 
         public delegate void MyHandler(BaseAssetButton _asset);
         public event MyHandler assetPressed;
@@ -20,16 +20,10 @@ namespace VisualScripting
             this.BackColor = Color.DimGray;
             this.Size = new Size(100, 100);
 
-            assetLabel = new Label();
-            this.Controls.Add(assetLabel);
-            assetLabel.Size = new Size(80, 80);
-            assetLabel.Location = new Point(10, 10);
-
             this.Click += AssetPressed;
-            assetLabel.Click += AssetPressed;
         }
 
-        private void AssetPressed(object sender, EventArgs e)
+        protected void AssetPressed(object sender, EventArgs e)
         {
             assetPressed(this);
         }
@@ -39,10 +33,17 @@ namespace VisualScripting
     {
         public VisualClass visualClass;
 
+        public TextBox classTextBox;
+
         public ClassAssetButton(VisualClass _visualClass) : base()
         {
             visualClass = _visualClass;
-            assetLabel.Text = visualClass.className;
+
+            classTextBox = new TextBox();
+            this.Controls.Add(classTextBox);
+            classTextBox.Size = new Size(80, 80);
+            classTextBox.Location = new Point(10, 10);
+            classTextBox.Text = visualClass.className;
         }
     }
 }

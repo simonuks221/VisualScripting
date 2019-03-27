@@ -52,7 +52,7 @@ namespace VisualScripting
         public FunctionPanelPart(VisualFunction _visualFunction)
         {
             visualFunction = _visualFunction;
-            nameLabel.Text = visualFunction.name;
+            nameLabel.Text = visualFunction.functionName;
         }
     }
 }

@@ -67,7 +67,7 @@ namespace VisualScripting
 
         private void NewFunctionButton_Click(object sender, EventArgs e)
         {
-            //projectManager.showingEditors[projectManager.currentEditorIndex].AddNewVisualFunction();
+            projectManager.showingEditors[projectManager.currentEditorIndex].AddNewFunctionButtonPressed();
         }
 
         private void AddNewClassButton_Click(object sender, EventArgs e)

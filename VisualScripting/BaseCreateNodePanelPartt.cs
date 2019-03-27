@@ -67,4 +67,23 @@ namespace VisualScripting
             }
         }
     }
+
+    public class VisualFunctionCreatePanelPart : BaseCreateNodePanelPart
+    {
+        public VisualFunction visualFunction;
+
+        public VisualFunctionCreatePanelPart(VisualFunction _visualFunction)
+        {
+            if (_visualFunction != null)
+            {
+                visualFunction = _visualFunction;
+
+                nameLabel.Text = visualFunction.functionName;
+            }
+            else
+            {
+                throw new Exception("Null function created");
+            }
+        }
+    }
 }

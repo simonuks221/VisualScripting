@@ -76,7 +76,7 @@ namespace VisualScripting
         public VisualFunctionNavigationPanelPart(int index, VisualFunction _visualFunction) : base(index)
         {
             visualFunction = _visualFunction;
-            nameLabel.Text = visualFunction.name;
+            nameLabel.Text = visualFunction.functionName;
         }
     }
 }
