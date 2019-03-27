@@ -626,7 +626,7 @@ namespace VisualScripting
 
         public override void AddNewFunctionButtonPressed()
         {
-            VisualFunction newVisualFunction = new VisualFunction("Nauja funkcija");
+            VisualFunction newVisualFunction = new VisualFunction("NaujaFunkcija");
             visualClass.visualFunctions.Add(newVisualFunction);
 
             UpdateVariableAndFunctionPanel();
@@ -647,7 +647,6 @@ namespace VisualScripting
     {
         CreateNodeSearchBar createNodeSearchBar;
         List<BaseNodePanel> currentNodesPanels;
-
 
         BasePin firstSelectedPin;
         BaseNodePanel firstSelectedNode;
@@ -671,7 +670,8 @@ namespace VisualScripting
             firstSelectedVariable = null;
             firstSelectedFunction = null;
             firstSelectedNodeOffset = new Size(0, 0);
-            SpawnNode(new Point(50, 50), new VisualNodeCreatePanelPart(typeof(ConstructNode))); //Spawns construct node
+            SpawnNode(new Point(50, 50), new VisualNodeCreatePanelPart(typeof(FunctionStartNode))); 
+            SpawnNode(new Point(200, 200), new VisualNodeCreatePanelPart(typeof(FunctionEndNode))); //Spawns starting nodes
 
             UpdateVariableAndFunctionPanel();
         }
@@ -1024,7 +1024,6 @@ namespace VisualScripting
         private void variableAndFunctionpanelPartPressed(BaseVariableAndFunctionPanelPart _panelPressed)
         {
             var CheckVariable = _panelPressed as VariablePanelPart;
-            var CheckFunction = _panelPressed as FunctionPanelPart;
 
             ClearVariableFunctionInfoPanel();
 
@@ -1067,37 +1066,10 @@ namespace VisualScripting
                 variableTypeComboBox.SelectedValueChanged += VariableTypeComboBoxSelectedValueChanged;
             }
 
-            if (CheckFunction != null)
-            {
-                VisualFunction function = CheckFunction.visualFunction;
-                firstSelectedFunction = function;
-
-                TextBox functionNameTextBox = new TextBox();
-                form.VariableFunctionInfoPanel.Controls.Add(functionNameTextBox);
-                functionNameTextBox.Location = new Point(5, 5);
-                functionNameTextBox.Size = new Size(90, 13);
-                functionNameTextBox.Text = function.functionName;
-                functionNameTextBox.LostFocus += ChangeFunctionNameTextChanged;
-
-                ProjectManager.Instance.AddNewShowingEditor(function);
-            }
-
             if (createNodeSearchBar != null)
             {
                 createNodeSearchBar.Dispose();
             }
         }
-
-        #region VisualFunctionStuff
-
-        private void ChangeFunctionNameTextChanged(object sender, EventArgs e)
-        {
-            TextBox textBox = (TextBox)sender;
-            firstSelectedFunction.functionName = textBox.Text;
-
-            UpdateVariableAndFunctionPanel();
-        }
-
-        #endregion
     }
 }

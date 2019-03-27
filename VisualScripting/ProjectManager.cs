@@ -127,21 +127,6 @@ namespace VisualScripting
             }
 
             showingEditors[currentEditorIndex].DisplayAllOnMainPanel();
-
-            /*
-            var checkCodeEditor = showingEditors[currentEditorIndex] as VisualScriptEditorManager;
-            var checkAssetEditor = showingEditors[currentEditorIndex] as AssetsEditorManager;
-
-            if (checkCodeEditor != null) //Editing class
-            {
-                VisualScriptEditorManager editor = checkCodeEditor as VisualScriptEditorManager;
-                editor.DisplayAllOnMainPanel();
-            }
-            if(checkAssetEditor != null)
-            {
-                
-            }*/
-
             UpdateNavigationPanel();
         }
 
@@ -189,7 +174,7 @@ namespace VisualScripting
                 VisualFunctionScriptEditorManager newEditorManager = new VisualFunctionScriptEditorManager(form, (VisualFunction)_visualBase);
                 showingEditors.Add(newEditorManager);
             }
-
+            ChangeSelectedEditorIndex(showingEditors.Count - 1);
             UpdateNavigationPanel();
         }
 
@@ -212,8 +197,8 @@ namespace VisualScripting
                 allCode += visualProject.visualClasses[i].CompileToString() + " \n ";
             }
 
-    
-allCode += "}";
+
+            allCode += "}";
             Console.Out.WriteLine(allCode);
             if (ConsoleForm.Instance == null)
             {

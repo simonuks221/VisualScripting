@@ -54,7 +54,7 @@ namespace VisualScripting
 
             for(int i = 0; i < visualFunctions.Count; i++)
             {
-                //visualFunctions[i].c
+                allCode += visualFunctions[i].CompileFunctionToString();
             }
 
             allCode += "}";

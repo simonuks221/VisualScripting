@@ -27,9 +27,17 @@ namespace VisualScripting
             visualVariables = new List<VisualVariable>();
         }
 
-        public override string CompileToString()
+        public override string CompileToString() //For calling function
         {
-            return "";
+            return functionName + "();";
+        }
+
+        public string CompileFunctionToString() //For initialization
+        {
+            string code = "void " + functionName + "() \n {";
+            code += visualNodes[0].CompileToString();
+            code += "}";
+            return code;
         }
     }
 
@@ -52,7 +60,7 @@ namespace VisualScripting
 
     class FunctionStartNode : VisualNode
     {
-        new public static string nodeName = "Function end";
+        new public static string nodeName = "Function start";
         new public static List<VisualNodeC> inputs = new List<VisualNodeC>() { };
         new public static List<VisualNodeC> outputs = new List<VisualNodeC>() { new VisualNodeC(typeof(ExecutionPin)) };
         new public static Size nodeSize = new Size(100, 100);
@@ -71,7 +79,7 @@ namespace VisualScripting
 
     class FunctionEndNode : VisualNode
     {
-        new public static string nodeName = "Function start";
+        new public static string nodeName = "Function end";
         new public static List<VisualNodeC> inputs = new List<VisualNodeC>() { new VisualNodeC(typeof(ExecutionPin)) };
         new public static List<VisualNodeC> outputs = new List<VisualNodeC>() {  };
         new public static Size nodeSize = new Size(100, 100);
