@@ -17,18 +17,15 @@ namespace VisualScripting
 
         Point panelLocation;
 
-        VisualClassScriptEditorManager thisVisualScriptManager;
-
         List<Type> nodesToShow;
         List<VisualVariable> variablesToShow;
         List<VisualFunction> functionsToShow;
 
         //List<Type> nodesToShow = new List<Type>() {typeof(IfNode), typeof(PrintNode), typeof(MakeString)};
 
-        public CreateNodeSearchBar(Point _panelLocation, VisualClassScriptEditorManager _thisVisualScriptManager, List<Type> _nodesToShow, List<VisualVariable> _variablesToShow, List<VisualFunction> _functionsToShow)
+        public CreateNodeSearchBar(Point _panelLocation, List<Type> _nodesToShow, List<VisualVariable> _variablesToShow, List<VisualFunction> _functionsToShow)
         {
             panelLocation = _panelLocation;
-            thisVisualScriptManager = _thisVisualScriptManager;
             nodesToShow = _nodesToShow;
             variablesToShow = _variablesToShow;
             functionsToShow = _functionsToShow;

@@ -10,6 +10,8 @@ namespace VisualScripting
 {
     public class ProjectManager
     {
+        public static ProjectManager Instance;
+
         Panel navigationPanel;
 
         public VisualProject visualProject;
@@ -24,6 +26,8 @@ namespace VisualScripting
             form = _form;
             form.projectManager = this;
             navigationPanel = form.NavigationPanel;
+
+            Instance = this;
 
             visualProject = new VisualProject();
             showingEditors = new List<BaseEditorManager>();
@@ -53,14 +57,21 @@ namespace VisualScripting
             {
                 BaseNavigationPanelPart newPanel = null;
                 var checkAsset = showingEditors[i] as AssetsEditorManager;
+                var checkClass = showingEditors[i] as VisualClassScriptEditorManager;
+                var checkFunction = showingEditors[i] as VisualFunctionScriptEditorManager;
+
                 if (checkAsset != null) //Asset editor
                 {
                     newPanel = new AssetsManagerNavigationPanelPart(i);
                     assetEditorMinus = 1;
                 }
-                else //Not asset editor
+                else if(checkClass != null)// Class editor
                 {
                     newPanel = new VisualClassNavigationPanelPart(i, visualProject.visualClasses[i - assetEditorMinus]);
+                }
+                else if (checkFunction != null) //Function editor
+                {
+                    newPanel = new VisualFunctionNavigationPanelPart(i, visualProject.visualClasses[0].visualFunctions[0]); /////////////Only supports 1 function in FIRST class FIX THIS
                 }
                 navigationPanel.Controls.Add(newPanel);
                 newPanel.Location = new Point(i * 105 + 2, 2);
@@ -166,10 +177,16 @@ namespace VisualScripting
         public void AddNewShowingEditor(VisualBase _visualBase)
         {
             var CheckClass = _visualBase as VisualClass;
+            var CheckFunction = _visualBase as VisualFunction;
 
             if (CheckClass != null)
             {
                 VisualClassScriptEditorManager newEditorManager = new VisualClassScriptEditorManager(form, (VisualClass)_visualBase);
+                showingEditors.Add(newEditorManager);
+            }
+            else if(CheckFunction != null)
+            {
+                VisualFunctionScriptEditorManager newEditorManager = new VisualFunctionScriptEditorManager(form, (VisualFunction)_visualBase);
                 showingEditors.Add(newEditorManager);
             }
 
